@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <script src="../jquery/dist/jquery.min.js"></script>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="stylesheet" href="../bootstrap-4.3.1-dist/css/bootstrap.min.css"> 
+    <!-- <link rel="stylesheet" href="../static/css/bootstrap-table.min.css">  -->
+    <!-- <script src="../static/js/bootstrap-table.min.js"></script>  -->
+    <script src="../bootstrap-4.3.1-dist/js/bootstrap.min.js"></script>
+    <!-- <script src="../bootstrap-4.3.1-dist/js/bootstrap.js"></script> -->
+</head>
+<style>
+    /*web background*/
+    .container{
+        display:table;
+        height:100%;
+    }
+
+    .row{
+        display: table-cell;
+        vertical-align: middle;
+    }
+
+    .login-center {
+      height: 100vh;
+    }
+
+    .well {
+      background: rgba(238, 229, 206, 0.5);
+      border-top-right-radius: 9px; 
+      border-top-left-radius: 9px; 
+      border-bottom-right-radius:9px;
+      border-bottom-left-radius:9px;
+    }
+
+    .bg {
+       background:url("../static/img/login.jpg") no-repeat center;
+       background-size:contain;
+       background-position: center 0; 
+       background-repeat: no-repeat;  
+       background-attachment: fixed; 
+       background-size: cover; 
+        -webkit-background-size: cover;  
+        -o-background-size: cover;  
+        -moz-background-size: cover;  
+        -ms-background-size: cover;
+    }
+</style>
+
+<body>
+    <div class="bg">
+    <div class="container">
+        <div class="row align-items-centerjustify-content-center login-center">
+          <dev id="information"></dev>
+            <div class="alert alert-danger alert-dismissible d-none">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                <strong>错误!</strong> 失败的操作。
+              </div>
+            <div class="well col-md-5 m-auto ">
+              <br>
+                <h2>欢迎登录</h2>
+                <form action="http://localhost:8080/project/login/mapper" method="POST" onsubmit="return Login();">
+                  <div class="form-group">
+                      <label for="sel1">用户类型:</label>
+                        <select class="form-control" id="sel1">
+                          <option>教师sss</option>
+                          <option>学院管理员</option>
+                          <option>信息化建设管理员</option>
+                          <option>专家</option>
+                        </select>
+                  </div>  
+                  <div class="form-group">
+                        <label for="usr">帐号:</label>
+                        <input type="text" class="form-control" id="usr">
+                      </div>
+                      <div class="form-group">
+                        <label for="pwd">密码:</label>
+                        <input type="password" class="form-control" id="pwd">
+                      </div>
+
+                    <button type="submit" class="btn btn-success btn-block">登录</button>
+                    <br>
+                </form>
+            </div>
+        </div>
+    </div>
+  </div>
+
+  <script>
+    var jsdom = require("jsdom"); 
+    $ = require("jquery")(jsdom.jsdom().createWindow()); 
+    function Login(){
+      var type = $("#sel1").val();
+      var num = $("#usr").val();
+	    var password = $("#pwd").val();
+	    if (num.length==0){
+		    alert("帐号不能为空");
+		    return false;
+	    }
+	    if (password.length==0){
+		    alert("密码不能为空");
+		    return false;
+	    }
+	    var flag;
+      var respstatus;
+	    $.ajax({
+		    url: "http://localhost:8080/project/login",
+		    type: "POST",
+		    async: false,
+        dataType : "json",
+		    data: {"type": type, "num": num, "password": password},
+		    success : function(data, status) {
+			    flag = date;
+          respstatus = status;
+		      }
+	    });
+	    if (flag != "true"){
+        alert(respstatus);
+        var info="<div class='alert alert-danger alert-dismissible'> <button type='button' class='close' data-dismiss='alert'>&times;</button> <strong>错误!</strong> 失败的操作。</div>";
+		    $("#information").after(info);
+        return false;
+	    } else {
+		    return true;
+    	}
+    }
+  </script>
+</body>
+</html>

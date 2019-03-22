@@ -1,0 +1,28 @@
+package routers
+
+import (
+	"github.com/astaxie/beego"
+	"github.com/astaxie/beego/context/param"
+)
+
+func init() {
+
+    beego.GlobalControllerRouter["ProjectManage/controllers:LoginController"] = append(beego.GlobalControllerRouter["ProjectManage/controllers:LoginController"],
+        beego.ControllerComments{
+            Method: "Login",
+            Router: `/`,
+            AllowHTTPMethods: []string{"get"},
+            MethodParams: param.Make(),
+            Filters: nil,
+            Params: nil})
+
+    beego.GlobalControllerRouter["ProjectManage/controllers:LoginController"] = append(beego.GlobalControllerRouter["ProjectManage/controllers:LoginController"],
+        beego.ControllerComments{
+            Method: "Validate",
+            Router: `/`,
+            AllowHTTPMethods: []string{"post"},
+            MethodParams: param.Make(),
+            Filters: nil,
+            Params: nil})
+
+}
