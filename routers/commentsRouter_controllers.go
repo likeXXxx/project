@@ -25,4 +25,13 @@ func init() {
             Filters: nil,
             Params: nil})
 
+    beego.GlobalControllerRouter["ProjectManage/controllers:LoginController"] = append(beego.GlobalControllerRouter["ProjectManage/controllers:LoginController"],
+        beego.ControllerComments{
+            Method: "Mapper",
+            Router: `/mapper`,
+            AllowHTTPMethods: []string{"post"},
+            MethodParams: param.Make(),
+            Filters: nil,
+            Params: nil})
+
 }

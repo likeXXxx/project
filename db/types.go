@@ -22,6 +22,7 @@ type Organization struct {
 type OManager struct {
 	ID           int64  `orm:"column(id);pk"`
 	Organization string `orm:"column(organization)"`
+	Pwd          string `orm:"column(pwd)"`
 }
 
 // IManager ...

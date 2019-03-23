@@ -8,8 +8,7 @@ import (
 
 // define some constant variable
 const (
-	ErrKey     = "error"
-	SuccessKey = "msg"
+	MessageKey = "msg"
 	DataKey    = "data"
 	SuccessVal = "success"
 )
@@ -24,7 +23,7 @@ func (b *BaseController) ServeOK(msg string, data interface{}) {
 	b.Ctx.Output.SetStatus(http.StatusOK)
 
 	resp := make(map[string]interface{})
-	resp[SuccessKey] = msg
+	resp[MessageKey] = msg
 	if data != nil {
 		resp[DataKey] = data
 	}
@@ -36,7 +35,7 @@ func (b *BaseController) ServeOK(msg string, data interface{}) {
 // ServeError response code = @status, error msg == @err
 func (b *BaseController) ServeError(status int, err error) {
 	resp := make(map[string]interface{})
-	resp[ErrKey] = err.Error()
+	resp[MessageKey] = err.Error()
 
 	b.Ctx.Output.SetStatus(status)
 	b.Data["json"] = resp

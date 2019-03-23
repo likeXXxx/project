@@ -36,5 +36,24 @@ func (c *LoginController) Validate() {
 		return
 	}
 
-	c.ServeOK(SuccessVal, "true")
+	c.ServeOK(SuccessVal, nil)
+}
+
+// Mapper ...
+// @router /mapper [post]
+func (c *LoginController) Mapper() {
+	utype := c.GetString("type")
+	num, _ := c.GetInt64("usr")
+	c.SetSession("UID", num)
+	c.SetSession("TYPE", utype)
+	switch utype {
+	case "教师":
+		c.TplName = "teacher.html"
+	case "学院管理员":
+
+	case "信息化建设管理员":
+
+	case "专家":
+
+	}
 }

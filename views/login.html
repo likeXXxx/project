@@ -4,11 +4,9 @@
     <meta charset="utf-8">
     <script src="../jquery/dist/jquery.min.js"></script>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="content-type" content="txt/html; charset=utf-8" />
     <link rel="stylesheet" href="../bootstrap-4.3.1-dist/css/bootstrap.min.css"> 
-    <!-- <link rel="stylesheet" href="../static/css/bootstrap-table.min.css">  -->
-    <!-- <script src="../static/js/bootstrap-table.min.js"></script>  -->
     <script src="../bootstrap-4.3.1-dist/js/bootstrap.min.js"></script>
-    <!-- <script src="../bootstrap-4.3.1-dist/js/bootstrap.js"></script> -->
 </head>
 <style>
     /*web background*/
@@ -53,18 +51,15 @@
     <div class="container">
         <div class="row align-items-centerjustify-content-center login-center">
           <dev id="information"></dev>
-            <div class="alert alert-danger alert-dismissible d-none">
-                <button type="button" class="close" data-dismiss="alert">&times;</button>
-                <strong>错误!</strong> 失败的操作。
-              </div>
+            
             <div class="well col-md-5 m-auto ">
               <br>
                 <h2>欢迎登录</h2>
                 <form action="http://localhost:8080/project/login/mapper" method="POST" onsubmit="return Login();">
                   <div class="form-group">
                       <label for="sel1">用户类型:</label>
-                        <select class="form-control" id="sel1">
-                          <option>教师sss</option>
+                        <select class="form-control" id="sel1" name="type">
+                          <option>教师</option>
                           <option>学院管理员</option>
                           <option>信息化建设管理员</option>
                           <option>专家</option>
@@ -72,11 +67,11 @@
                   </div>  
                   <div class="form-group">
                         <label for="usr">帐号:</label>
-                        <input type="text" class="form-control" id="usr">
+                        <input type="text" class="form-control" id="usr" name="usr">
                       </div>
                       <div class="form-group">
                         <label for="pwd">密码:</label>
-                        <input type="password" class="form-control" id="pwd">
+                        <input type="password" class="form-control" id="pwd" name="pwd">
                       </div>
 
                     <button type="submit" class="btn btn-success btn-block">登录</button>
@@ -88,8 +83,8 @@
   </div>
 
   <script>
-    var jsdom = require("jsdom"); 
-    $ = require("jquery")(jsdom.jsdom().createWindow()); 
+    // var jsdom = require("jsdom"); 
+    // $ = require("jquery")(jsdom.jsdom().createWindow()); 
     function Login(){
       var type = $("#sel1").val();
       var num = $("#usr").val();
@@ -103,26 +98,31 @@
 		    return false;
 	    }
 	    var flag;
-      var respstatus;
 	    $.ajax({
 		    url: "http://localhost:8080/project/login",
 		    type: "POST",
 		    async: false,
-        dataType : "json",
+        dataType : "JSON",
 		    data: {"type": type, "num": num, "password": password},
-		    success : function(data, status) {
-			    flag = date;
-          respstatus = status;
-		      }
-	    });
-	    if (flag != "true"){
-        alert(respstatus);
-        var info="<div class='alert alert-danger alert-dismissible'> <button type='button' class='close' data-dismiss='alert'>&times;</button> <strong>错误!</strong> 失败的操作。</div>";
-		    $("#information").after(info);
+        success: function(data) {
+			    flag = data;
+		      },
+        error: function (jqXHR) { 
+          flag = jqXHR.responseJSON;
+        }
+      },);
+	    if (flag.msg != "success"){
+        var info="<div class='alert alert-danger alert-dismissible'> <button type='button' class='close' data-dismiss='alert'>&times;</button> <strong>错误!</strong>"+flag.msg+"</div>";
+		    $("#information").append(info);
+        var t=setTimeout("removeAlert()",1500);
         return false;
 	    } else {
 		    return true;
     	}
+    }
+
+    function removeAlert() {
+      $("#information").empty();
     }
   </script>
 </body>
