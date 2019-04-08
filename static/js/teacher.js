@@ -15,7 +15,8 @@ $(document).ready(function(){
     }
   },);
   if (flag.msg == "success"){
-     $("#userinfo-btn").html(flag.data)
+    alert("xx");
+    $("#userinfo-btn").html(flag.data);
   } 
 
   $("#li1").click(function(){
