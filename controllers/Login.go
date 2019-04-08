@@ -42,13 +42,26 @@ func (c *LoginController) Validate() {
 // Mapper ...
 // @router /mapper [post]
 func (c *LoginController) Mapper() {
+	w := c.Ctx.ResponseWriter
+	sess, _ := globalSessions.SessionStart(w, c.Ctx.Request)
+	defer sess.SessionRelease(w)
 	utype := c.GetString("type")
-	num, _ := c.GetInt64("usr")
-	c.SetSession("UID", num)
-	c.SetSession("TYPE", utype)
+	num, _ := c.GetInt64("user")
+
+	if err := sess.Set("type", utype); err != nil {
+		logrus.Errorln(err)
+		c.ServeError(http.StatusInternalServerError, err)
+		return
+	}
+	if err := sess.Set("user", num); err != nil {
+		logrus.Errorln(err)
+		c.ServeError(http.StatusInternalServerError, err)
+		return
+	}
+
 	switch utype {
 	case "教师":
-		c.TplName = "teacher.html"
+		c.Ctx.Redirect(302, "http://localhost:8080/project/teacher")
 	case "学院管理员":
 
 	case "信息化建设管理员":

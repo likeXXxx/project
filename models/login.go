@@ -4,7 +4,7 @@ import (
 	"ProjectManage/db"
 	"fmt"
 
-	"github.com/astaxie/beego/orm"
+	"github.com/sirupsen/logrus"
 )
 
 // ValidateUser ...
@@ -25,33 +25,24 @@ func ValidateUser(utype string, num int64, pwd string) error {
 }
 
 func validateTeacher(num int64, pwd string) error {
-	o := db.GetOrmer()
-	info := o.QueryTable("teacher").Filter("id", num)
-	var teacher db.Teacher
-	if err := info.One(&teacher); err != nil {
-		if err == orm.ErrNoRows {
-			return fmt.Errorf("该帐号不存在！")
-		}
-
+	teacher, err := db.GetTeacherByID(num)
+	if err != nil {
+		logrus.Errorln(err)
 		return err
 	}
 
 	if teacher.Pwd != pwd {
 		return fmt.Errorf("密码错误，请重新输入！")
 	}
+	println(teacher)
 
 	return nil
 }
 
 func validateOM(num int64, pwd string) error {
-	o := db.GetOrmer()
-	info := o.QueryTable("o_manager").Filter("id", num)
-	var om db.OManager
-	if err := info.One(&om); err != nil {
-		if err == orm.ErrNoRows {
-			return fmt.Errorf("该帐号不存在！")
-		}
-
+	om, err := db.GetOMByID(num)
+	if err != nil {
+		logrus.Errorln(err)
 		return err
 	}
 
@@ -63,14 +54,9 @@ func validateOM(num int64, pwd string) error {
 }
 
 func validateIM(num int64, pwd string) error {
-	o := db.GetOrmer()
-	info := o.QueryTable("i_manager").Filter("id", num)
-	var im db.IManager
-	if err := info.One(&im); err != nil {
-		if err == orm.ErrNoRows {
-			return fmt.Errorf("该帐号不存在！")
-		}
-
+	im, err := db.GetIMByID(num)
+	if err != nil {
+		logrus.Errorln(err)
 		return err
 	}
 
@@ -82,14 +68,9 @@ func validateIM(num int64, pwd string) error {
 }
 
 func validateMaster(num int64, pwd string) error {
-	o := db.GetOrmer()
-	info := o.QueryTable("master").Filter("id", num)
-	var master db.Master
-	if err := info.One(&master); err != nil {
-		if err == orm.ErrNoRows {
-			return fmt.Errorf("该帐号不存在！")
-		}
-
+	master, err := db.GetMasterByID(num)
+	if err != nil {
+		logrus.Errorln(err)
 		return err
 	}
 

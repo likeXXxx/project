@@ -34,4 +34,22 @@ func init() {
             Filters: nil,
             Params: nil})
 
+    beego.GlobalControllerRouter["ProjectManage/controllers:TeacherController"] = append(beego.GlobalControllerRouter["ProjectManage/controllers:TeacherController"],
+        beego.ControllerComments{
+            Method: "Get",
+            Router: `/`,
+            AllowHTTPMethods: []string{"get"},
+            MethodParams: param.Make(),
+            Filters: nil,
+            Params: nil})
+
+    beego.GlobalControllerRouter["ProjectManage/controllers:TeacherController"] = append(beego.GlobalControllerRouter["ProjectManage/controllers:TeacherController"],
+        beego.ControllerComments{
+            Method: "GetInfo",
+            Router: `/getinfo`,
+            AllowHTTPMethods: []string{"get"},
+            MethodParams: param.Make(),
+            Filters: nil,
+            Params: nil})
+
 }
