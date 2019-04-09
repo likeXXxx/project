@@ -58,6 +58,7 @@ func (c *LoginController) Mapper() {
 		c.ServeError(http.StatusInternalServerError, err)
 		return
 	}
+	logrus.Infof("[%s]:[%d] login", utype, num)
 
 	switch utype {
 	case "教师":

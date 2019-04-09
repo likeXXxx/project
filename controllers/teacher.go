@@ -1,9 +1,11 @@
 package controllers
 
 import (
+	"ProjectManage/db"
 	"ProjectManage/models"
 	"fmt"
 	"net/http"
+	"regexp"
 
 	"github.com/sirupsen/logrus"
 )
@@ -22,7 +24,7 @@ func (c *TeacherController) Prepare() {
 	uType := sess.Get("type")
 	uNum := sess.Get("user")
 	if uType == nil || uNum == nil {
-		c.Ctx.Redirect(302, "http://localhost:8080/project/login")
+		c.Ctx.Redirect(302, ServerHost+"/project/login")
 		return
 	}
 
@@ -62,4 +64,48 @@ func (c *TeacherController) GetInfo() {
 	}
 
 	c.ServeOK(SuccessVal, uName)
+}
+
+// Logout ...
+// @router /logout [post]
+func (c *TeacherController) Logout() {
+	logrus.Infof("teacher[%d] logout url: [%s]", c.uID, c.Ctx.Input.URI())
+
+	globalSessions.SessionDestroy(c.Ctx.ResponseWriter, c.Ctx.Request)
+	c.ServeOK(SuccessVal, nil)
+}
+
+// ResetPassword ...
+// @router /pwd [put]
+func (c *TeacherController) ResetPassword() {
+	logrus.Infof("teacher reset pwd url: [%s]", c.uID, c.Ctx.Input.URI())
+
+	oldPwd := c.GetString("old")
+	newPwd := c.GetString("new")
+
+	teacher, err := db.GetTeacherByID(c.uID)
+	if err != nil {
+		logrus.Errorf("get teacher info fail:[%v]", err)
+		c.ServeError(http.StatusInternalServerError, err)
+		return
+	}
+	if teacher.Pwd != oldPwd {
+		logrus.Errorf("teacher old pwd is wrong")
+		c.ServeError(http.StatusBadRequest, fmt.Errorf("原密码错误!请输入正确的密码"))
+		return
+	}
+
+	if ok, _ := regexp.MatchString("^[0-9a-zA-Z_]{8,20}$", newPwd); !ok {
+		logrus.Errorf("new password is invalid")
+		c.ServeError(http.StatusBadRequest, fmt.Errorf("新密码应由8-20位字母/数字/下划线组成"))
+		return
+	}
+
+	if err := models.ResetTeacherPwd(newPwd, c.uID); err != nil {
+		logrus.Errorf("reset teacher pwd fail: [%v]", err)
+		c.ServeError(http.StatusInternalServerError, err)
+		return
+	}
+
+	c.ServeOK(SuccessVal, nil)
 }

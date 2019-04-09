@@ -28,6 +28,7 @@ const (
 	MessageKey = "msg"
 	DataKey    = "data"
 	SuccessVal = "success"
+	ServerHost = "http://localhost:8080"
 )
 
 // BaseController base class for other all controller

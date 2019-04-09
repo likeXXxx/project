@@ -7,6 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta http-equiv="content-type" content="txt/html; charset=utf-8" />
     <link rel="stylesheet" href="http://localhost:8080/bootstrap-4.3.1-dist/css/bootstrap.min.css"> 
+    <script src="http://localhost:8080/static/js/popper.min.js"></script>
     <script src="http://localhost:8080/bootstrap-4.3.1-dist/js/bootstrap.min.js"></script>
     <script src="http://localhost:8080/static/js/teacher.js"></script>
 </head>
@@ -81,10 +82,16 @@
       right: 2%;
       width: 20%;
     }
+
+    #information {
+      position: fixed;
+      top: 5%;
+    }
 </style>
 
 <body>
     <div class="container">
+
       <div class="text-center " id="logo">
         <p id="logoinfo" clase="text-info" style="color:white"><strong>信息化建设项目全生命周期管理信息系统</strong></p>
       </div>
@@ -94,7 +101,7 @@
           <a class="nav-link active text-center" data-toggle="tab" href="#home">暂存项目</a>
         </li>
         <li class="nav-item" id="li2">
-          <a class="nav-link text-center" data-toggle="tab" href="#menu1">申报中</a>
+          <a class="nav-link text-center" data-toggle="tab" href="#menu1">执行项目</a>
         </li>
         <li class="nav-item" id="li3">
           <a class="nav-link text-center" data-toggle="tab" href="#menu2">已完成项目</a>
@@ -106,22 +113,57 @@
           <label id="u-name" >暂存项目</label>
         </div>
         
-        <div class="dropdown">
-          <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
-            Dropdown button
+        <div class="dropdown" id="dropdownbtn">
+          <button id="userinfo-btn" type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
           </button>
           <div class="dropdown-menu">
-            <a class="dropdown-item" href="#">Link 1</a>
-            <a class="dropdown-item" href="#">Link 2</a>
-            <a class="dropdown-item" href="#">Link 3</a>
+            <a class="dropdown-item" id="item-resetpwd" data-toggle="modal" data-target="#myModal">修改密码</a>
+            <a class="dropdown-item" id="item-logout">退出</a>
           </div>
         </div>
       </div>
       
-        
-        
-      
       <hr />
+        
+      <!-- 模态框 -->
+  <div class="modal fade" id="myModal">
+    <div class="modal-dialog">
+      <div class="modal-content">
+   
+        <!-- 模态框头部 -->
+        <div class="modal-header">
+          <h4 class="modal-title">修改密码</h4>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+   
+        <!-- 模态框主体 -->
+        <div class="modal-body">
+            <form>
+            <div class="form-group">
+            <label id="lb-old">原密码:</label><br>
+            <input type="password" class="form-control" id="pwd-old"><br>
+            </div>
+            <div class="form-group">
+            <label id="lb-new">新密码:</label><br>
+            <input type="password" class="form-control" id="pwd-new"><br>
+            </div>
+            <div class="form-group">
+            <label id="lb-renew">确认密码:</label><br>
+            <input type="password" class="form-control" id="pwd-renew">
+            <p id="p-repwd"></p>
+            </div>
+            </form>
+        </div>
+   
+        <!-- 模态框底部 -->
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" id="btn-resetpwd-ok">确定</button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+        </div>
+   
+      </div>
+    </div>
+  </div>    
 
       <div class="tab-content">
         <div id="home" class="container tab-pane active tabcontent"><br>
