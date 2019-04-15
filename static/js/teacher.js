@@ -88,18 +88,31 @@ $(document).ready(function(){
       $("#pwd-renew").val("");
     })
 
-  //得到查询的参数
-    queryParams = function (params) {
-                 var temp = {   //这里的键的名字和控制器的变量名必须一直，这边改动，控制器也需要改成一样的
-                 limit: params.limit,   //页面大小
-                 offset:params.offset
-                };
-                return temp;
-             }
-
     function Table_1_Init() {
-        $('#ArbetTable').bootstrapTable({
-            url: 'http://localhost:8080/project/login/test',         //请求后台的URL（*）
+      //得到查询的参数
+      queryParams = function (params) {
+        var temp = {   //这里的键的名字和控制器的变量名必须一直，这边改动，控制器也需要改成一样的
+        limit: params.limit,   //页面大小
+        offset:params.offset
+        };
+       return temp;
+      }
+
+      window.tempOperateEvents = {
+
+      }
+  
+      function AddTmpTableFuncAlty(value,row,index){
+        return[
+          '<button id="tmpTableDelete" type="button" class="btn btn-default">删除</button> &nbsp',
+          '<button id="tmpTableVerify" type="button" class="btn btn-default">确认参数</button> &nbsp',
+          '<button id="tmpTableInvite" type="button" class="btn btn-default">招投标</button> &nbsp',
+          '<button id="tmpTableRun" type="button" class="btn btn-default">确认执行</button> &nbsp'
+        ].join("")
+      }
+
+        $('#TmpProjectTable').bootstrapTable({
+            url: 'http://localhost:8080/project/teacher/project/temp',         //请求后台的URL（*）
             method: 'get',                      //请求方式（*）
             striped: true,                      //是否显示行间隔色
             cache: false,                       //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
@@ -108,7 +121,7 @@ $(document).ready(function(){
             // sortOrder: "asc",                   //排序方式
             sidePagination: "server",           //分页方式：client客户端分页，server服务端分页（*）
             pageNumber: 1,                       //初始化加载第一页，默认第一页
-            pageSize: 10,                       //每页的记录行数（*）
+            pageSize: 5,                       //每页的记录行数（*）
             pageList: [10, 25, 50, 100],        //可供选择的每页的行数（*）
             queryParams: queryParams,           //传递参数（*）
             search: true,                       //是否显示表格搜索，此搜索是客户端搜索，不会进服务端，所以，个人感觉意义不大
@@ -124,12 +137,29 @@ $(document).ready(function(){
             // detailView: false,                   //是否显示父子表
             columns: [
             {
-                field: 'id',
-                title: 'id'
+              field: 'id',
+              title: 'ID'
             }, {
-                field: 'name',
-                title: 'name'
-            }, 
+              field: 'name',
+              title: '名称'
+            }, {
+              field: 'create_time',
+              title: '创建时间'
+            },{
+              field: 'budget',
+              title: '计划预算'
+            },{
+              field: 'invite_way',
+              title: '招标方式'
+            },{
+              field: 'instruction',
+              title: '项目说明'
+            },{
+              field: 'operator',
+              title: '操作',
+              events: tempOperateEvents,
+              formatter: AddTmpTableFuncAlty,
+            }
             ],
             rowStyle: function (row, index) {
                 var classesArr = ['success', 'info'];

@@ -50,6 +50,7 @@ type Project struct {
 	CreateTime   time.Time `orm:"column(create_time);auto_now_add;type(date)"`
 	Budget       int       `orm:"column(budget)"`
 	Status       string    `orm:"column(status)"`
-	FinTime      time.Time `orm:"column(fin_time)"`
+	FinTime      time.Time `orm:"column(fin_time);type(date)"`
 	InviteWay    string    `orm:"column(invite_way)"`
+	Instruction  string    `orm:"column(instruction);type(text)"`
 }

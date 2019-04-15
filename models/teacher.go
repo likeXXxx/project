@@ -17,11 +17,12 @@ type TmpProjectsResp struct {
 
 // TmpProjects ...
 type TmpProjects struct {
-	ID         int       `json:"id,omitempty"`
-	Name       string    `json:"name,omitempty"`
-	CreateTime time.Time `json:"create_time,omitempty"`
-	Budget     int       `json:"budget,omitempty"`
-	InviteWay  string    `json:"invite_way,omitempty"`
+	ID          int       `json:"id,omitempty"`
+	Name        string    `json:"name,omitempty"`
+	CreateTime  time.Time `json:"create_time,omitempty"`
+	Budget      int       `json:"budget,omitempty"`
+	InviteWay   string    `json:"invite_way,omitempty"`
+	Instruction string    `json:"instruction,omitempty"`
 }
 
 // ResetTeacherPwd ...
@@ -46,11 +47,12 @@ func convertProjectToTmpProjects(projects []db.Project) []TmpProjects {
 	resp := make([]TmpProjects, 0, len(projects))
 	for i := 0; i < len(projects); i++ {
 		tmpProject := TmpProjects{
-			ID:         projects[i].ID,
-			Name:       projects[i].Name,
-			CreateTime: projects[i].CreateTime,
-			Budget:     projects[i].Budget,
-			InviteWay:  projects[i].InviteWay,
+			ID:          projects[i].ID,
+			Name:        projects[i].Name,
+			CreateTime:  projects[i].CreateTime,
+			Budget:      projects[i].Budget,
+			InviteWay:   projects[i].InviteWay,
+			Instruction: projects[i].Instruction,
 		}
 		resp = append(resp, tmpProject)
 	}
@@ -58,11 +60,11 @@ func convertProjectToTmpProjects(projects []db.Project) []TmpProjects {
 }
 
 // GetTempProjects ...
-func GetTempProjects() (*TmpProjectsResp, error) {
+func GetTempProjects(teacherID int64) (*TmpProjectsResp, error) {
 	o := db.GetOrmer()
 
 	var projects []db.Project
-	_, err := o.QueryTable("project").Exclude("invite_way", StatusRunning, StatusFinish).All(&projects)
+	_, err := o.QueryTable("project").Exclude("invite_way", StatusRunning).Exclude("invite_way", StatusFinish).Filter("teacher_id", teacherID).All(&projects)
 	if err != nil {
 		if err == orm.ErrNoRows {
 			return nil, nil
