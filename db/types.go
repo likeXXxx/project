@@ -40,3 +40,16 @@ type Master struct {
 	Pwd  string `orm:"column(pwd)"`
 	Tel  string `orm:"column(tel)"`
 }
+
+// Project ...
+type Project struct {
+	ID           int       `orm:"column(id);pk"`
+	Name         string    `orm:"column(name)"`
+	Organization string    `orm:"column(organization)"`
+	TeacherID    int64     `orm:"column(teacher_id)"`
+	CreateTime   time.Time `orm:"column(create_time);auto_now_add;type(date)"`
+	Budget       int       `orm:"column(budget)"`
+	Status       string    `orm:"column(status)"`
+	FinTime      time.Time `orm:"column(fin_time)"`
+	InviteWay    string    `orm:"column(invite_way)"`
+}

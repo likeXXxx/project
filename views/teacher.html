@@ -7,6 +7,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta http-equiv="content-type" content="txt/html; charset=utf-8" />
     <link rel="stylesheet" href="http://localhost:8080/bootstrap-4.3.1-dist/css/bootstrap.min.css"> 
+    <link rel="stylesheet" href="../static/css/bootstrap-table.min.css"> 
+    <script src="../static/js/bootstrap-table.min.js"></script> 
     <script src="http://localhost:8080/static/js/popper.min.js"></script>
     <script src="http://localhost:8080/bootstrap-4.3.1-dist/js/bootstrap.min.js"></script>
     <script src="http://localhost:8080/static/js/teacher.js"></script>
@@ -124,7 +126,9 @@
       </div>
       
       <hr />
-        
+  <div class="alert alert-warning">
+    <strong>错误！</strong> <p id="pwd-warning"></p>
+  </div>      
       <!-- 模态框 -->
   <div class="modal fade" id="myModal">
     <div class="modal-dialog">
@@ -141,7 +145,7 @@
             <form>
             <div class="form-group">
             <label id="lb-old">原密码:</label><br>
-            <input type="password" class="form-control" id="pwd-old"><br>
+            <input type="password" class="form-control " id="pwd-old"><br>
             </div>
             <div class="form-group">
             <label id="lb-new">新密码:</label><br>
@@ -163,19 +167,24 @@
    
       </div>
     </div>
-  </div>    
-
+  </div>   
+  
       <div class="tab-content">
-        <div id="home" class="container tab-pane active tabcontent"><br>
-          <h3>HOME</h3>
-         <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+        <div id="tab-1" class="container tab-pane active tabcontent"><br>
+          <button type="button" class="btn btn-primary" id="btn-new-project">新建项目</button>
+          <table id="ArbetTable">
+            <thead>
+              <th data-field="id">id</th>
+              <th data-field="name">name</th>
+            </thead>
+          </table>
          
         </div>
-       <div id="menu1" class="container tab-pane fade tabcontent"><br>
+       <div id="tab-2" class="container tab-pane fade tabcontent"><br>
          <h3>Menu 1</h3>
          <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
        </div>
-       <div id="menu2" class="container tab-pane fade tabcontent"><br>
+       <div id="tab-3" class="container tab-pane fade tabcontent"><br>
           <h3>Menu 2</h3>
          <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam.</p>
        </div>

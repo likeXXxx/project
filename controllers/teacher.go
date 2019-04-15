@@ -109,3 +109,18 @@ func (c *TeacherController) ResetPassword() {
 
 	c.ServeOK(SuccessVal, nil)
 }
+
+// GetTempProjects ...
+// @router /project/temp [get]
+func (c *TeacherController) GetTempProjects() {
+	logrus.Infof("teacher get temp projects url: [%s]", c.uID, c.Ctx.Input.URI())
+
+	tmpProjectsResp, err := models.GetTempProjects()
+	if err != nil {
+		logrus.Errorln(err)
+		c.ServeError(http.StatusInternalServerError, err)
+		return
+	}
+
+	c.ServeOK(SuccessVal, tmpProjectsResp)
+}
