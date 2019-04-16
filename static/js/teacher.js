@@ -2,6 +2,7 @@ $(document).ready(function(){
   $(".alert").hide();
   Table_1_Init();
 
+  var TeacherInfo = new Array(2);
   var flag;
   var hostip = "http://localhost:8080/" 
   $.ajax({
@@ -16,7 +17,9 @@ $(document).ready(function(){
     }
   },);
   if (flag.msg == "success"){
-    $("#userinfo-btn").html(flag.data);
+    TeacherInfo[0] = flag.data[0];
+    TeacherInfo[1] = flag.data[1];
+    $("#userinfo-btn").html(flag.data[0]);
   } 
 
   $("#li1").click(function(){
@@ -104,6 +107,7 @@ $(document).ready(function(){
   
       function AddTmpTableFuncAlty(value,row,index){
         return[
+          '<button id="tmpTableDelete" type="button" class="btn btn-default">详情</button> &nbsp',
           '<button id="tmpTableDelete" type="button" class="btn btn-default">删除</button> &nbsp',
           '<button id="tmpTableVerify" type="button" class="btn btn-default">确认参数</button> &nbsp',
           '<button id="tmpTableInvite" type="button" class="btn btn-default">招投标</button> &nbsp',
@@ -117,19 +121,19 @@ $(document).ready(function(){
             striped: true,                      //是否显示行间隔色
             cache: false,                       //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
             pagination: true,                   //是否显示分页（*）
-            // sortable: false,                     //是否启用排序
+            // sortable: true,                     //是否启用排序
             // sortOrder: "asc",                   //排序方式
-            sidePagination: "server",           //分页方式：client客户端分页，server服务端分页（*）
+            sidePagination: "client",           //分页方式：client客户端分页，server服务端分页（*）
             pageNumber: 1,                       //初始化加载第一页，默认第一页
             pageSize: 5,                       //每页的记录行数（*）
-            pageList: [10, 25, 50, 100],        //可供选择的每页的行数（*）
+            pageList: [5, 10, 25, 50, 100],        //可供选择的每页的行数（*）
             queryParams: queryParams,           //传递参数（*）
             search: true,                       //是否显示表格搜索，此搜索是客户端搜索，不会进服务端，所以，个人感觉意义不大
             contentType: "application/x-www-form-urlencoded",
             strictSearch: true,
             showColumns: true,                  //是否显示所有的列
             showRefresh: true,                  //是否显示刷新按钮
-            // clickToSelect: true,                //是否启用点击选中行
+            clickToSelect: true,                //是否启用点击选中行
             height: 700,                        //行高，如果没有设置height属性，表格自动根据记录条数觉得表格高度
             uniqueId: "no",                     //每一行的唯一标识，一般为主键列
             // showToggle: true,                    //是否显示详细视图和列表视图的切换按钮
@@ -174,5 +178,14 @@ $(document).ready(function(){
 
             
         });
-    }
+    };
+
+    $("#btn-refresh-tmptable").click(function(){
+      $("#TmpProjectTable").bootstrapTable('refresh');
+    });
+
+    $("#btn-new-project").click(function(){
+      $("#project-owner").html(TeacherInfo[0]);
+      $("#project-organization").html(TeacherInfo[1]);
+    });
 });

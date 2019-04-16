@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"net/http"
 	"regexp"
+	"strings"
 
 	"github.com/sirupsen/logrus"
 )
@@ -56,14 +57,14 @@ func (c *TeacherController) Get() {
 func (c *TeacherController) GetInfo() {
 	logrus.Infof("get user info url: [%s]", c.Ctx.Input.URI())
 
-	uName, err := models.GetUserName(c.uID, "教师")
+	uInfo, err := models.GetUserName(c.uID, "教师")
 	if err != nil {
 		logrus.Errorln(err)
 		c.ServeError(http.StatusInternalServerError, err)
 		return
 	}
 
-	c.ServeOK(SuccessVal, uName)
+	c.ServeOK(SuccessVal, strings.Split(uInfo, ","))
 }
 
 // Logout ...

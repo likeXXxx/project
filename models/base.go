@@ -16,7 +16,7 @@ func GetUserName(id int64, utype string) (string, error) {
 			logrus.Errorln(err)
 			return "", err
 		}
-		return obj.Name, nil
+		return obj.Name + "," + obj.Organization, nil
 	case "学院管理员":
 		obj, err := db.GetOMByID(id)
 		if err != nil {

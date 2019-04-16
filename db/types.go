@@ -53,4 +53,5 @@ type Project struct {
 	FinTime      time.Time `orm:"column(fin_time);type(date)"`
 	InviteWay    string    `orm:"column(invite_way)"`
 	Instruction  string    `orm:"column(instruction);type(text)"`
+	RunTime      time.Time `orm:"column(run_time);type(date)"`
 }

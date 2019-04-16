@@ -154,7 +154,6 @@
             <div class="form-group">
             <label id="lb-renew">确认密码:</label><br>
             <input type="password" class="form-control" id="pwd-renew">
-            <p id="p-repwd"></p>
             </div>
             </form>
         </div>
@@ -167,11 +166,87 @@
    
       </div>
     </div>
-  </div>   
+  </div>
+  
+  <div class="modal fade" id="modal-new-project">
+    <div class="modal-dialog">
+      <div class="modal-content">
+   
+        <!-- 模态框头部 -->
+        <div class="modal-header">
+          <h4 class="modal-title">新建项目</h4>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+   
+        <!-- 模态框主体 -->
+        <div class="modal-body">
+          <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text">项目名</span>
+            </div>
+            <input type="text" class="form-control" placeholder="项目名称" id="project-name">
+          </div>
+
+          <div class="input-group mb-3">
+          <form class="form-inline">
+              <label for="project-owner">负责人: </label> 
+              <label id="project-owner"></label> &nbsp &nbsp &nbsp &nbsp
+              <label for="organization">申报部门: </label>
+              <label id="project-organization"></label>
+            </form>
+          </div>
+
+          <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text">项目说明</span>
+            </div>
+            <input type="text" class="form-control" placeholder="项目的相关说明" id="project-instruction">
+          </div>
+
+          <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                  <span class="input-group-text">计划预算(元)</span>
+              </div>
+              <input type="text" class="form-control" placeholder="项目的计划预算" id="project-budget">
+          </div>
+
+          <label for="project-invite-way">招标方式:</label>
+          <div class="input-group mb-3">
+            <label class="radio-inline"><input type="radio" name="invite-radio">公开招标</label>&nbsp
+            <label class="radio-inline"><input type="radio" name="invite-radio">邀请招标</label>&nbsp
+            <label class="radio-inline"><input type="radio" name="invite-radio">竞争性谈判</label>&nbsp
+            <label class="radio-inline"><input type="radio" name="invite-radio">单一来源</label>&nbsp
+            <label class="radio-inline"><input type="radio" name="invite-radio">询价采购</label>
+            <br>
+            <div class="input-group-prepend">
+                <div class="input-group-text">
+                <input type="radio" name="invite-radio">其他方式</label>
+                </div>
+            </div>
+            <input type="text" class="form-control" placeholder="请输入招标方式" id="project-invite-way-other">
+          </div>
+        </div>
+   
+        <!-- 模态框底部 -->
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" id="btn-newproject-ok">确定</button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+        </div>
+   
+      </div>
+    </div>
+  </div> 
   
       <div class="tab-content">
         <div id="tab-1" class="container tab-pane active tabcontent"><br>
-          <button type="button" class="btn btn-primary" id="btn-new-project">新建项目</button>
+          
+
+          <div class="btn-group">
+            <button type="button" class="btn btn-primary" id="btn-new-project" data-toggle="modal" data-target="#modal-new-project">新建项目</button>
+            <button type="button" class="btn btn-primary" id="btn-refresh-tmptable">刷新</button>
+          </div>
+  
+
           <table id="TmpProjectTable">
             <thead>
               <th data-field="id">ID</th>
