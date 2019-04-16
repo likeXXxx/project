@@ -82,3 +82,33 @@ func GetTempProjects(teacherID int64) (*TmpProjectsResp, error) {
 
 	return tmpProjectsResp, nil
 }
+
+// CreateProjectReq ...
+type CreateProjectReq struct {
+	Name         string `json:"name,omitempty"`
+	Organization string `json:"organization,omitempty"`
+	Instruction  string `json:"instruction,omitempty"`
+	Budget       int    `json:"budget,omitempty"`
+	Inviteway    string `json:"inviteway,omitempty"`
+}
+
+// CreateProject ...
+func CreateProject(projectReq *CreateProjectReq) error {
+	o := db.GetOrmer()
+
+	project := db.Project{
+		Name:         projectReq.Name,
+		Organization: projectReq.Organization,
+		Instruction:  projectReq.Instruction,
+		Budget:       projectReq.Budget,
+		InviteWay:    projectReq.Inviteway,
+	}
+
+	_, err := o.Insert(&project)
+	if err != nil {
+		logrus.Errorln(err)
+		return err
+	}
+
+	return nil
+}

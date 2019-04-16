@@ -3,6 +3,7 @@ package controllers
 import (
 	"ProjectManage/db"
 	"ProjectManage/models"
+	"encoding/json"
 	"fmt"
 	"net/http"
 	"regexp"
@@ -128,4 +129,25 @@ func (c *TeacherController) GetTempProjects() {
 	resp["total"] = tmpProjectsResp.Total
 	c.Data["json"] = resp
 	c.ServeJSON()
+}
+
+// CreateProject ...
+// @router /project [post]
+func (c *TeacherController) CreateProject() {
+	logrus.Infof("teacher create project, url:[%s], body:[%s]", c.Ctx.Input.URI(), string(c.Ctx.Input.RequestBody))
+
+	var project models.CreateProjectReq
+	if err := json.Unmarshal(c.Ctx.Input.RequestBody, &project); err != nil {
+		logrus.Errorln(err)
+		c.ServeError(http.StatusBadRequest, err)
+		return
+	}
+
+	if err := models.CreateProject(&project); err != nil {
+		logrus.Errorln(err)
+		c.ServeError(http.StatusInternalServerError, err)
+		return
+	}
+
+	c.ServeOK(SuccessVal, nil)
 }

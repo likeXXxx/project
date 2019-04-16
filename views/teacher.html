@@ -4,8 +4,7 @@
     <meta charset="utf-8">
     <title>ProjectManager</title>
     <script src="http://localhost:8080/jquery/dist/jquery.min.js"></script>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta http-equiv="content-type" content="txt/html; charset=utf-8" />
+    <meta http-equiv=”content-type” content=”text/html; charset=UTF-8″ />
     <link rel="stylesheet" href="http://localhost:8080/bootstrap-4.3.1-dist/css/bootstrap.min.css"> 
     <link rel="stylesheet" href="../static/css/bootstrap-table.min.css"> 
     <script src="../static/js/bootstrap-table.min.js"></script> 
@@ -100,13 +99,13 @@
 
       <ul class="nav nav-tabs flex-column">
         <li class="nav-item" id="li1">
-          <a class="nav-link active text-center" data-toggle="tab" href="#home">暂存项目</a>
+          <a class="nav-link active text-center" data-toggle="tab" href="#tab-1">暂存项目</a>
         </li>
         <li class="nav-item" id="li2">
-          <a class="nav-link text-center" data-toggle="tab" href="#menu1">执行项目</a>
+          <a class="nav-link text-center" data-toggle="tab" href="#tab-2">执行项目</a>
         </li>
         <li class="nav-item" id="li3">
-          <a class="nav-link text-center" data-toggle="tab" href="#menu2">已完成项目</a>
+          <a class="nav-link text-center" data-toggle="tab" href="#tab-3">已完成项目</a>
         </li>
       </ul>
 
@@ -212,15 +211,15 @@
 
           <label for="project-invite-way">招标方式:</label>
           <div class="input-group mb-3">
-            <label class="radio-inline"><input type="radio" name="invite-radio">公开招标</label>&nbsp
-            <label class="radio-inline"><input type="radio" name="invite-radio">邀请招标</label>&nbsp
-            <label class="radio-inline"><input type="radio" name="invite-radio">竞争性谈判</label>&nbsp
-            <label class="radio-inline"><input type="radio" name="invite-radio">单一来源</label>&nbsp
-            <label class="radio-inline"><input type="radio" name="invite-radio">询价采购</label>
+            <label class="radio-inline"><input type="radio" name="invite-radio" value="公开招标">公开招标</label>&nbsp
+            <label class="radio-inline"><input type="radio" name="invite-radio" value="邀请招标">邀请招标</label>&nbsp
+            <label class="radio-inline"><input type="radio" name="invite-radio" value="竞争性谈判">竞争性谈判</label>&nbsp
+            <label class="radio-inline"><input type="radio" name="invite-radio" value="单一来源">单一来源</label>&nbsp
+            <label class="radio-inline"><input type="radio" name="invite-radio" value="询价采购">询价采购</label>
             <br>
             <div class="input-group-prepend">
                 <div class="input-group-text">
-                <input type="radio" name="invite-radio">其他方式</label>
+                <input type="radio" name="invite-radio" value="其他方式">其他方式</label>
                 </div>
             </div>
             <input type="text" class="form-control" placeholder="请输入招标方式" id="project-invite-way-other">

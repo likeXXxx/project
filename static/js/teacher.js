@@ -1,6 +1,9 @@
 $(document).ready(function(){
   $(".alert").hide();
   Table_1_Init();
+  $.ajaxSetup({
+    contentType: "application/x-www-form-urlencoded; charset=utf-8"
+  });
 
   var TeacherInfo = new Array(2);
   var flag;
@@ -188,4 +191,71 @@ $(document).ready(function(){
       $("#project-owner").html(TeacherInfo[0]);
       $("#project-organization").html(TeacherInfo[1]);
     });
+
+    $("#btn-newproject-ok").click(function(){
+      var name = $("#project-name").val();
+      var organization = $("#project-organization").html();
+      var instruction = $("#project-instruction").val();
+      var budget = $("#project-budget").val();
+      var inviteway = $("input[name='invite-radio']:checked").val(); 
+      if (inviteway == "其他方式") {
+        inviteway = $("#project-invite-way-other").val();
+      }
+      var r=/^[1-9][0-9]+$/gi;
+      if (!r.test(budget)){
+        $("#pwd-warning").html("预算请输入纯数字！");
+        $(".alert").show();
+        var timeout=setTimeout(function () {
+          $("#pwd-warning").html("");
+          $(".alert").hide();
+        }, 1500);
+        return;
+      }
+      if (name==""||organization==""||instruction==""||budget==""||inviteway==undefined){
+        $("#pwd-warning").html("请将项目信息填写完整！");
+        $(".alert").show();
+        var timeout=setTimeout(function () {
+          $("#pwd-warning").html("");
+          $(".alert").hide();
+        }, 1500);
+        return;
+      }
+      var flag;
+      var project={"name": name, "organization": organization, "instruction": instruction, "budget": budget, "inviteway": inviteway};
+	    $.ajax({
+		    url: hostip+"project/teacher/project",
+		    type: "POST",
+        async: false,
+        dataType : "JSON",
+		    data: project,
+        success: function(data) {
+			    flag = data;
+		    },
+        error: function (jqXHR) { 
+          flag = jqXHR.responseJSON;
+        }
+      },);
+      if (flag.msg != "success"){
+        $("#pwd-warning").html(flag.msg);
+        $(".alert").show();
+        var timeout=setTimeout(function () {
+          $("#pwd-warning").html("");
+          $(".alert").hide();
+        }, 1500);
+        return;
+      } else {
+        $("#modal-new-project").modal('hide');
+        $("#TmpProjectTable").bootstrapTable('refresh');
+        return;
+      }
+    });
+
+    $('#modal-new-project').on('hide.bs.modal',
+    function() {
+      $("#project-name").val("");
+      $("#project-instruction").val("");
+      $("#project-budget").val("");
+      $("#project-invite-way-other").val("");
+      $("input[name='invite-radio']").removeAttr('checked');
+    })
 });
