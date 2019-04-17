@@ -18,6 +18,15 @@ func (c *LoginController) Login() {
 	c.TplName = "login.html"
 }
 
+// Logout ...
+// @router /logout [post]
+func (c *LoginController) Logout() {
+	logrus.Infof("user[%d] logout url: [%s]", c.uID, c.Ctx.Input.URI())
+
+	globalSessions.SessionDestroy(c.Ctx.ResponseWriter, c.Ctx.Request)
+	c.ServeOK(SuccessVal, nil)
+}
+
 // Validate ...
 // @router / [post]
 func (c *LoginController) Validate() {
@@ -64,7 +73,7 @@ func (c *LoginController) Mapper() {
 	case "教师":
 		c.Ctx.Redirect(302, "http://localhost:8080/project/teacher")
 	case "学院管理员":
-
+		c.Ctx.Redirect(302, "http://localhost:8080/project/omanager")
 	case "信息化建设管理员":
 
 	case "专家":

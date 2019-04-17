@@ -15,36 +15,6 @@ import (
 // TeacherController ..
 type TeacherController struct {
 	BaseController
-	uID   int64
-	uType string
-}
-
-// Prepare ...
-func (c *TeacherController) Prepare() {
-	sess, _ := globalSessions.SessionStart(c.Ctx.ResponseWriter, c.Ctx.Request)
-
-	uType := sess.Get("type")
-	uNum := sess.Get("user")
-	if uType == nil || uNum == nil {
-		c.Ctx.Redirect(302, ServerHost+"/project/login")
-		return
-	}
-
-	if t, ok := uType.(string); ok {
-		c.uType = t
-	} else {
-		logrus.Errorf("获取uType失败")
-		c.ServeError(http.StatusInternalServerError, fmt.Errorf("获取uType失败"))
-		return
-	}
-
-	if id, ok := uNum.(int64); ok {
-		c.uID = id
-	} else {
-		logrus.Errorf("获取uID失败")
-		c.ServeError(http.StatusInternalServerError, fmt.Errorf("获取uID失败"))
-		return
-	}
 }
 
 // Get ...
@@ -66,15 +36,6 @@ func (c *TeacherController) GetInfo() {
 	}
 
 	c.ServeOK(SuccessVal, strings.Split(uInfo, ","))
-}
-
-// Logout ...
-// @router /logout [post]
-func (c *TeacherController) Logout() {
-	logrus.Infof("teacher[%d] logout url: [%s]", c.uID, c.Ctx.Input.URI())
-
-	globalSessions.SessionDestroy(c.Ctx.ResponseWriter, c.Ctx.Request)
-	c.ServeOK(SuccessVal, nil)
 }
 
 // ResetPassword ...
@@ -142,6 +103,7 @@ func (c *TeacherController) CreateProject() {
 		c.ServeError(http.StatusBadRequest, err)
 		return
 	}
+	project.TeacherID = c.uID
 
 	if err := models.CreateProject(&project); err != nil {
 		logrus.Errorln(err)

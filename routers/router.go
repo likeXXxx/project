@@ -18,6 +18,11 @@ func init() {
 				&controllers.TeacherController{},
 			),
 		),
+		beego.NSNamespace("/omanager",
+			beego.NSInclude(
+				&controllers.OManagerController{},
+			),
+		),
 	)
 	beego.AddNamespace(ns)
 }

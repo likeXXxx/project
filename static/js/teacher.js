@@ -39,7 +39,7 @@ $(document).ready(function(){
 
   $("#item-logout").click(function(){
     $.ajax({
-      url: hostip+"project/teacher/logout",
+      url: hostip+"project/login/logout",
       type: "POST",
       async: false,
     },);
@@ -162,6 +162,9 @@ $(document).ready(function(){
               field: 'instruction',
               title: '项目说明'
             },{
+              field: 'status',
+              title: '项目状态'
+            },{
               field: 'operator',
               title: '操作',
               events: tempOperateEvents,
@@ -221,13 +224,14 @@ $(document).ready(function(){
         return;
       }
       var flag;
-      var project={"name": name, "organization": organization, "instruction": instruction, "budget": budget, "inviteway": inviteway};
+      var project={"name": name, "organization": organization, "instruction": instruction, "budget": parseInt(budget), "inviteway": inviteway};
 	    $.ajax({
 		    url: hostip+"project/teacher/project",
 		    type: "POST",
         async: false,
-        dataType : "JSON",
-		    data: project,
+        dataType: "json",
+        contentType: "application/json",
+		    data: JSON.stringify(project),
         success: function(data) {
 			    flag = data;
 		    },

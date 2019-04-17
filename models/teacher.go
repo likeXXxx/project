@@ -2,7 +2,6 @@ package models
 
 import (
 	"ProjectManage/db"
-	"time"
 
 	"github.com/astaxie/beego/orm"
 
@@ -17,12 +16,13 @@ type TmpProjectsResp struct {
 
 // TmpProjects ...
 type TmpProjects struct {
-	ID          int       `json:"id,omitempty"`
-	Name        string    `json:"name,omitempty"`
-	CreateTime  time.Time `json:"create_time,omitempty"`
-	Budget      int       `json:"budget,omitempty"`
-	InviteWay   string    `json:"invite_way,omitempty"`
-	Instruction string    `json:"instruction,omitempty"`
+	ID          int    `json:"id,omitempty"`
+	Name        string `json:"name,omitempty"`
+	CreateTime  string `json:"create_time,omitempty"`
+	Budget      int    `json:"budget,omitempty"`
+	InviteWay   string `json:"invite_way,omitempty"`
+	Instruction string `json:"instruction,omitempty"`
+	Status      string `json:"status,omitempty"`
 }
 
 // ResetTeacherPwd ...
@@ -49,10 +49,11 @@ func convertProjectToTmpProjects(projects []db.Project) []TmpProjects {
 		tmpProject := TmpProjects{
 			ID:          projects[i].ID,
 			Name:        projects[i].Name,
-			CreateTime:  projects[i].CreateTime,
+			CreateTime:  projects[i].CreateTime.Format("2006-01-02"),
 			Budget:      projects[i].Budget,
 			InviteWay:   projects[i].InviteWay,
 			Instruction: projects[i].Instruction,
+			Status:      projects[i].Status,
 		}
 		resp = append(resp, tmpProject)
 	}
@@ -90,6 +91,7 @@ type CreateProjectReq struct {
 	Instruction  string `json:"instruction,omitempty"`
 	Budget       int    `json:"budget,omitempty"`
 	Inviteway    string `json:"inviteway,omitempty"`
+	TeacherID    int64  `json:"teacher_id,omitempty"`
 }
 
 // CreateProject ...
@@ -102,6 +104,8 @@ func CreateProject(projectReq *CreateProjectReq) error {
 		Instruction:  projectReq.Instruction,
 		Budget:       projectReq.Budget,
 		InviteWay:    projectReq.Inviteway,
+		TeacherID:    projectReq.TeacherID,
+		Status:       StatusSchoolVerify,
 	}
 
 	_, err := o.Insert(&project)
