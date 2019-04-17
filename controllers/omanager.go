@@ -80,3 +80,22 @@ func (c *OManagerController) ResetPassword() {
 
 	c.ServeOK(SuccessVal, nil)
 }
+
+// GetApplyProjects ...
+// @router /project/apply [get]
+func (c *OManagerController) GetApplyProjects() {
+	logrus.Infof("teacher get temp projects url: [%s]", c.uID, c.Ctx.Input.URI())
+
+	applyProjectsResp, err := models.GetApplyProjects(c.uID)
+	if err != nil {
+		logrus.Errorln(err)
+		c.ServeError(http.StatusInternalServerError, err)
+		return
+	}
+
+	resp := make(map[string]interface{})
+	resp["rows"] = applyProjectsResp
+	resp["total"] = len(applyProjectsResp)
+	c.Data["json"] = resp
+	c.ServeJSON()
+}

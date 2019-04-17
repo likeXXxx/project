@@ -104,14 +104,20 @@ $(document).ready(function(){
          return temp;
         }
   
-        window.tempOperateEvents = {
-  
+        window.applyOperateEvents = {
+            "click #applyTableDetail":function(e,value,row,index){
+                $("#modal-apply-project-detail").modal('show');
+            },
+
+            "click #applyTableAuditing":function(e,value,row,index){
+                $("#modal-apply-project-Auditing").modal('show');
+            }
         }
     
-        function AddTmpTableFuncAlty(value,row,index){
+        function AddApplyTableFuncAlty(value,row,index){
           return[
-            '<button id="tmpTableDelete" type="button" class="btn btn-default">详情</button> &nbsp',
-            '<button id="tmpTableDelete" type="button" class="btn btn-default">审核</button> &nbsp',
+            '<button id="applyTableDetail" type="button" class="btn btn-default">详情</button> &nbsp',
+            '<button id="applyTableAuditing" type="button" class="btn btn-default">审核</button> &nbsp',
           ].join("")
         }
   
@@ -141,9 +147,6 @@ $(document).ready(function(){
               // detailView: false,                   //是否显示父子表
               columns: [
               {
-                field: 'id',
-                title: 'ID'
-              }, {
                 field: 'name',
                 title: '名称'
               }, {
@@ -159,13 +162,16 @@ $(document).ready(function(){
                 field: 'instruction',
                 title: '项目说明'
               },{
-                field: 'status',
-                title: '项目状态'
+                field: 'teacher_name',
+                title: '负责教师'
+              },{
+                  field: 'teacher_tel',
+                  title: '联系方式'
               },{
                 field: 'operator',
                 title: '操作',
-                events: tempOperateEvents,
-                formatter: AddTmpTableFuncAlty,
+                events: applyOperateEvents,
+                formatter: AddApplyTableFuncAlty,
               }
               ],
               rowStyle: function (row, index) {
