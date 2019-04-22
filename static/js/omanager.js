@@ -87,13 +87,105 @@ $(document).ready(function(){
       }
     });
   
+    //修改密码模态框
     $('#myModal').on('hide.bs.modal',
       function() {
         $("#pwd-old").val("");
         $("#pwd-new").val("");
         $("#pwd-renew").val("");
-      })
+      });
+
+    //项目详情模态框
+    $('#modal-apply-project-detail').on('hide.bs.modal',
+      function(){
+        $("#project-detail-id").html("");
+        $("#project-detail-name").html("");
+        $("#project-detail-organization").html("");
+        $("#project-detail-budget").html("");
+        $("#project-detail-createtime").html("");
+        $("#project-detail-inviteway").html("");
+        $("#project-detail-instruction").html("");
+        $("#teacher-detail-name").html("");
+        $("#teacher-detail-id").html("");
+        $("#teacher-detail-sex").html("");
+        $("#teacher-detail-organization").html("");
+        $("#teacher-detail-pt").html("");
+        $("#teacher-detail-tel").html("");
+      });
+
+      var last_clicked_apply_project_id;
+
+      //审核项目模态框
+      $('#modal-apply-project-Auditing').on('hide.bs.modal',
+      function() {
+        $("#verify-instruction").val("");
+      });
+
+      //审核通过
+      $('#auditing-pass').click(function(){
+        var verifyInstruction = $("#verify-instruction").val();
+        if (verifyInstruction == "") {
+          alert("审核说明不能为空！");
+          return;
+        }
+
+        var flag;
+        $.ajax({
+            url: "http://localhost:8080/project/omanager/project/pass",
+            type: "POST",
+            async: false,
+            dataType : "JSON",
+            data: {"instruction": verifyInstruction,"id":last_clicked_apply_project_id},
+            success: function(data) {
+                flag = data;
+            },
+            error: function (jqXHR) { 
+              flag = jqXHR.responseJSON;
+            }
+        },);
+        if (flag.msg != "success"){
+          alert(flag.msg);
+          return;
+        } else {
+          $("#ApplyProjectTable").bootstrapTable('refresh');
+          $("#modal-apply-project-Auditing").modal('hide');
+          return;
+        }
+      });
+
+      //审核不过
+      $('#auditing-fail').click(function(){
+        var verifyInstruction = $("#verify-instruction").val();
+        if (verifyInstruction == "") {
+          alert("审核说明不能为空！");
+          return;
+        }
+
+        var flag;
+        $.ajax({
+            url: "http://localhost:8080/project/omanager/project/fail",
+            type: "POST",
+            async: false,
+            dataType : "JSON",
+            data: {"instruction": verifyInstruction, "id":last_clicked_apply_project_id},
+            success: function(data) {
+                flag = data;
+            },
+            error: function (jqXHR) { 
+              flag = jqXHR.responseJSON;
+            }
+        },);
+        if (flag.msg != "success"){
+          alert(flag.msg);
+          return;
+        } else {
+          $("#ApplyProjectTable").bootstrapTable('refresh');
+          $("#modal-apply-project-Auditing").modal('hide');
+          return;
+        }
+      });
   
+      //审核项目table
       function Table_1_Init() {
         //得到查询的参数
         queryParams = function (params) {
@@ -104,13 +196,49 @@ $(document).ready(function(){
          return temp;
         }
   
+        //Table中按钮绑定事件
         window.applyOperateEvents = {
             "click #applyTableDetail":function(e,value,row,index){
-                $("#modal-apply-project-detail").modal('show');
-            },
+              last_clicked_apply_project_id = row.id;
+              var flag;
+              $.ajax({
+              url: "http://localhost:8080/project/omanager/project/detail",
+              type: "GET",
+              async: false,
+              dataType : "JSON",
+              data: {"id": row.id},
+              success: function(data) {
+                      flag = data;
+                    },
+              error: function (jqXHR) { 
+                flag = jqXHR.responseJSON;
+              }
+              },);
+              if (flag.msg == "success"){
+                $("#project-detail-id").html(flag.data.project.id);
+                $("#project-detail-name").html(flag.data.project.name);
+                $("#project-detail-organization").html(flag.data.project.organization);
+                $("#project-detail-budget").html(flag.data.project.budget);
+                $("#project-detail-createtime").html(flag.data.project.create_time);
+                $("#project-detail-inviteway").html(flag.data.project.invite_way);
+                $("#project-detail-instruction").html(flag.data.project.instruction);
+                $("#teacher-detail-name").html(flag.data.teacher.name);
+                $("#teacher-detail-id").html(flag.data.teacher.id);
+                if(flag.data.teacher.sex == "f"){
+                  $("#teacher-detail-sex").html("女");
+                } else {
+                  $("#teacher-detail-sex").html("男");
+                }
+                $("#teacher-detail-organization").html(flag.data.teacher.organization);
+                $("#teacher-detail-pt").html(flag.data.teacher.professional_title);
+                $("#teacher-detail-tel").html(flag.data.teacher.tel);
+              } 
+            $("#modal-apply-project-detail").modal('show');
+          },
 
             "click #applyTableAuditing":function(e,value,row,index){
-                $("#modal-apply-project-Auditing").modal('show');
+              last_clicked_apply_project_id = row.id;
+              $("#modal-apply-project-Auditing").modal('show');
             }
         }
     
@@ -147,6 +275,9 @@ $(document).ready(function(){
               // detailView: false,                   //是否显示父子表
               columns: [
               {
+                field: 'id',
+                title: 'ID'
+              },{
                 field: 'name',
                 title: '名称'
               }, {

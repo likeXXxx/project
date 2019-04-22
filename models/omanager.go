@@ -27,6 +27,7 @@ func ResetOManagerPwd(newPwd string, id int64) error {
 
 // ApplyProjectResp ...
 type ApplyProjectResp struct {
+	ID          int    `json:"id,omitempty"`
 	Name        string `json:"name,omitempty"`
 	CreateTime  string `json:"create_time,omitempty"`
 	Budget      int    `json:"budget,omitempty"`
@@ -40,6 +41,7 @@ func convertProjectToApplyProjects(projects []db.Project) ([]*ApplyProjectResp, 
 	resp := make([]*ApplyProjectResp, 0, len(projects))
 	for i := 0; i < len(projects); i++ {
 		applyProjectResp := ApplyProjectResp{
+			ID:          projects[i].ID,
 			Name:        projects[i].Name,
 			CreateTime:  projects[i].CreateTime.Format("2006-01-02"),
 			Budget:      projects[i].Budget,
@@ -85,4 +87,29 @@ func GetApplyProjects(ID int64) ([]*ApplyProjectResp, error) {
 	}
 
 	return tmpProjects, nil
+}
+
+// OPassProject ...
+func OPassProject(id int, instruction string) error {
+	orm := db.GetOrmer()
+
+	project := db.Project{ID: id}
+	if err := orm.Read(&project); err != nil {
+		logrus.Errorln(err)
+		return err
+	}
+	project.Status = StatusICenterVerify
+	project.OAuditInstruction = instruction
+	if _, err := orm.Update(&project, "status", "o_audit_instruction"); err != nil {
+		logrus.Errorln(err)
+		return err
+	}
+
+	return nil
+}
+
+// OAbolitionProject ...
+func OAbolitionProject(id int, instruction string) error {
+
+	return nil
 }

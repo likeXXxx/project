@@ -84,7 +84,7 @@ func (c *OManagerController) ResetPassword() {
 // GetApplyProjects ...
 // @router /project/apply [get]
 func (c *OManagerController) GetApplyProjects() {
-	logrus.Infof("teacher get temp projects url: [%s]", c.uID, c.Ctx.Input.URI())
+	logrus.Infof("omanager get temp projects url: [%s]", c.Ctx.Input.URI())
 
 	applyProjectsResp, err := models.GetApplyProjects(c.uID)
 	if err != nil {
@@ -98,4 +98,70 @@ func (c *OManagerController) GetApplyProjects() {
 	resp["total"] = len(applyProjectsResp)
 	c.Data["json"] = resp
 	c.ServeJSON()
+}
+
+// GetProjectDetail ...
+// @router /project/detail [get]
+func (c *OManagerController) GetProjectDetail() {
+	logrus.Infof("omanager get  project detail url: [%s]", c.Ctx.Input.URI())
+
+	id, err := c.GetInt("id")
+	if err != nil {
+		logrus.Errorln(err)
+		c.ServeError(http.StatusBadRequest, err)
+		return
+	}
+
+	projectDetail, err := models.GetProjectDetail(id)
+	if err != nil {
+		logrus.Errorln(err)
+		c.ServeError(http.StatusInternalServerError, err)
+		return
+	}
+
+	c.ServeOK(SuccessVal, projectDetail)
+}
+
+// ApplyProjectPass ...
+// @router /project/pass [post]
+func (c *OManagerController) ApplyProjectPass() {
+	logrus.Infof("omanager pass  project url: [%s]", c.Ctx.Input.URI())
+
+	instruction := c.GetString("instruction")
+	id, err := c.GetInt("id")
+	if err != nil {
+		logrus.Errorln(err)
+		c.ServeError(http.StatusBadRequest, err)
+		return
+	}
+
+	if err := models.OPassProject(id, instruction); err != nil {
+		logrus.Errorln(err)
+		c.ServeError(http.StatusInternalServerError, err)
+		return
+	}
+
+	c.ServeOK(SuccessVal, nil)
+}
+
+// ApplyProjectFail ...
+// @router /project/fail [post]
+func (c *OManagerController) ApplyProjectFail() {
+	logrus.Infof("omanager fail to pass  project url: [%s]", c.Ctx.Input.URI())
+
+	instruction := c.GetString("instruction")
+	id, err := c.GetInt("id")
+	if err != nil {
+		logrus.Errorln(err)
+		c.ServeError(http.StatusBadRequest, err)
+		return
+	}
+
+	if err := models.OAbolitionProject(id, instruction); err != nil {
+		logrus.Errorln(err)
+		c.ServeError(http.StatusInternalServerError, err)
+		return
+	}
+
+	c.ServeOK(SuccessVal, nil)
 }

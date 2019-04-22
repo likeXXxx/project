@@ -32,7 +32,7 @@ func InitMysql() {
 		mysql.Password, mysql.Host, strconv.Itoa(mysql.Port), mysql.Database, url.QueryEscape("Asia/Shanghai"))
 
 	orm.RegisterDataBase("default", "mysql", sql)
-	orm.RegisterModel(new(Teacher), new(OManager), new(Organization), new(IManager), new(Master), new(Project))
+	orm.RegisterModel(new(Teacher), new(OManager), new(Organization), new(IManager), new(Master), new(Project), new(AbolitionProject))
 	orm.RunSyncdb("default", false, true)
 }
 

@@ -69,3 +69,19 @@ func GetMasterByID(id int64) (*Master, error) {
 
 	return &master, nil
 }
+
+// GetProjectByID ...
+func GetProjectByID(id int) (*Project, error) {
+	o := GetOrmer()
+	info := o.QueryTable("project").Filter("id", id)
+	var project Project
+	if err := info.One(&project); err != nil {
+		if err == orm.ErrNoRows {
+			return nil, fmt.Errorf("该项目不存在！")
+		}
+
+		return nil, err
+	}
+
+	return &project, nil
+}
