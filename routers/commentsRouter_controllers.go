@@ -90,6 +90,15 @@ func init() {
 
     beego.GlobalControllerRouter["ProjectManage/controllers:OManagerController"] = append(beego.GlobalControllerRouter["ProjectManage/controllers:OManagerController"],
         beego.ControllerComments{
+            Method: "ApplyProjectFail",
+            Router: `/project/fail`,
+            AllowHTTPMethods: []string{"post"},
+            MethodParams: param.Make(),
+            Filters: nil,
+            Params: nil})
+
+    beego.GlobalControllerRouter["ProjectManage/controllers:OManagerController"] = append(beego.GlobalControllerRouter["ProjectManage/controllers:OManagerController"],
+        beego.ControllerComments{
             Method: "ApplyProjectPass",
             Router: `/project/pass`,
             AllowHTTPMethods: []string{"post"},

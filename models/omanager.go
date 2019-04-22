@@ -108,8 +108,45 @@ func OPassProject(id int, instruction string) error {
 	return nil
 }
 
+func convertProjectToAbolitionProject(project *db.Project, omanager *db.OManager) *db.AbolitionProject {
+	return &db.AbolitionProject{
+		ID:                    project.ID,
+		Name:                  project.Name,
+		Organization:          project.Organization,
+		TeacherID:             project.TeacherID,
+		CreateTime:            project.CreateTime,
+		AbolitionOrganization: omanager.Organization,
+		Operator:              omanager.Name,
+		OperatorTel:           omanager.Tel,
+	}
+}
+
 // OAbolitionProject ...
-func OAbolitionProject(id int, instruction string) error {
+func OAbolitionProject(projectID int, instruction string, oID int64) error {
+	o := db.GetOrmer()
+
+	project := db.Project{ID: projectID}
+	if err := o.Read(&project); err != nil {
+		logrus.Errorln(err)
+		return err
+	}
+	omanager, err := db.GetOMByID(oID)
+	if err != nil {
+		logrus.Errorln(err)
+		return err
+	}
+	abolitionProject := convertProjectToAbolitionProject(&project, omanager)
+	abolitionProject.AbolitionInstr0uction = instruction
+
+	if _, err := o.Insert(abolitionProject); err != nil {
+		logrus.Errorln(err)
+		return err
+	}
+
+	if _, err := o.Delete(&project); err != nil {
+		logrus.Errorln(err)
+		return err
+	}
 
 	return nil
 }

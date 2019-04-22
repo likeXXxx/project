@@ -157,7 +157,7 @@ func (c *OManagerController) ApplyProjectFail() {
 		return
 	}
 
-	if err := models.OAbolitionProject(id, instruction); err != nil {
+	if err := models.OAbolitionProject(id, instruction, c.uID); err != nil {
 		logrus.Errorln(err)
 		c.ServeError(http.StatusInternalServerError, err)
 		return

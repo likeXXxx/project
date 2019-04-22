@@ -25,6 +25,7 @@ type OManager struct {
 	Organization string `orm:"column(organization)"`
 	Pwd          string `orm:"column(pwd)"`
 	Name         string `orm:"column(name)"`
+	Tel          string `orm:"column(tel)"`
 }
 
 // IManager ...
@@ -32,6 +33,7 @@ type IManager struct {
 	ID   int64  `orm:"column(id);pk"`
 	Name string `orm:"column(name)"`
 	Pwd  string `orm:"column(pwd)"`
+	Tel  string `orm:"column(tel)"`
 }
 
 // Master ...
