@@ -282,7 +282,8 @@ $(document).ready(function(){
                 title: '名称'
               }, {
                 field: 'create_time',
-                title: '创建时间'
+                title: '创建时间',
+                sortable: true
               },{
                 field: 'budget',
                 title: '计划预算'

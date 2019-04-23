@@ -6,10 +6,10 @@
     <script src="http://localhost:8080/jquery/dist/jquery.min.js"></script>
     <meta http-equiv=”content-type” content=”text/html; charset=UTF-8″ />
     <link rel="stylesheet" href="http://localhost:8080/bootstrap-4.3.1-dist/css/bootstrap.min.css"> 
-    <link rel="stylesheet" href="../static/css/bootstrap-table.min.css"> 
-    <script src="../static/js/bootstrap-table.min.js"></script> 
     <script src="http://localhost:8080/static/js/popper.min.js"></script>
     <script src="http://localhost:8080/bootstrap-4.3.1-dist/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="../static/css/bootstrap-table.min.css"> 
+    <script src="../static/js/bootstrap-table.min.js"></script> 
     <script src="http://localhost:8080/static/js/teacher.js"></script>
 </head>
 <style>
@@ -244,21 +244,15 @@
             <button type="button" class="btn btn-primary" id="btn-new-project" data-toggle="modal" data-target="#modal-new-project">新建项目</button>
             <button type="button" class="btn btn-primary" id="btn-refresh-tmptable">刷新</button>
           </div>
-  
-
+          
+          <div>
           <table id="TmpProjectTable">
-            <thead>
-              <th data-field="id">ID</th>
-              <th data-field="name">名称</th>
-              <th data-field="create_time">创建时间</th>
-              <th data-field="budget">计划预算</th>
-              <th data-field="invite_way">招标方式</th>
-              <th data-field="instruction">项目说明</th>
-              <th data-field="status">项目状态</th>
-              <th data-field="operator">操作</th>
-            </thead>
+          
           </table>
+          </div>
          
+          <h4>已废除项目:</h4>
+          <table id="abolition-project-table"></table>
         </div>
        <div id="tab-2" class="container tab-pane fade tabcontent"><br>
          <h3>Menu 1</h3>

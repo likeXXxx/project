@@ -76,7 +76,7 @@ func (c *TeacherController) ResetPassword() {
 // GetTempProjects ...
 // @router /project/temp [get]
 func (c *TeacherController) GetTempProjects() {
-	logrus.Infof("teacher get temp projects url: [%s]", c.uID, c.Ctx.Input.URI())
+	logrus.Infof("teacher[%s] get temp projects url: [%s]", c.uID, c.Ctx.Input.URI())
 
 	tmpProjectsResp, err := models.GetTempProjects(c.uID)
 	if err != nil {
@@ -88,6 +88,25 @@ func (c *TeacherController) GetTempProjects() {
 	resp := make(map[string]interface{})
 	resp["rows"] = tmpProjectsResp.Rows
 	resp["total"] = tmpProjectsResp.Total
+	c.Data["json"] = resp
+	c.ServeJSON()
+}
+
+// GetAbolitionProjects ...
+// @router /project/abolition [get]
+func (c *TeacherController) GetAbolitionProjects() {
+	logrus.Infof("teacher[%s] get abolition projects url: [%s]", c.uID, c.Ctx.Input.URI())
+
+	abolitionProjectsResp, err := models.GetAbolitionProjects(c.uID)
+	if err != nil {
+		logrus.Errorln(err)
+		c.ServeError(http.StatusInternalServerError, err)
+		return
+	}
+
+	resp := make(map[string]interface{})
+	resp["rows"] = abolitionProjectsResp
+	resp["total"] = len(abolitionProjectsResp)
 	c.Data["json"] = resp
 	c.ServeJSON()
 }

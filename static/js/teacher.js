@@ -1,6 +1,7 @@
 $(document).ready(function(){
   $(".alert").hide();
   Table_1_Init();
+  Table_Abolition_Project_Init();
   $.ajaxSetup({
     contentType: "application/x-www-form-urlencoded; charset=utf-8"
   });
@@ -124,12 +125,12 @@ $(document).ready(function(){
             striped: true,                      //是否显示行间隔色
             cache: false,                       //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
             pagination: true,                   //是否显示分页（*）
-            // sortable: true,                     //是否启用排序
-            // sortOrder: "asc",                   //排序方式
-            sidePagination: "client",           //分页方式：client客户端分页，server服务端分页（*）
+            sortable: true,                     //是否启用排序
+            sortOrder: "asc",                   //排序方式
+            sidePagination: 'client',           //分页方式：client客户端分页，server服务端分页（*）
             pageNumber: 1,                       //初始化加载第一页，默认第一页
             pageSize: 5,                       //每页的记录行数（*）
-            pageList: [5, 10, 25, 50, 100],        //可供选择的每页的行数（*）
+            pageList: [5, 10, 20],        //可供选择的每页的行数（*）
             queryParams: queryParams,           //传递参数（*）
             search: true,                       //是否显示表格搜索，此搜索是客户端搜索，不会进服务端，所以，个人感觉意义不大
             contentType: "application/x-www-form-urlencoded",
@@ -137,7 +138,6 @@ $(document).ready(function(){
             showColumns: true,                  //是否显示所有的列
             showRefresh: true,                  //是否显示刷新按钮
             clickToSelect: true,                //是否启用点击选中行
-            height: 700,                        //行高，如果没有设置height属性，表格自动根据记录条数觉得表格高度
             uniqueId: "no",                     //每一行的唯一标识，一般为主键列
             // showToggle: true,                    //是否显示详细视图和列表视图的切换按钮
             // cardView: false,                    //是否显示详细视图
@@ -151,7 +151,8 @@ $(document).ready(function(){
               title: '名称'
             }, {
               field: 'create_time',
-              title: '创建时间'
+              title: '创建时间',
+              sortable: true
             },{
               field: 'budget',
               title: '计划预算'
@@ -262,4 +263,75 @@ $(document).ready(function(){
       $("#project-invite-way-other").val("");
       $("input[name='invite-radio']").removeAttr('checked');
     })
+
+    function Table_Abolition_Project_Init(){
+      queryParams = function (params) {
+        var temp = {   
+        limit: params.limit,   //页面大小
+        offset:params.offset
+        };
+       return temp;
+      }
+
+      $('#abolition-project-table').bootstrapTable({
+        url: 'http://localhost:8080/project/teacher/project/abolition',         //请求后台的URL（*）
+        method: 'get',                      //请求方式（*）
+        striped: true,                      //是否显示行间隔色
+        cache: false,                       //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
+        pagination: true,                   //是否显示分页（*）
+        sortable: true,                     //是否启用排序
+        sortOrder: "asc",                   //排序方式
+        sidePagination: 'client',           //分页方式：client客户端分页，server服务端分页（*）
+        pageNumber: 1,                       //初始化加载第一页，默认第一页
+        pageSize: 5,                       //每页的记录行数（*）
+        pageList: [5, 10, 20],        //可供选择的每页的行数（*）
+        queryParams: queryParams,           //传递参数（*）
+        search: true,                       //是否显示表格搜索，此搜索是客户端搜索，不会进服务端，所以，个人感觉意义不大
+        contentType: "application/x-www-form-urlencoded",
+        strictSearch: true,
+        showColumns: true,                  //是否显示所有的列
+        showRefresh: true,                  //是否显示刷新按钮
+        clickToSelect: true,                //是否启用点击选中行
+        uniqueId: "no",                     //每一行的唯一标识，一般为主键列
+        showToggle: true,                    //是否显示详细视图和列表视图的切换按钮
+        cardView: false,                    //是否显示详细视图
+        detailView: false,                   //是否显示父子表
+        columns: [
+        {
+          field: 'id',
+          title: 'ID'
+        }, {
+          field: 'name',
+          title: '名称'
+        }, {
+          field: 'create_time',
+          title: '创建时间',
+          sortable: true
+        },{
+          field: 'abolition_organization',
+          title: '终止机构'
+        },{
+          field: 'abolition_instruction',
+          title: '终止说明'
+        },{
+          field: 'operator',
+          title: '操作人'
+        },{
+          field: 'operator_tel',
+          title: '联系方式'
+        }
+        ],
+        rowStyle: function (row, index) {
+            var classesArr = ['success', 'info'];
+            var strclass = "";
+            if (index % 2 === 0) {//偶数行
+                strclass = classesArr[0];
+            } else {//奇数行
+                strclass = classesArr[1];
+            }
+            return { classes: strclass };
+        },//隔行变色
+
+        });
+    };
 });

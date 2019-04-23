@@ -84,6 +84,53 @@ func GetTempProjects(teacherID int64) (*TmpProjectsResp, error) {
 	return tmpProjectsResp, nil
 }
 
+// AbolitionProjectResp ...
+type AbolitionProjectResp struct {
+	ID                    int    `json:"id,omitempty"`
+	Name                  string `json:"name,omitempty"`
+	CreateTime            string `json:"create_time,omitempty"`
+	AbolitionOrganization string `json:"abolition_organization,omitempty"`
+	AbolitionInstruction  string `json:"abolition_instruction,omitempty"`
+	Operator              string `json:"operator,omitempty"`
+	OperatorTel           string `json:"operator_tel,omitempty"`
+}
+
+func convertAbolitionProjectsToAbolitionProjectResp(abolitionProjects []db.AbolitionProject) []*AbolitionProjectResp {
+	abolitionProjectsResp := make([]*AbolitionProjectResp, 0, len(abolitionProjects))
+	for i := 0; i < len(abolitionProjects); i++ {
+		abolitionProject := &AbolitionProjectResp{
+			ID:                    abolitionProjects[i].ID,
+			Name:                  abolitionProjects[i].Name,
+			CreateTime:            abolitionProjects[i].CreateTime.Format("2006-01-02"),
+			AbolitionOrganization: abolitionProjects[i].AbolitionOrganization,
+			AbolitionInstruction:  abolitionProjects[i].AbolitionInstr0uction,
+			Operator:              abolitionProjects[i].Operator,
+			OperatorTel:           abolitionProjects[i].OperatorTel,
+		}
+		abolitionProjectsResp = append(abolitionProjectsResp, abolitionProject)
+	}
+
+	return abolitionProjectsResp
+}
+
+// GetAbolitionProjects ...
+func GetAbolitionProjects(teacherID int64) ([]*AbolitionProjectResp, error) {
+	o := db.GetOrmer()
+	var abolitionProjects []db.AbolitionProject
+	_, err := o.QueryTable("abolition_project").Filter("teacher_id", teacherID).All(&abolitionProjects)
+	if err != nil {
+		if err == orm.ErrNoRows {
+			return nil, nil
+		}
+
+		logrus.Errorln(err)
+		return nil, err
+	}
+
+	abolitionProjectsResp := convertAbolitionProjectsToAbolitionProjectResp(abolitionProjects)
+	return abolitionProjectsResp, nil
+}
+
 // CreateProjectReq ...
 type CreateProjectReq struct {
 	Name         string `json:"name,omitempty"`
