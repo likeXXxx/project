@@ -96,6 +96,7 @@ $(document).ready(function(){
         $("#teacher-detail-organization").html("");
         $("#teacher-detail-pt").html("");
         $("#teacher-detail-tel").html("");
+        $("#organization-verify-instruction").val("");
       });
 
       var last_clicked_apply_project_id;
@@ -217,6 +218,7 @@ $(document).ready(function(){
                 $("#teacher-detail-organization").html(flag.data.teacher.organization);
                 $("#teacher-detail-pt").html(flag.data.teacher.professional_title);
                 $("#teacher-detail-tel").html(flag.data.teacher.tel);
+                $("#organization-verify-instruction").val(flag.data.project.o_audit_instruction)
               } 
             $("#modal-apply-project-detail").modal('show');
           },

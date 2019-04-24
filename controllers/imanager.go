@@ -89,3 +89,69 @@ func (c *IManagerController) GetApplyProjects() {
 	c.Data["json"] = resp
 	c.ServeJSON()
 }
+
+// IManagerGetProjectDetail ...
+// @router /project/detail [get]
+func (c *IManagerController) IManagerGetProjectDetail() {
+	logrus.Infof("imanager get  project detail url: [%s]", c.Ctx.Input.URI())
+
+	id, err := c.GetInt("id")
+	if err != nil {
+		logrus.Errorln(err)
+		c.ServeError(http.StatusBadRequest, err)
+		return
+	}
+
+	projectDetail, err := models.GetProjectDetail(id)
+	if err != nil {
+		logrus.Errorln(err)
+		c.ServeError(http.StatusInternalServerError, err)
+		return
+	}
+
+	c.ServeOK(SuccessVal, projectDetail)
+}
+
+// IManagerProjectPass ...
+// @router /project/pass [post]
+func (c *IManagerController) IManagerProjectPass() {
+	logrus.Infof("imanager pass  project url: [%s]", c.Ctx.Input.URI())
+
+	instruction := c.GetString("instruction")
+	id, err := c.GetInt("id")
+	if err != nil {
+		logrus.Errorln(err)
+		c.ServeError(http.StatusBadRequest, err)
+		return
+	}
+
+	if err := models.IPassProject(id, instruction); err != nil {
+		logrus.Errorln(err)
+		c.ServeError(http.StatusInternalServerError, err)
+		return
+	}
+
+	c.ServeOK(SuccessVal, nil)
+}
+
+// ImanagerProjectFail ...
+// @router /project/fail [post]
+func (c *IManagerController) ImanagerProjectFail() {
+	logrus.Infof("imanager fail to pass  project url: [%s]", c.Ctx.Input.URI())
+
+	instruction := c.GetString("instruction")
+	id, err := c.GetInt("id")
+	if err != nil {
+		logrus.Errorln(err)
+		c.ServeError(http.StatusBadRequest, err)
+		return
+	}
+
+	if err := models.IAbolitionProject(id, instruction, c.uID); err != nil {
+		logrus.Errorln(err)
+		c.ServeError(http.StatusInternalServerError, err)
+		return
+	}
+
+	c.ServeOK(SuccessVal, nil)
+}
