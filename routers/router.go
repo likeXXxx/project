@@ -23,6 +23,11 @@ func init() {
 				&controllers.OManagerController{},
 			),
 		),
+		beego.NSNamespace("/imanager",
+			beego.NSInclude(
+				&controllers.IManagerController{},
+			),
+		),
 	)
 	beego.AddNamespace(ns)
 }

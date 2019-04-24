@@ -12,6 +12,10 @@ type LoginController struct {
 	BaseController
 }
 
+const (
+	hostIP = "http://localhost:8080"
+)
+
 // Login ...
 // @router / [get]
 func (c *LoginController) Login() {
@@ -71,11 +75,11 @@ func (c *LoginController) Mapper() {
 
 	switch utype {
 	case "教师":
-		c.Ctx.Redirect(302, "http://localhost:8080/project/teacher")
+		c.Ctx.Redirect(302, hostIP+"/project/teacher")
 	case "学院管理员":
-		c.Ctx.Redirect(302, "http://localhost:8080/project/omanager")
+		c.Ctx.Redirect(302, hostIP+"/project/omanager")
 	case "信息化建设管理员":
-
+		c.Ctx.Redirect(302, hostIP+"/project/imanager")
 	case "专家":
 
 	}
