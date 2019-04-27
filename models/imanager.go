@@ -2,6 +2,8 @@ package models
 
 import (
 	"ProjectManage/db"
+	"strconv"
+	"strings"
 
 	"github.com/astaxie/beego/orm"
 	"github.com/sirupsen/logrus"
@@ -86,8 +88,9 @@ func GetOrganizationApplyProjects() ([]*OrganizationApplyProjectResp, error) {
 }
 
 // IPassProject ...
-func IPassProject(id int, instruction string) error {
+func IPassProject(id int, instruction string, masterInfo string) error {
 	o := db.GetOrmer()
+	var err error
 
 	project := db.Project{ID: id}
 	if err := o.Read(&project); err != nil {
@@ -96,7 +99,12 @@ func IPassProject(id int, instruction string) error {
 	}
 	project.Status = StatusMasterVerify
 	project.IAuditInstruction = instruction
-	if _, err := o.Update(&project, "status", "i_audit_instruction"); err != nil {
+	project.MasterID, err = strconv.ParseInt(strings.Split(masterInfo, " ")[0], 10, 64)
+	if err != nil {
+		logrus.Errorln(err)
+		return err
+	}
+	if _, err := o.Update(&project, "status", "i_audit_instruction", "master_id"); err != nil {
 		logrus.Errorln(err)
 		return err
 	}

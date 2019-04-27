@@ -106,6 +106,15 @@ func init() {
             Filters: nil,
             Params: nil})
 
+    beego.GlobalControllerRouter["ProjectManage/controllers:MasterController"] = append(beego.GlobalControllerRouter["ProjectManage/controllers:MasterController"],
+        beego.ControllerComments{
+            Method: "ListMaster",
+            Router: `/list`,
+            AllowHTTPMethods: []string{"get"},
+            MethodParams: param.Make(),
+            Filters: nil,
+            Params: nil})
+
     beego.GlobalControllerRouter["ProjectManage/controllers:OManagerController"] = append(beego.GlobalControllerRouter["ProjectManage/controllers:OManagerController"],
         beego.ControllerComments{
             Method: "Get",

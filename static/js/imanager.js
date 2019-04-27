@@ -105,13 +105,19 @@ $(document).ready(function(){
       $('#modal-apply-project-Auditing').on('hide.bs.modal',
       function() {
         $("#verify-instruction").val("");
+        $("#master-name").val("");
       });
 
       //审核通过
       $('#auditing-pass').click(function(){
         var verifyInstruction = $("#verify-instruction").val();
+        var masterInfo = $("#master-name").val();
         if (verifyInstruction == "") {
           alert("审核说明不能为空！");
+          return;
+        }
+        if (masterInfo == "") {
+          alert("请指定审核的专家！");
           return;
         }
 
@@ -121,7 +127,7 @@ $(document).ready(function(){
             type: "POST",
             async: false,
             dataType : "JSON",
-            data: {"instruction": verifyInstruction,"id":last_clicked_apply_project_id},
+            data: {"instruction": verifyInstruction,"id":last_clicked_apply_project_id,"master":masterInfo},
             success: function(data) {
                 flag = data;
             },
@@ -312,4 +318,35 @@ $(document).ready(function(){
         $("#ApplyProjectTable").bootstrapTable('refresh');
       });
   
+      $("#btn-choice-master").click(function(){
+        $("#dropdown-master-choice").empty();
+        var flag;
+              $.ajax({
+              url: hostip+"project/master/list",
+              type: "GET",
+              async: false,
+              dataType : "JSON",
+              success: function(data) {
+                      flag = data;
+                    },
+              error: function (jqXHR) { 
+                flag = jqXHR.responseJSON;
+              }
+              },);
+              if (flag.msg == "success"){
+                for (var i=0;i<flag.data.length;i++){
+                  var info="<a class='dropdown-item dropdown-item-master-choice' onclick='choiceMaster(this)'>"+flag.data[i].id+" "+flag.data[i].name+"</a>";
+                  $("#dropdown-master-choice").append(info);
+                }
+              }
+      });
+
+      function choiceMaster(btn){
+        $("#master-name").val(($btn).html());
+      }
+
+      $(".dropdown-item-master-choice").click(function(){
+        alert(this.val());
+        $("#master-name").val(this.html());
+      });
   });

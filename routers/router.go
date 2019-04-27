@@ -28,6 +28,11 @@ func init() {
 				&controllers.IManagerController{},
 			),
 		),
+		beego.NSNamespace("/master",
+			beego.NSInclude(
+				&controllers.MasterController{},
+			),
+		),
 	)
 	beego.AddNamespace(ns)
 }

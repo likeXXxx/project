@@ -118,6 +118,7 @@ func (c *IManagerController) IManagerProjectPass() {
 	logrus.Infof("imanager pass  project url: [%s]", c.Ctx.Input.URI())
 
 	instruction := c.GetString("instruction")
+	masterInfo := c.GetString("master")
 	id, err := c.GetInt("id")
 	if err != nil {
 		logrus.Errorln(err)
@@ -125,7 +126,7 @@ func (c *IManagerController) IManagerProjectPass() {
 		return
 	}
 
-	if err := models.IPassProject(id, instruction); err != nil {
+	if err := models.IPassProject(id, instruction, masterInfo); err != nil {
 		logrus.Errorln(err)
 		c.ServeError(http.StatusInternalServerError, err)
 		return
