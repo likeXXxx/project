@@ -104,3 +104,69 @@ func (c *MasterController) GetApplyProjects() {
 	c.Data["json"] = resp
 	c.ServeJSON()
 }
+
+// MasterGetProjectDetail ...
+// @router /project/detail [get]
+func (c *MasterController) MasterGetProjectDetail() {
+	logrus.Infof("master get  project detail url: [%s]", c.Ctx.Input.URI())
+
+	id, err := c.GetInt("id")
+	if err != nil {
+		logrus.Errorln(err)
+		c.ServeError(http.StatusBadRequest, err)
+		return
+	}
+
+	projectDetail, err := models.GetProjectDetail(id)
+	if err != nil {
+		logrus.Errorln(err)
+		c.ServeError(http.StatusInternalServerError, err)
+		return
+	}
+
+	c.ServeOK(SuccessVal, projectDetail)
+}
+
+// MasterProjectPass ...
+// @router /project/pass [post]
+func (c *MasterController) MasterProjectPass() {
+	logrus.Infof("manager pass  project url: [%s]", c.Ctx.Input.URI())
+
+	instruction := c.GetString("instruction")
+	id, err := c.GetInt("id")
+	if err != nil {
+		logrus.Errorln(err)
+		c.ServeError(http.StatusBadRequest, err)
+		return
+	}
+
+	if err := models.MasterPassProject(id, instruction); err != nil {
+		logrus.Errorln(err)
+		c.ServeError(http.StatusInternalServerError, err)
+		return
+	}
+
+	c.ServeOK(SuccessVal, nil)
+}
+
+// MasterProjectFail ...
+// @router /project/fail [post]
+func (c *MasterController) MasterProjectFail() {
+	logrus.Infof("master fail to pass  project url: [%s]", c.Ctx.Input.URI())
+
+	instruction := c.GetString("instruction")
+	id, err := c.GetInt("id")
+	if err != nil {
+		logrus.Errorln(err)
+		c.ServeError(http.StatusBadRequest, err)
+		return
+	}
+
+	if err := models.MAbolitionProject(id, instruction, c.uID); err != nil {
+		logrus.Errorln(err)
+		c.ServeError(http.StatusInternalServerError, err)
+		return
+	}
+
+	c.ServeOK(SuccessVal, nil)
+}

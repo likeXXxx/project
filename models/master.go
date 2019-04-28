@@ -117,3 +117,69 @@ func GetMasterApplyProjects(id int64) ([]*MasterApplyProjectResp, error) {
 
 	return tmpProjects, nil
 }
+
+// MasterPassProject ...
+func MasterPassProject(id int, instruction string) error {
+	o := db.GetOrmer()
+
+	project := db.Project{ID: id}
+	if err := o.Read(&project); err != nil {
+		logrus.Errorln(err)
+		return err
+	}
+	project.Status = StatusVerifyProject
+	project.MAuditInstruction = instruction
+
+	if _, err := o.Update(&project, "status", "m_audit_instruction"); err != nil {
+		logrus.Errorln(err)
+		return err
+	}
+
+	return nil
+}
+
+// OrganizationNameOfMaster ...
+const OrganizationNameOfMaster = "专家"
+
+func convertProjectToMasterAbolitionProject(project *db.Project, master *db.Master) *db.AbolitionProject {
+	return &db.AbolitionProject{
+		ID:                    project.ID,
+		Name:                  project.Name,
+		Organization:          project.Organization,
+		TeacherID:             project.TeacherID,
+		CreateTime:            project.CreateTime,
+		AbolitionOrganization: OrganizationNameOfMaster,
+		Operator:              master.Name,
+		OperatorTel:           master.Tel,
+	}
+}
+
+//MAbolitionProject ...
+func MAbolitionProject(projectID int, instruction string, mID int64) error {
+	o := db.GetOrmer()
+
+	project := db.Project{ID: projectID}
+	if err := o.Read(&project); err != nil {
+		logrus.Errorln(err)
+		return err
+	}
+	master, err := db.GetMasterByID(mID)
+	if err != nil {
+		logrus.Errorln(err)
+		return err
+	}
+	abolitionProject := convertProjectToMasterAbolitionProject(&project, master)
+	abolitionProject.AbolitionInstr0uction = instruction
+
+	if _, err := o.Insert(abolitionProject); err != nil {
+		logrus.Errorln(err)
+		return err
+	}
+
+	if _, err := o.Delete(&project); err != nil {
+		logrus.Errorln(err)
+		return err
+	}
+
+	return nil
+}

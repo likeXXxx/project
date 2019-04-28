@@ -189,7 +189,7 @@ $(document).ready(function(){
               last_clicked_apply_project_id = row.id;
               var flag;
               $.ajax({
-              url: hostip+"project/imanager/project/detail",
+              url: hostip+"project/master/project/detail",
               type: "GET",
               async: false,
               dataType : "JSON",
@@ -220,7 +220,7 @@ $(document).ready(function(){
                 $("#teacher-detail-pt").html(flag.data.teacher.professional_title);
                 $("#teacher-detail-tel").html(flag.data.teacher.tel);
                 $("#organization-verify-instruction").val(flag.data.project.o_audit_instruction)
-                $("#organization-verify-instruction").val(flag.data.project.i_audit_instruction)
+                $("#i-verify-instruction").val(flag.data.project.i_audit_instruction)
             } 
             $("#modal-apply-project-detail").modal('show');
           },
