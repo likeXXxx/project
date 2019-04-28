@@ -129,8 +129,8 @@ $(document).ready(function(){
             sortOrder: "asc",                   //排序方式
             sidePagination: 'client',           //分页方式：client客户端分页，server服务端分页（*）
             pageNumber: 1,                       //初始化加载第一页，默认第一页
-            pageSize: 5,                       //每页的记录行数（*）
-            pageList: [5, 10, 20],        //可供选择的每页的行数（*）
+            pageSize: 10,                       //每页的记录行数（*）
+            pageList: [10, 15, 20],        //可供选择的每页的行数（*）
             queryParams: queryParams,           //传递参数（*）
             search: true,                       //是否显示表格搜索，此搜索是客户端搜索，不会进服务端，所以，个人感觉意义不大
             contentType: "application/x-www-form-urlencoded",
@@ -262,7 +262,15 @@ $(document).ready(function(){
       $("#project-budget").val("");
       $("#project-invite-way-other").val("");
       $("input[name='invite-radio']").removeAttr('checked');
-    })
+    });
+
+    //提示模态框
+    $('#modal-information').on('hide.bs.modal',function() {
+      $("#modal-information-body").html("");
+    });
+
+    var last_clicked_abolition_project_id;
+    var information_modal_flag;
 
     function Table_Abolition_Project_Init(){
       queryParams = function (params) {
@@ -272,6 +280,23 @@ $(document).ready(function(){
         };
        return temp;
       }
+
+      //Table中按钮绑定事件
+      window.abolitionOperateEvents = {
+        "click #abolition-project-delete":function(e,value,row,index){
+          alert(row.id);
+          last_clicked_abolition_project_id = row.id;
+          $("#modal-information").modal('show');
+          $("#modal-information-body").html("项目删除后将不能找回，是否删除选择项目？");
+          information_modal_flag="abolition";
+      },
+      }
+
+    function AddAbolitionTableFuncAlty(value,row,index){
+      return[
+        '<button id="abolition-project-delete" type="button" class="btn btn-default">删除</button>',
+      ].join("")
+    }
 
       $('#abolition-project-table').bootstrapTable({
         url: 'http://localhost:8080/project/teacher/project/abolition',         //请求后台的URL（*）
@@ -283,8 +308,8 @@ $(document).ready(function(){
         sortOrder: "asc",                   //排序方式
         sidePagination: 'client',           //分页方式：client客户端分页，server服务端分页（*）
         pageNumber: 1,                       //初始化加载第一页，默认第一页
-        pageSize: 5,                       //每页的记录行数（*）
-        pageList: [5, 10, 20],        //可供选择的每页的行数（*）
+        pageSize: 10,                       //每页的记录行数（*）
+        pageList: [10, 15, 20],        //可供选择的每页的行数（*）
         queryParams: queryParams,           //传递参数（*）
         search: true,                       //是否显示表格搜索，此搜索是客户端搜索，不会进服务端，所以，个人感觉意义不大
         contentType: "application/x-www-form-urlencoded",
@@ -319,6 +344,11 @@ $(document).ready(function(){
         },{
           field: 'operator_tel',
           title: '联系方式'
+        },{
+          field: 'operator',
+          title: '操作',
+          events: abolitionOperateEvents,
+          formatter: AddAbolitionTableFuncAlty,
         }
         ],
         rowStyle: function (row, index) {
