@@ -341,10 +341,6 @@ $(document).ready(function(){
               }
       });
 
-      function choiceMaster(btn){
-        $("#master-name").val(($btn).html());
-      }
-
       $(".dropdown-item-master-choice").click(function(){
         alert(this.val());
         $("#master-name").val(this.html());

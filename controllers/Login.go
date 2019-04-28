@@ -81,6 +81,6 @@ func (c *LoginController) Mapper() {
 	case "信息化建设管理员":
 		c.Ctx.Redirect(302, hostIP+"/project/imanager")
 	case "专家":
-
+		c.Ctx.Redirect(302, hostIP+"/project/master")
 	}
 }
