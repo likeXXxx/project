@@ -260,6 +260,60 @@
       </div>
     </div>
   </div>
+
+  <div class="modal fade" id="modal-verify-project">
+    <div class="modal-dialog">
+      <div class="modal-content">
+   
+        <!-- 模态框头部 -->
+        <div class="modal-header">
+          <h4 class="modal-title">核定参数</h4>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+   
+        <!-- 模态框主体 -->
+        <div class="modal-body">
+        <form>
+          <div class="form-group">
+            <label for="verify-project-id">项目ID:</label>
+            <label id="verify-project-id"></label>
+            &nbsp; &nbsp; &nbsp; &nbsp;
+            <label for="verify-project-name">项目名:</label>
+            <label id="verify-project-name"></label>
+          </div>
+          <div class="form-group">
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">项目最终资金:</span>
+                </div>
+                <input type="text" class="form-control" readonly="readonly" id="project-fin-funds">
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="project-detail-inviteway">招标方式:</label>
+            <label id="verify-project-inviteway"></label>
+          </div>
+          <label for="verify-inviteway-instruction">招标说明:</label>
+          <div class="form-group">
+            <textarea class="form-control" rows="3" id="verify-inviteway-instruction"></textarea>
+          </div>
+          <label for="verify-inviterway-file">招标文件附件:</label>
+          <div class="form-group">
+            <input type="file" id="verify-inviterway-file">
+          </div>
+        </form>
+          
+        </div>
+   
+        <!-- 模态框底部 -->
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" id="btn-modal-verify-project-ok">确认招标</button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+        </div>
+   
+      </div>
+    </div>
+  </div>
   
       <div class="tab-content">
         <div id="tab-1" class="container tab-pane active tabcontent"><br>

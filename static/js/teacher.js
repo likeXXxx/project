@@ -98,6 +98,16 @@ $(document).ready(function(){
       $("#pwd-renew").val("");
     })
 
+  
+    //核定参数模态框关闭
+    $('#modal-verify-project').on('hide.bs.modal',function() {
+      $("#verify-project-id").html("");
+      $("#verify-project-name").html("");
+      $("#project-fin-funds").val("");
+      $("#verify-project-inviteway").html("");
+      $("#verify-inviteway-instruction").val("");
+    })
+
     function Table_1_Init() {
       //得到查询的参数
       queryParams = function (params) {
@@ -117,15 +127,39 @@ $(document).ready(function(){
           last_clicked_apply_project_id = row.id;
           information_modal_type = "apply";
           $("#modal-information").modal("show");
+        },
+
+        "click #tmpTableVerify":function(e,value,row,index){
+          if (row.status != "核定参数"){
+            alert("此阶段不可核定参数！");
+            return;
+          }
+          var flag;
+              $.ajax({
+              url: "http://localhost:8080/project/omanager/project/detail",
+              type: "GET",
+              async: false,
+              dataType : "JSON",
+              data: {"id": row.id},
+              success: function(data) {
+                      flag = data;
+                    },
+              error: function (jqXHR) { 
+                flag = jqXHR.responseJSON;
+              }
+              },);
+              if (flag.msg == "success"){
+
+              } 
+          $("#modal-verify-project").modal("show");
         }
       }
   
       function AddTmpTableFuncAlty(value,row,index){
         return[
-          '<button id="tmpTableDetail" type="button" class="btn btn-default">详情</button> &nbsp',
           '<button id="tmpTableDelete" type="button" class="btn btn-default">删除</button> &nbsp',
-          '<button id="tmpTableVerify" type="button" class="btn btn-default">确认参数</button> &nbsp',
-          '<button id="tmpTableInvite" type="button" class="btn btn-default">招投标</button> &nbsp',
+          '<button id="tmpTableVerify" type="button" class="btn btn-default">核定参数</button> &nbsp',
+          '<button id="tmpTableInvite" type="button" class="btn btn-default">修改参数</button> &nbsp',
           '<button id="tmpTableRun" type="button" class="btn btn-default">确认执行</button> &nbsp'
         ].join("")
       }
@@ -368,6 +402,7 @@ $(document).ready(function(){
         });
     };
 
+    //删除模态框点击确认
     $("#btn-information-modal-ok").click(function(){
       if(information_modal_type == "abolition"){
         var flag; 
@@ -417,4 +452,11 @@ $(document).ready(function(){
         }
       }
     });
+
+    //核定参数确认招标按钮
+    $("#btn-modal-verify-project-ok").click(function(){
+
+    });
+
+
 });
