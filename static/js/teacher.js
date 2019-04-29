@@ -475,17 +475,23 @@ $(document).ready(function(){
         return;
       }
       var id = $("#verify-project-id").html();
-      var file = $('#verify-inviterway-file').val();
+      var file = $('#verify-inviterway-file')[0].files[0];
       var filename = getFileName($('#verify-inviterway-file').val());
+
+      var formData = new FormData();
+      formData.append("file",file);
+      formData.append("id",id);
+      formData.append("filename",filename);
+      formData.append("instruction",inviteway_instruction)
 
       var flag; 
       $.ajax({ 
         type : "POST", 
         url : hostip+"project/teacher/project/verify", 
-        data : {"id":id,"file":file,"filename":filename}, 
-        async: false, 
-        contentType:"application/json",
-        dataType : "JSON",
+        cache: false, 
+        processData: false,
+        contentType: false,
+        data: formData,
         success: function(data) {
           flag = data;
         },
@@ -494,7 +500,8 @@ $(document).ready(function(){
         }
       },);
       if (flag.msg == "success"){
-        $("modal-verify-project").modal("hide");
+        $("#TmpProjectTable").bootstrapTable('refresh');
+        $("#modal-verify-project").modal("hide");
         return;
       } else {
         alert(flag.msg);

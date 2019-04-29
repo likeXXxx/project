@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"os"
 	"regexp"
 	"strings"
 
@@ -205,6 +206,30 @@ func (c *TeacherController) GetProjectDetail() {
 // VerifyProject ...
 // @router /project/verify [post]
 func (c *TeacherController) VerifyProject() {
-	logrus.Infof("teacher get  project detail url: [%s],body: [%s]", c.Ctx.Input.URI(), string(c.Ctx.Input.RequestBody))
+	logrus.Infof("teacher verify project url: [%s],body: [%s]", c.Ctx.Input.URI(), string(c.Ctx.Input.RequestBody))
+
+	fileName := c.GetString("filename")
+	id, err := c.GetInt("id")
+	if err != nil {
+		logrus.Errorln(err)
+		c.ServeError(http.StatusBadRequest, err)
+		return
+	}
+	instruction := c.GetString("instruction")
+	path := "./static/file/" + fmt.Sprintf("%d", id) + "/"
+	os.RemoveAll(path)
+	os.MkdirAll(path, os.ModePerm)
+	if err := c.SaveToFile("file", path+fileName); err != nil {
+		logrus.Errorln(err)
+		c.ServeError(http.StatusBadRequest, err)
+		return
+	}
+
+	if err := models.TeacherVerifyProject(id, instruction, fileName); err != nil {
+		logrus.Errorln(err)
+		c.ServeError(http.StatusInternalServerError, err)
+		return
+	}
+
 	c.ServeOK(SuccessVal, nil)
 }

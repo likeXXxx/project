@@ -187,3 +187,36 @@ func DeleteProject(id int) error {
 
 	return nil
 }
+
+//TeacherVerifyProject ...
+func TeacherVerifyProject(id int, instruction string, fileName string) error {
+	o := db.GetOrmer()
+
+	project := db.Project{ID: id}
+	if err := o.Read(&project); err != nil {
+		logrus.Errorln(err)
+		return err
+	}
+	project.Budget = project.FinFunds
+	project.Status = StatusBudget
+	if _, err := o.Update(&project, "status", "budget"); err != nil {
+		logrus.Errorln(err)
+		return err
+	}
+
+	inviteProject := db.ProjectInvite{
+		ID:             project.ID,
+		Funds:          project.FinFunds,
+		InviteWay:      project.InviteWay,
+		Instruction:    instruction,
+		InviteFileName: fileName,
+	}
+
+	_, err := o.Insert(&inviteProject)
+	if err != nil {
+		logrus.Errorln(err)
+		return err
+	}
+
+	return nil
+}

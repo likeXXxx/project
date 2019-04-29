@@ -76,3 +76,16 @@ type AbolitionProject struct {
 	Operator              string    `orm:"column(operator)"`
 	OperatorTel           string    `orm:"column(operator_tel)"`
 }
+
+//ProjectInvite ...
+type ProjectInvite struct {
+	ID             int       `orm:"column(id);pk" json:"id,omitempty"`
+	BeginTime      time.Time `orm:"column(begin_time);auto_now_add;type(date)" json:"begin_time,omitempty"`
+	FinTime        time.Time `orm:"column(fin_time);type(date)" json:"fin_time,omitempty"`
+	Funds          int       `orm:"column(funds)" json:"funds,omitempty"`
+	FinFunds       int       `orm:"column(fin_funds)" json:"fin_funds,omitempty"`
+	CompanyName    string    `orm:"column(company_name)" json:"company_name,omitempty"`
+	InviteWay      string    `orm:"column(invite_way)" json:"invite_way,omitempty"`
+	Instruction    string    `orm:"column(instruction)" json:"instruction,omitempty"`
+	InviteFileName string    `orm:"column(invite_file_name)" json:"invite_file_name,omitempty"`
+}
