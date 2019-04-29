@@ -163,3 +163,27 @@ func CreateProject(projectReq *CreateProjectReq) error {
 
 	return nil
 }
+
+//DeleteAbolitionProject ...
+func DeleteAbolitionProject(id int) error {
+	o := db.GetOrmer()
+
+	if _, err := o.Delete(&db.AbolitionProject{ID: id}); err == nil {
+		logrus.Errorln(err)
+		return err
+	}
+
+	return nil
+}
+
+//DeleteProject ...
+func DeleteProject(id int) error {
+	o := db.GetOrmer()
+
+	if _, err := o.Delete(&db.Project{ID: id}); err == nil {
+		logrus.Errorln(err)
+		return err
+	}
+
+	return nil
+}

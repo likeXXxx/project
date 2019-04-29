@@ -5,10 +5,13 @@ $(document).ready(function(){
   $.ajaxSetup({
     contentType: "application/x-www-form-urlencoded; charset=utf-8"
   });
+  var last_clicked_abolition_project_id;
+  var last_clicked_apply_project_id;
+  var information_modal_type;
 
   var TeacherInfo = new Array(2);
-  var flag;
-  var hostip = "http://localhost:8080/" 
+  var hostip = "http://localhost:8080/";
+  var flag; 
   $.ajax({
     url: hostip+"project/teacher/getinfo",
     type: "GET",
@@ -106,12 +109,20 @@ $(document).ready(function(){
       }
 
       window.tempOperateEvents = {
-
+        "click #tmpTableDelete":function(e,value,row,index){
+          if (row.status != "学院审核") {
+            alert("已通过审核的项目不能删除！");
+            return;
+          }
+          last_clicked_apply_project_id = row.id;
+          information_modal_type = "apply";
+          $("#modal-information").modal("show");
+        }
       }
   
       function AddTmpTableFuncAlty(value,row,index){
         return[
-          '<button id="tmpTableDelete" type="button" class="btn btn-default">详情</button> &nbsp',
+          '<button id="tmpTableDetail" type="button" class="btn btn-default">详情</button> &nbsp',
           '<button id="tmpTableDelete" type="button" class="btn btn-default">删除</button> &nbsp',
           '<button id="tmpTableVerify" type="button" class="btn btn-default">确认参数</button> &nbsp',
           '<button id="tmpTableInvite" type="button" class="btn btn-default">招投标</button> &nbsp',
@@ -264,13 +275,7 @@ $(document).ready(function(){
       $("input[name='invite-radio']").removeAttr('checked');
     });
 
-    //提示模态框
-    $('#modal-information').on('hide.bs.modal',function() {
-      $("#modal-information-body").html("");
-    });
-
-    var last_clicked_abolition_project_id;
-    var information_modal_flag;
+    
 
     function Table_Abolition_Project_Init(){
       queryParams = function (params) {
@@ -279,24 +284,22 @@ $(document).ready(function(){
         offset:params.offset
         };
        return temp;
-      }
+      };
 
       //Table中按钮绑定事件
       window.abolitionOperateEvents = {
         "click #abolition-project-delete":function(e,value,row,index){
-          alert(row.id);
           last_clicked_abolition_project_id = row.id;
-          $("#modal-information").modal('show');
-          $("#modal-information-body").html("项目删除后将不能找回，是否删除选择项目？");
-          information_modal_flag="abolition";
-      },
+          information_modal_type = "abolition"
+          $("#modal-information").modal("show");
+        }
       }
 
-    function AddAbolitionTableFuncAlty(value,row,index){
-      return[
-        '<button id="abolition-project-delete" type="button" class="btn btn-default">删除</button>',
-      ].join("")
-    }
+      function AddAbolitionTableFuncAlty(value,row,index){
+        return[
+          '<button id="abolition-project-delete" type="button" class="btn btn-default">删除</button>',
+        ].join("")
+      };
 
       $('#abolition-project-table').bootstrapTable({
         url: 'http://localhost:8080/project/teacher/project/abolition',         //请求后台的URL（*）
@@ -345,10 +348,10 @@ $(document).ready(function(){
           field: 'operator_tel',
           title: '联系方式'
         },{
-          field: 'operator',
+          field: 'useroperator',
           title: '操作',
           events: abolitionOperateEvents,
-          formatter: AddAbolitionTableFuncAlty,
+          formatter: AddAbolitionTableFuncAlty
         }
         ],
         rowStyle: function (row, index) {
@@ -364,4 +367,54 @@ $(document).ready(function(){
 
         });
     };
+
+    $("#btn-information-modal-ok").click(function(){
+      if(information_modal_type == "abolition"){
+        var flag; 
+        $.ajax({
+          url: hostip+"project/teacher/project/abolition",
+          type: "delete",
+          async: false,
+          dataType: "JSON",
+          contentType: "application/json",
+		      data:JSON.stringify({"id": last_clicked_abolition_project_id}),
+          success: function(data) {
+            flag = data;
+          },
+          error: function (jqXHR) { 
+            flag = jqXHR.responseJSON;
+          }
+        },);
+        if (flag.msg == "success"){
+          $("#abolition-project-table").bootstrapTable('refresh');
+          $("#modal-information").modal("hide");
+          return;
+        } else {
+          alert(flag.msg);
+        }
+      } else if (information_modal_type == "apply"){
+        var flag; 
+        $.ajax({
+          url: hostip+"project/teacher/project",
+          type: "DELETE",
+          async: false,
+          contentType:"application/json",
+          dataType : "JSON",
+		      data:JSON.stringify({"id": last_clicked_apply_project_id}),
+          success: function(data) {
+            flag = data;
+          },
+          error: function (jqXHR) { 
+            flag = jqXHR.responseJSON;
+          }
+        },);
+        if (flag.msg == "success"){
+          $("#TmpProjectTable").bootstrapTable('refresh');
+          $("#modal-information").modal("hide");
+          return;
+        } else {
+          alert(flag.msg);
+        }
+      }
+    });
 });

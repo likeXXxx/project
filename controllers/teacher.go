@@ -132,3 +132,50 @@ func (c *TeacherController) CreateProject() {
 
 	c.ServeOK(SuccessVal, nil)
 }
+
+// DeleteProjectReq ..
+type DeleteProjectReq struct {
+	ID int `json:"id,omitempty"`
+}
+
+// DeleteAbolitionProject ...
+// @router /project/abolition [delete]
+func (c *TeacherController) DeleteAbolitionProject() {
+	logrus.Infof("teacher delete abolition project url:[%s],body:[%s]", c.Ctx.Input.URI(), string(c.Ctx.Input.RequestBody))
+
+	var id DeleteProjectReq
+	if err := json.Unmarshal(c.Ctx.Input.RequestBody, &id); err != nil {
+		logrus.Errorln(err)
+		c.ServeError(http.StatusBadRequest, err)
+		return
+	}
+
+	if err := models.DeleteAbolitionProject(id.ID); err != nil {
+		logrus.Errorln(err)
+		c.ServeError(http.StatusInternalServerError, err)
+		return
+	}
+
+	c.ServeOK(SuccessVal, nil)
+}
+
+// DeleteProject ...
+// @router /project [delete]
+func (c *TeacherController) DeleteProject() {
+	logrus.Infof("teacher delete project url:[%s]", c.Ctx.Input.URI())
+
+	var id DeleteProjectReq
+	if err := json.Unmarshal(c.Ctx.Input.RequestBody, &id); err != nil {
+		logrus.Errorln(err)
+		c.ServeError(http.StatusBadRequest, err)
+		return
+	}
+
+	if err := models.DeleteProject(id.ID); err != nil {
+		logrus.Errorln(err)
+		c.ServeError(http.StatusInternalServerError, err)
+		return
+	}
+
+	c.ServeOK(SuccessVal, nil)
+}
