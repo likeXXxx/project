@@ -139,8 +139,14 @@ func (c *MasterController) MasterProjectPass() {
 		c.ServeError(http.StatusBadRequest, err)
 		return
 	}
+	funds, err := c.GetInt("funds")
+	if err != nil {
+		logrus.Errorln(err)
+		c.ServeError(http.StatusBadRequest, err)
+		return
+	}
 
-	if err := models.MasterPassProject(id, instruction); err != nil {
+	if err := models.MasterPassProject(id, instruction, funds); err != nil {
 		logrus.Errorln(err)
 		c.ServeError(http.StatusInternalServerError, err)
 		return

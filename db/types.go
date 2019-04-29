@@ -61,6 +61,7 @@ type Project struct {
 	IAuditInstruction string    `orm:"column(i_audit_instruction)" json:"i_audit_instruction,omitempty"`
 	MAuditInstruction string    `orm:"column(m_audit_instruction)" json:"m_audit_instruction,omitempty"`
 	MasterID          int64     `orm:"column(master_id)" json:"master_id,omitempty"`
+	FinFunds          int       `orm:"column(fin_funds)" json:"fin_funds,omitempty"`
 }
 
 //AbolitionProject ...

@@ -119,7 +119,7 @@ func GetMasterApplyProjects(id int64) ([]*MasterApplyProjectResp, error) {
 }
 
 // MasterPassProject ...
-func MasterPassProject(id int, instruction string) error {
+func MasterPassProject(id int, instruction string, funds int) error {
 	o := db.GetOrmer()
 
 	project := db.Project{ID: id}
@@ -129,8 +129,9 @@ func MasterPassProject(id int, instruction string) error {
 	}
 	project.Status = StatusVerifyProject
 	project.MAuditInstruction = instruction
+	project.FinFunds = funds
 
-	if _, err := o.Update(&project, "status", "m_audit_instruction"); err != nil {
+	if _, err := o.Update(&project, "status", "m_audit_instruction", "fin_funds"); err != nil {
 		logrus.Errorln(err)
 		return err
 	}

@@ -101,11 +101,19 @@ $(document).ready(function(){
       });
 
       var last_clicked_apply_project_id;
+      var last_clicked_apply_project_budget;
 
       //审核项目模态框
       $('#modal-apply-project-Auditing').on('hide.bs.modal',
       function() {
         $("#verify-instruction").val("");
+        $("#teacher-budget").val("");
+        $("#master-verify-funds").val("");
+      });
+
+      $('#modal-apply-project-Auditing').on('show.bs.modal',
+      function() {
+        $("#teacher-budget").val(last_clicked_apply_project_budget);
       });
 
       //审核通过
@@ -116,13 +124,20 @@ $(document).ready(function(){
           return;
         }
 
+        var fin_funds = $("#master-verify-funds").val();
+        var r=/^[1-9][0-9]+$/gi;
+        if (!r.test(fin_funds)){
+          alert("确认的项目资金应该为纯数字！");
+          return;
+        }
+
         var flag;
         $.ajax({
             url: "http://localhost:8080/project/master/project/pass",
             type: "POST",
             async: false,
             dataType : "JSON",
-            data: {"instruction": verifyInstruction,"id":last_clicked_apply_project_id},
+            data: {"instruction": verifyInstruction,"id":last_clicked_apply_project_id,"funds": fin_funds},
             success: function(data) {
                 flag = data;
             },
@@ -187,6 +202,7 @@ $(document).ready(function(){
         window.applyOperateEvents = {
             "click #applyTableDetail":function(e,value,row,index){
               last_clicked_apply_project_id = row.id;
+              last_clicked_apply_project_budget = row.budget;
               var flag;
               $.ajax({
               url: hostip+"project/master/project/detail",
@@ -227,6 +243,7 @@ $(document).ready(function(){
 
             "click #applyTableAuditing":function(e,value,row,index){
               last_clicked_apply_project_id = row.id;
+              last_clicked_apply_project_budget = row.budget;
               $("#modal-apply-project-Auditing").modal('show');
             }
         }
