@@ -179,3 +179,32 @@ func (c *TeacherController) DeleteProject() {
 
 	c.ServeOK(SuccessVal, nil)
 }
+
+// GetProjectDetail ...
+// @router /project/detail [get]
+func (c *TeacherController) GetProjectDetail() {
+	logrus.Infof("teacher get  project detail url: [%s]", c.Ctx.Input.URI())
+
+	id, err := c.GetInt("id")
+	if err != nil {
+		logrus.Errorln(err)
+		c.ServeError(http.StatusBadRequest, err)
+		return
+	}
+
+	projectDetail, err := models.GetProjectDetail(id)
+	if err != nil {
+		logrus.Errorln(err)
+		c.ServeError(http.StatusInternalServerError, err)
+		return
+	}
+
+	c.ServeOK(SuccessVal, projectDetail)
+}
+
+// VerifyProject ...
+// @router /project/verify [post]
+func (c *TeacherController) VerifyProject() {
+	logrus.Infof("teacher get  project detail url: [%s],body: [%s]", c.Ctx.Input.URI(), string(c.Ctx.Input.RequestBody))
+	c.ServeOK(SuccessVal, nil)
+}

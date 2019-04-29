@@ -106,6 +106,12 @@ $(document).ready(function(){
       $("#project-fin-funds").val("");
       $("#verify-project-inviteway").html("");
       $("#verify-inviteway-instruction").val("");
+      var file = $('#verify-inviterway-file')[0];
+      if(file.outerHTML){
+        file.outerHTML = file.outerHTML;
+      }else{
+        file.value = '';
+      }
     })
 
     function Table_1_Init() {
@@ -135,22 +141,25 @@ $(document).ready(function(){
             return;
           }
           var flag;
-              $.ajax({
-              url: "http://localhost:8080/project/omanager/project/detail",
-              type: "GET",
-              async: false,
-              dataType : "JSON",
-              data: {"id": row.id},
-              success: function(data) {
-                      flag = data;
-                    },
-              error: function (jqXHR) { 
-                flag = jqXHR.responseJSON;
-              }
-              },);
-              if (flag.msg == "success"){
-
-              } 
+          $.ajax({
+            url: "http://localhost:8080/project/teacher/project/detail",
+            type: "GET",
+            async: false,
+            dataType : "JSON",
+            data: {"id": row.id},
+            success: function(data) {
+              flag = data;
+            },
+            error: function (jqXHR) { 
+              flag = jqXHR.responseJSON;
+            }
+          },);
+          if (flag.msg == "success"){
+            $("#verify-project-id").html(flag.data.project.id);
+            $("#verify-project-name").html(flag.data.project.name);
+            $("#project-fin-funds").val(flag.data.project.fin_funds);
+            $("#verify-project-inviteway").html(flag.data.project.invite_way);
+          } 
           $("#modal-verify-project").modal("show");
         }
       }
@@ -453,9 +462,43 @@ $(document).ready(function(){
       }
     });
 
+    function getFileName(o){
+      var pos=o.lastIndexOf("\\");
+      return o.substring(pos+1);  
+    }
+
     //核定参数确认招标按钮
     $("#btn-modal-verify-project-ok").click(function(){
+      var inviteway_instruction = $("#verify-inviteway-instruction").val();
+      if (inviteway_instruction==""){
+        alert("请填写招标说明！");
+        return;
+      }
+      var id = $("#verify-project-id").html();
+      var file = $('#verify-inviterway-file').val();
+      var filename = getFileName($('#verify-inviterway-file').val());
 
+      var flag; 
+      $.ajax({ 
+        type : "POST", 
+        url : hostip+"project/teacher/project/verify", 
+        data : {"id":id,"file":file,"filename":filename}, 
+        async: false, 
+        contentType:"application/json",
+        dataType : "JSON",
+        success: function(data) {
+          flag = data;
+        },
+        error: function (jqXHR) { 
+          flag = jqXHR.responseJSON;
+        }
+      },);
+      if (flag.msg == "success"){
+        $("modal-verify-project").modal("hide");
+        return;
+      } else {
+        alert(flag.msg);
+      }
     });
 
 

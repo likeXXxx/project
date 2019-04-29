@@ -273,10 +273,10 @@
    
         <!-- 模态框主体 -->
         <div class="modal-body">
-        <form>
+        <form id="form-verify-project">
           <div class="form-group">
             <label for="verify-project-id">项目ID:</label>
-            <label id="verify-project-id"></label>
+            <label id="verify-project-id" name="project-id"></label>
             &nbsp; &nbsp; &nbsp; &nbsp;
             <label for="verify-project-name">项目名:</label>
             <label id="verify-project-name"></label>
@@ -295,11 +295,11 @@
           </div>
           <label for="verify-inviteway-instruction">招标说明:</label>
           <div class="form-group">
-            <textarea class="form-control" rows="3" id="verify-inviteway-instruction"></textarea>
+            <textarea class="form-control" rows="3" id="verify-inviteway-instruction" name="inviteway-instruction"></textarea>
           </div>
           <label for="verify-inviterway-file">招标文件附件:</label>
           <div class="form-group">
-            <input type="file" id="verify-inviterway-file">
+            <input type="file" id="verify-inviterway-file" name="file">
           </div>
         </form>
           

@@ -22,6 +22,7 @@ type ProjectDetail struct {
 	OAuditInstruction string `json:"o_audit_instruction,omitempty"`
 	IAuditInstruction string `json:"i_audit_instruction,omitempty"`
 	MAuditInstruction string `json:"m_audit_instruction,omitempty"`
+	FinFunds          int    `json:"fin_funds,omitempty"`
 }
 
 // ProjectDetailResp ...
@@ -46,6 +47,7 @@ func convertProjectToProjectDetail(project *db.Project) *ProjectDetail {
 		OAuditInstruction: project.OAuditInstruction,
 		IAuditInstruction: project.IAuditInstruction,
 		MAuditInstruction: project.MAuditInstruction,
+		FinFunds:          project.FinFunds,
 	}
 	return projectDetail
 }
