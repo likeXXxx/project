@@ -161,6 +161,14 @@ $(document).ready(function(){
             $("#verify-project-inviteway").html(flag.data.project.invite_way);
           } 
           $("#modal-verify-project").modal("show");
+        },
+
+        "click #tmpTableInvite":function(e,value,row,index){
+          if (row.status != "招投标"){
+            alert("此阶段不可查看招投标信息！");
+            return;
+          }
+          $("#modal-invite-project").modal("show");
         }
       }
   
@@ -168,7 +176,7 @@ $(document).ready(function(){
         return[
           '<button id="tmpTableDelete" type="button" class="btn btn-default">删除</button> &nbsp',
           '<button id="tmpTableVerify" type="button" class="btn btn-default">核定参数</button> &nbsp',
-          '<button id="tmpTableInvite" type="button" class="btn btn-default">修改参数</button> &nbsp',
+          '<button id="tmpTableInvite" type="button" class="btn btn-default">招投标</button> &nbsp',
           '<button id="tmpTableRun" type="button" class="btn btn-default">确认执行</button> &nbsp'
         ].join("")
       }
@@ -488,9 +496,10 @@ $(document).ready(function(){
       $.ajax({ 
         type : "POST", 
         url : hostip+"project/teacher/project/verify", 
-        cache: false, 
         processData: false,
         contentType: false,
+        async: false,
+        dataType : "JSON",
         data: formData,
         success: function(data) {
           flag = data;
