@@ -62,6 +62,9 @@ type Project struct {
 	MAuditInstruction string    `orm:"column(m_audit_instruction)" json:"m_audit_instruction,omitempty"`
 	MasterID          int64     `orm:"column(master_id)" json:"master_id,omitempty"`
 	FinFunds          int       `orm:"column(fin_funds)" json:"fin_funds,omitempty"`
+	Purpose           string    `orm:"column(purpose)" json:"purpose,omitempty"`
+	PFunction         string    `orm:"column(p_function)" json:"p_function,omitempty"`
+	ExpectResult      string    `orm:"column(expect_result)" json:"expect_result,omitempty"`
 }
 
 //AbolitionProject ...

@@ -20,7 +20,9 @@ type TmpProjects struct {
 	Name        string `json:"name,omitempty"`
 	CreateTime  string `json:"create_time,omitempty"`
 	Budget      int    `json:"budget,omitempty"`
+	Purpose     string `json:"purpose,omitempty"`
 	InviteWay   string `json:"invite_way,omitempty"`
+	PFunction   string `json:"p_function,omitempty"`
 	Instruction string `json:"instruction,omitempty"`
 	Status      string `json:"status,omitempty"`
 }
@@ -54,6 +56,8 @@ func convertProjectToTmpProjects(projects []db.Project) []TmpProjects {
 			InviteWay:   projects[i].InviteWay,
 			Instruction: projects[i].Instruction,
 			Status:      projects[i].Status,
+			Purpose:     projects[i].Purpose,
+			PFunction:   projects[i].PFunction,
 		}
 		resp = append(resp, tmpProject)
 	}
@@ -138,6 +142,9 @@ type CreateProjectReq struct {
 	Instruction  string `json:"instruction,omitempty"`
 	Budget       int    `json:"budget,omitempty"`
 	Inviteway    string `json:"inviteway,omitempty"`
+	Purpose      string `json:"purpose,omitempty"`
+	PFunction    string `json:"p_function,omitempty"`
+	Result       string `json:"result,omitempty"`
 	TeacherID    int64  `json:"teacher_id,omitempty"`
 }
 
@@ -153,6 +160,9 @@ func CreateProject(projectReq *CreateProjectReq) error {
 		InviteWay:    projectReq.Inviteway,
 		TeacherID:    projectReq.TeacherID,
 		Status:       StatusSchoolVerify,
+		Purpose:      projectReq.Purpose,
+		PFunction:    projectReq.PFunction,
+		ExpectResult: projectReq.Result,
 	}
 
 	_, err := o.Insert(&project)

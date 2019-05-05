@@ -216,14 +216,20 @@ $(document).ready(function(){
               title: '创建时间',
               sortable: true
             },{
+              field: 'purpose',
+              title: '项目用途'
+            },{
               field: 'budget',
               title: '计划预算'
             },{
               field: 'invite_way',
               title: '招标方式'
             },{
+              field: 'p_function',
+              title: '主要功能'
+            },{
               field: 'instruction',
-              title: '项目说明'
+              title: '补充说明'
             },{
               field: 'status',
               title: '项目状态'
@@ -263,7 +269,10 @@ $(document).ready(function(){
       var organization = $("#project-organization").html();
       var instruction = $("#project-instruction").val();
       var budget = $("#project-budget").val();
-      var inviteway = $("input[name='invite-radio']:checked").val(); 
+      var inviteway = $("input[name='invite-radio']:checked").val();
+      var purpose = $("input[name='project-purpose']:checked").val();
+      var p_function = $("#project-function").val();
+      var result = $("#project-expect-result").val();
       if (inviteway == "其他方式") {
         inviteway = $("#project-invite-way-other").val();
       }
@@ -277,7 +286,7 @@ $(document).ready(function(){
         }, 1500);
         return;
       }
-      if (name==""||organization==""||instruction==""||budget==""||inviteway==undefined){
+      if (name==""||organization==""||instruction==""||budget==""||p_function==""||result==""||inviteway==undefined||purpose==undefined){
         $("#pwd-warning").html("请将项目信息填写完整！");
         $(".alert").show();
         var timeout=setTimeout(function () {
@@ -287,7 +296,7 @@ $(document).ready(function(){
         return;
       }
       var flag;
-      var project={"name": name, "organization": organization, "instruction": instruction, "budget": parseInt(budget), "inviteway": inviteway};
+      var project={"name": name, "organization": organization, "instruction": instruction, "budget": parseInt(budget), "inviteway": inviteway,"purpose": purpose,"p_function": p_function,"result":result};
 	    $.ajax({
 		    url: hostip+"project/teacher/project",
 		    type: "POST",
@@ -323,7 +332,10 @@ $(document).ready(function(){
       $("#project-instruction").val("");
       $("#project-budget").val("");
       $("#project-invite-way-other").val("");
+      $("#project-function").val("");
+      $("#project-expect-result").val("");
       $("input[name='invite-radio']").removeAttr('checked');
+      $("input[name='project-purpose']").removeAttr('checked');
     });
 
     
