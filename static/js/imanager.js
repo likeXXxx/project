@@ -111,7 +111,7 @@ $(document).ready(function(){
         $("#master-name").val("");
       });
 
-      //审核通过
+      //初审通过
       $('#auditing-pass').click(function(){
         var verifyInstruction = $("#verify-instruction").val();
         var masterInfo = $("#master-name").val();
@@ -148,7 +148,7 @@ $(document).ready(function(){
         }
       });
 
-      //审核不过
+      //初审不过
       $('#auditing-fail').click(function(){
         var verifyInstruction = $("#verify-instruction").val();
         if (verifyInstruction == "") {
@@ -244,7 +244,8 @@ $(document).ready(function(){
         function AddApplyTableFuncAlty(value,row,index){
           return[
             '<button id="applyTableDetail" type="button" class="btn btn-default">详情</button> &nbsp',
-            '<button id="applyTableAuditing" type="button" class="btn btn-default">审核</button> &nbsp',
+            '<button id="applyTableAuditing" type="button" class="btn btn-default">初审</button> &nbsp',
+            '<button id="applyTableFinAuditing" type="button" class="btn btn-default">终审</button>',
           ].join("")
         }
   
@@ -347,8 +348,4 @@ $(document).ready(function(){
               }
       });
 
-      $(".dropdown-item-master-choice").click(function(){
-        alert(this.val());
-        $("#master-name").val(this.html());
-      });
   });

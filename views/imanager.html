@@ -324,8 +324,14 @@
 
   <script>
     function choiceMaster(btn){
-        $("#master-name").val($(btn).html());
+      var names = $("#master-name").val();
+      if (names == "") {
+        names = names  + $(btn).html();
+      }else{
+        names = names + "," + $(btn).html();
       }
+      $("#master-name").val(names);
+    }
   </script>
 </body>
 </html>
