@@ -109,6 +109,7 @@ $(document).ready(function(){
       function() {
         $("#verify-instruction").val("");
         $("#master-name").val("");
+        cleanMasterArray();
       });
 
       //初审通过
@@ -236,6 +237,10 @@ $(document).ready(function(){
           },
 
             "click #applyTableAuditing":function(e,value,row,index){
+              if (row.status == "专家论证"){
+                alert("请进行终审！");
+                return;
+              }
               last_clicked_apply_project_id = row.id;
               $("#modal-apply-project-Auditing").modal('show');
             }
@@ -293,6 +298,9 @@ $(document).ready(function(){
               },{
                 field: 'instruction',
                 title: '项目说明'
+              },{
+                field: 'status',
+                title: '项目状态'
               },{
                 field: 'teacher_name',
                 title: '负责教师'

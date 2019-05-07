@@ -323,14 +323,25 @@
       </div>
 
   <script>
+    var master_Array = new Array(); 
     function choiceMaster(btn){
+      var master = $(btn).html();
+      if (-1 != master_Array.indexOf(master)){
+        alert("专家:"+master+"已选择");
+        return
+      }
+
       var names = $("#master-name").val();
       if (names == "") {
-        names = names  + $(btn).html();
+        names = names  + master;
       }else{
-        names = names + "," + $(btn).html();
+        names = names + "," + master;
       }
+      master_Array.push(master);
       $("#master-name").val(names);
+    }
+    function cleanMasterArray(){
+      master_Array.length=0;
     }
   </script>
 </body>

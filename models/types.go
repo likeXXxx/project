@@ -19,3 +19,11 @@ const (
 	InviteSS string = "单一来源"
 	InviteIS string = "询价采购"
 )
+
+// 专家审核项目状态
+const (
+	StatusWaitToAudit = "audit"
+	StatusFinishAudit = "finish"
+	ResultPass        = "pass"
+	ResultFail        = "fail"
+)

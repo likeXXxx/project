@@ -59,12 +59,20 @@ type Project struct {
 	RunTime           time.Time `orm:"column(run_time);type(date)" json:"run_time,omitempty"`
 	OAuditInstruction string    `orm:"column(o_audit_instruction)" json:"o_audit_instruction,omitempty"`
 	IAuditInstruction string    `orm:"column(i_audit_instruction)" json:"i_audit_instruction,omitempty"`
-	MAuditInstruction string    `orm:"column(m_audit_instruction)" json:"m_audit_instruction,omitempty"`
-	MasterID          int64     `orm:"column(master_id)" json:"master_id,omitempty"`
 	FinFunds          int       `orm:"column(fin_funds)" json:"fin_funds,omitempty"`
 	Purpose           string    `orm:"column(purpose)" json:"purpose,omitempty"`
 	PFunction         string    `orm:"column(p_function)" json:"p_function,omitempty"`
 	ExpectResult      string    `orm:"column(expect_result)" json:"expect_result,omitempty"`
+}
+
+//MasterAudit ...
+type MasterAudit struct {
+	ProjectID         int    `orm:"column(project_id);pk" json:"project_id,omitempty"`
+	MAuditInstruction string `orm:"column(m_audit_instruction)" json:"m_audit_instruction,omitempty"`
+	MasterID          int64  `orm:"column(master_id);" json:"master_id,omitempty"`
+	Status            string `orm:"column(status)" json:"status,omitempty"`
+	Result            string `orm:"column(result)" json:"result"`
+	FinFunds          int    `orm:"column(fin_funds)" json:"fin_funds,omitempty"`
 }
 
 //AbolitionProject ...

@@ -146,7 +146,7 @@ func (c *MasterController) MasterProjectPass() {
 		return
 	}
 
-	if err := models.MasterPassProject(id, instruction, funds); err != nil {
+	if err := models.MasterPassProject(id, instruction, funds, c.uID); err != nil {
 		logrus.Errorln(err)
 		c.ServeError(http.StatusInternalServerError, err)
 		return

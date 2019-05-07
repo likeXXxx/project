@@ -49,7 +49,6 @@ func convertProjectToProjectDetail(project *db.Project) *ProjectDetail {
 		FinTime:           project.FinTime.Format("2006-01-02"),
 		OAuditInstruction: project.OAuditInstruction,
 		IAuditInstruction: project.IAuditInstruction,
-		MAuditInstruction: project.MAuditInstruction,
 		FinFunds:          project.FinFunds,
 		Purpose:           project.Purpose,
 		PFunction:         project.PFunction,

@@ -38,6 +38,7 @@ type OrganizationApplyProjectResp struct {
 	Instruction  string `json:"instruction,omitempty"`
 	TeacherName  string `json:"teacher_name,omitempty"`
 	TeacherTel   string `json:"teacher_tel,omitempty"`
+	Status       string `json:"status"`
 }
 
 func convertProjectToOrganizationApplyProjectResp(projects []db.Project) ([]*OrganizationApplyProjectResp, error) {
@@ -51,6 +52,7 @@ func convertProjectToOrganizationApplyProjectResp(projects []db.Project) ([]*Org
 			Budget:       projects[i].Budget,
 			InviteWay:    projects[i].InviteWay,
 			Instruction:  projects[i].Instruction,
+			Status:       projects[i].Status,
 		}
 		teacher, err := db.GetTeacherByID(projects[i].TeacherID)
 		if err != nil {
@@ -68,7 +70,7 @@ func GetOrganizationApplyProjects() ([]*OrganizationApplyProjectResp, error) {
 	o := db.GetOrmer()
 
 	var projects []db.Project
-	_, err := o.QueryTable("project").Filter("status", StatusICenterVerify).All(&projects)
+	_, err := o.QueryTable("project").Filter("status__in", StatusICenterVerify, StatusMasterVerify).All(&projects)
 	if err != nil {
 		if err == orm.ErrNoRows {
 			return nil, nil
@@ -99,14 +101,27 @@ func IPassProject(id int, instruction string, masterInfo string) error {
 	}
 	project.Status = StatusMasterVerify
 	project.IAuditInstruction = instruction
-	project.MasterID, err = strconv.ParseInt(strings.Split(masterInfo, " ")[0], 10, 64)
 	if err != nil {
 		logrus.Errorln(err)
 		return err
 	}
-	if _, err := o.Update(&project, "status", "i_audit_instruction", "master_id"); err != nil {
+	if _, err := o.Update(&project, "status", "i_audit_instruction"); err != nil {
 		logrus.Errorln(err)
 		return err
+	}
+
+	masters := strings.Split(masterInfo, ",")
+	for i := 0; i < len(masters); i++ {
+		masterID, _ := strconv.ParseInt(strings.Split(masters[i], " ")[0], 10, 64)
+		masterAudit := db.MasterAudit{
+			ProjectID: id,
+			MasterID:  masterID,
+			Status:    StatusWaitToAudit,
+		}
+		if _, err := o.Insert(&masterAudit); err != nil {
+			logrus.Errorln(err)
+			return err
+		}
 	}
 
 	return nil
