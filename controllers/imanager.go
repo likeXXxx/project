@@ -179,5 +179,52 @@ func (c *IManagerController) GetMasterAuditResult() {
 	c.ServeOK(SuccessVal, result)
 }
 
-// FinAudit ...
-// @router
+// FinAuditPass ...
+// @router /finaudit/pass [post]
+func (c *IManagerController) FinAuditPass() {
+	logrus.Infof("imanager final pass  project url: [%s]", c.Ctx.Input.URI())
+
+	instruction := c.GetString("instruction")
+	id, err := c.GetInt("id")
+	if err != nil {
+		logrus.Errorln(err)
+		c.ServeError(http.StatusBadRequest, err)
+		return
+	}
+	finFunds, err := c.GetInt("funds")
+	if err != nil {
+		logrus.Errorln(err)
+		c.ServeError(http.StatusBadRequest, err)
+		return
+	}
+
+	if err := models.FinAuditPass(instruction, finFunds, id); err != nil {
+		logrus.Errorln(err)
+		c.ServeError(http.StatusInternalServerError, err)
+		return
+	}
+
+	c.ServeOK(SuccessVal, nil)
+}
+
+// FinAuditFail ...
+// @router /finaudit/fail [post]
+func (c *IManagerController) FinAuditFail() {
+	logrus.Infof("imanager final fail project url: [%s]", c.Ctx.Input.URI())
+
+	instruction := c.GetString("instruction")
+	id, err := c.GetInt("id")
+	if err != nil {
+		logrus.Errorln(err)
+		c.ServeError(http.StatusBadRequest, err)
+		return
+	}
+
+	if err := models.FinAuditFail(instruction, id, c.uID); err != nil {
+		logrus.Errorln(err)
+		c.ServeError(http.StatusInternalServerError, err)
+		return
+	}
+
+	c.ServeOK(SuccessVal, nil)
+}

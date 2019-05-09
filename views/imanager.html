@@ -256,7 +256,7 @@
    
         <!-- 模态框底部 -->
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal" data-toggle="modal" data-target="#modal-apply-project-Auditing">审核</button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal" id="btn-skip-audit">审核</button>
           <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
         </div>
    
@@ -299,6 +299,48 @@
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" id="auditing-pass">审核通过</button>
           <button type="button" class="btn btn-secondary" id="auditing-fail">审核不过</button>
+        </div>
+   
+      </div>
+    </div>
+  </div>
+
+  <!-- 终审模态框 -->
+  <div class="modal fade" id="modal-final-auditing">
+    <div class="modal-dialog">
+      <div class="modal-content">
+   
+        <!-- 模态框头部 -->
+        <div class="modal-header">
+          <h4 class="modal-title">审核项目</h4>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+   
+        <!-- 模态框主体 -->
+        <div class="modal-body">
+            <div id="fin-modal-body">
+
+            </div>
+            <form>
+            <label for="verify-project-instruction">审核意见:</label>
+            <div class="form-group">
+              <textarea class="form-control" rows="3" id="fin-verify-instruction"></textarea>
+            </div>
+            <div class="form-group">
+              <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                  <span class="input-group-text">最终预算:</span>
+                </div>
+                <input type="text" class="form-control" placeholder="确认最终预算" id="fin-verify-funds">
+              </div>
+            </div>
+            </form>
+        </div>
+   
+        <!-- 模态框底部 -->
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" id="fin-auditing-pass">审核通过</button>
+          <button type="button" class="btn btn-secondary" id="fin-auditing-fail">审核不过</button>
         </div>
    
       </div>

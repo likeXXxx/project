@@ -18,8 +18,35 @@ func init() {
 
     beego.GlobalControllerRouter["ProjectManage/controllers:IManagerController"] = append(beego.GlobalControllerRouter["ProjectManage/controllers:IManagerController"],
         beego.ControllerComments{
+            Method: "FinAuditFail",
+            Router: `/finaudit/fail`,
+            AllowHTTPMethods: []string{"post"},
+            MethodParams: param.Make(),
+            Filters: nil,
+            Params: nil})
+
+    beego.GlobalControllerRouter["ProjectManage/controllers:IManagerController"] = append(beego.GlobalControllerRouter["ProjectManage/controllers:IManagerController"],
+        beego.ControllerComments{
+            Method: "FinAuditPass",
+            Router: `/finaudit/pass`,
+            AllowHTTPMethods: []string{"post"},
+            MethodParams: param.Make(),
+            Filters: nil,
+            Params: nil})
+
+    beego.GlobalControllerRouter["ProjectManage/controllers:IManagerController"] = append(beego.GlobalControllerRouter["ProjectManage/controllers:IManagerController"],
+        beego.ControllerComments{
             Method: "GetInfo",
             Router: `/getinfo`,
+            AllowHTTPMethods: []string{"get"},
+            MethodParams: param.Make(),
+            Filters: nil,
+            Params: nil})
+
+    beego.GlobalControllerRouter["ProjectManage/controllers:IManagerController"] = append(beego.GlobalControllerRouter["ProjectManage/controllers:IManagerController"],
+        beego.ControllerComments{
+            Method: "GetMasterAuditResult",
+            Router: `/master/audit`,
             AllowHTTPMethods: []string{"get"},
             MethodParams: param.Make(),
             Filters: nil,

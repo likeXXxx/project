@@ -172,7 +172,7 @@ func MAbolitionProject(projectID int, instruction string, mID int64) error {
 	masterAudit.Result = ResultFail
 	masterAudit.Status = StatusFinish
 	if _, err := o.QueryTable("master_audit").Filter("project_id", projectID).Filter("master_id", mID).Update(orm.Params{
-		"m_audit_instruction": "instruction", "result": ResultFail, "status": StatusFinish,
+		"m_audit_instruction": instruction, "result": ResultFail, "status": StatusFinish,
 	}); err != nil {
 		logrus.Errorln(err)
 		return err

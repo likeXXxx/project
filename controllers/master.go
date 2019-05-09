@@ -99,7 +99,11 @@ func (c *MasterController) GetApplyProjects() {
 	}
 
 	resp := make(map[string]interface{})
-	resp["rows"] = applyProjectsResp
+	if len(applyProjectsResp) == 0 {
+		resp["rows"] = make([]models.MasterApplyProjectResp, 0)
+	} else {
+		resp["rows"] = applyProjectsResp
+	}
 	resp["total"] = len(applyProjectsResp)
 	c.Data["json"] = resp
 	c.ServeJSON()

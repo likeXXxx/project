@@ -103,6 +103,8 @@ $(document).ready(function(){
       });
 
       var last_clicked_apply_project_id;
+      var last_clicked_apply_project_status;
+      var last_clicked_fin_project_id;
 
       //审核项目模态框
       $('#modal-apply-project-Auditing').on('hide.bs.modal',
@@ -110,6 +112,13 @@ $(document).ready(function(){
         $("#verify-instruction").val("");
         $("#master-name").val("");
         cleanMasterArray();
+      });
+
+      $('#modal-final-auditing').on('hide.bs.modal',
+      function() {
+        $("#fin-verify-instruction").val("");
+        $("#fin-verify-funds").val("");
+        $("#fin-modal-body").empty();
       });
 
       //初审通过
@@ -120,8 +129,8 @@ $(document).ready(function(){
           alert("审核说明不能为空！");
           return;
         }
-        if (masterInfo == "") {
-          alert("请指定审核的专家！");
+        if (masterInfo == ""||(masterInfo.split(",")).length<3) {
+          alert("请指定至少三个审核的专家！");
           return;
         }
 
@@ -196,6 +205,7 @@ $(document).ready(function(){
         window.applyOperateEvents = {
             "click #applyTableDetail":function(e,value,row,index){
               last_clicked_apply_project_id = row.id;
+              last_clicked_apply_project_status = row.status;
               var flag;
               $.ajax({
               url: hostip+"project/imanager/project/detail",
@@ -242,7 +252,54 @@ $(document).ready(function(){
                 return;
               }
               last_clicked_apply_project_id = row.id;
+
               $("#modal-apply-project-Auditing").modal('show');
+            },
+
+            "click #applyTableFinAuditing":function(e,value,row,index){
+              last_clicked_fin_project_id = row.id;
+              if (row.status == "网信中心审核"){
+                alert("请进行初审！");
+                return;
+              }
+              var flag;
+              $.ajax({
+                url: "http://localhost:8080/project/imanager/master/audit",
+                type: "GET",
+                async: false,
+                dataType : "JSON",
+                data: {"id": row.id},
+                success: function(data) {
+                  flag = data;
+                },
+                error: function (jqXHR) { 
+                  flag = jqXHR.responseJSON;
+                }
+              },);
+              if (flag.msg == "notReady"){
+                alert("请等待所有专家审核完成后再进行终审！");
+                return;
+              } else if (flag.msg != "success"){
+                alert(flag.msg);
+                return;
+              }
+
+              for (var i=0;i<flag.data.length;i++){
+                var result = new String();
+                if (flag.data[i].result == "pass"){
+                  result = "通过";
+                } else {
+                  result = "否决";
+                }
+                var info = "<div class='form-group'>\
+                <label>专家:</label>"+"<label>"+flag.data[i].master_id+" "+flag.data[i].master_name+"</label>\
+                <br><label>审核意见:</label>"+result+"&nbsp; &nbsp;<label>指导预算:</label>"+"\
+                <label>"+flag.data[i].fin_funds+"</label><br>\
+                <label>审核说明:</label> <label>"+flag.data[i].instruction+"</label>\
+                </div> <hr>";
+                $("#fin-modal-body").append(info);
+              }
+              $("#modal-final-auditing").modal('show');
             }
         }
     
@@ -354,6 +411,84 @@ $(document).ready(function(){
                   $("#dropdown-master-choice").append(info);
                 }
               }
+      });
+
+      $("#btn-skip-audit").click(function(){
+        if (last_clicked_apply_project_status == "专家论证"){
+          alert("此阶段请进行最终审核！");
+          return;
+        }
+        $("#modal-apply-project-Auditing").modal('show');
+      });
+
+      //终审通过
+      $('#fin-auditing-pass').click(function(){
+        var verifyInstruction = $("#fin-verify-instruction").val();
+        if (verifyInstruction == "") {
+          alert("审核说明不能为空！");
+          return;
+        }
+        var fin_funds = $("#fin-verify-funds").val();
+        var r=/^[1-9][0-9]+$/gi;
+        if (!r.test(fin_funds)){
+          alert("确认的项目资金应该为纯数字！");
+          return;
+        }
+
+        var flag;
+        $.ajax({
+            url: "http://localhost:8080/project/imanager/finaudit/pass",
+            type: "POST",
+            async: false,
+            dataType : "JSON",
+            data: {"instruction": verifyInstruction,"id":last_clicked_fin_project_id,"funds":fin_funds},
+            success: function(data) {
+                flag = data;
+            },
+            error: function (jqXHR) { 
+              flag = jqXHR.responseJSON;
+            }
+        },);
+        if (flag.msg != "success"){
+          alert(flag.msg);
+          return;
+        } else {
+          $("#ApplyProjectTable").bootstrapTable('refresh');
+          $("#modal-final-auditing").modal('hide');
+          return;
+        }
+      });
+
+      //初审不过
+      $('#fin-auditing-fail').click(function(){
+        var verifyInstruction = $("#fin-verify-instruction").val();
+        if (verifyInstruction == "") {
+          alert("审核说明不能为空！");
+          return;
+        }
+
+        var flag;
+        $.ajax({
+            url: "http://localhost:8080/project/imanager/finaudit/fail",
+            type: "POST",
+            async: false,
+            dataType : "JSON",
+            data: {"instruction": verifyInstruction, "id":last_clicked_fin_project_id},
+            success: function(data) {
+                flag = data;
+            },
+            error: function (jqXHR) { 
+              flag = jqXHR.responseJSON;
+            }
+        },);
+        if (flag.msg != "success"){
+          alert(flag.msg);
+          return;
+        } else {
+          $("#ApplyProjectTable").bootstrapTable('refresh');
+          $("#modal-final-auditing").modal('hide');
+          return;
+        }
       });
 
   });
