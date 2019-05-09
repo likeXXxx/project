@@ -156,3 +156,28 @@ func (c *IManagerController) ImanagerProjectFail() {
 
 	c.ServeOK(SuccessVal, nil)
 }
+
+// GetMasterAuditResult ...
+// @router /master/audit [get]
+func (c *IManagerController) GetMasterAuditResult() {
+	logrus.Infof("imanager get master audit result, url: [%s]", c.Ctx.Input.URI())
+
+	id, err := c.GetInt("id")
+	if err != nil {
+		logrus.Errorln(err)
+		c.ServeError(http.StatusBadRequest, err)
+		return
+	}
+
+	result, err := models.GetMasterAuditResult(id)
+	if err != nil {
+		logrus.Errorln(err)
+		c.ServeError(http.StatusInternalServerError, err)
+		return
+	}
+
+	c.ServeOK(SuccessVal, result)
+}
+
+// FinAudit ...
+// @router

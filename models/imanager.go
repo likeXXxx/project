@@ -2,6 +2,7 @@ package models
 
 import (
 	"ProjectManage/db"
+	"fmt"
 	"strconv"
 	"strings"
 
@@ -171,4 +172,27 @@ func IAbolitionProject(projectID int, instruction string, iID int64) error {
 	}
 
 	return nil
+}
+
+// GetMasterAuditResult ...
+func GetMasterAuditResult(id int) ([]db.MasterAudit, error) {
+	o := db.GetOrmer()
+
+	var masterAudit []db.MasterAudit
+	_, err := o.QueryTable("master_audit").Filter("project_id", id).All(&masterAudit)
+	if err != nil {
+		logrus.Errorln(err)
+		return nil, err
+	}
+	if len(masterAudit) == 0 {
+		return nil, fmt.Errorf("不存在此id的审核项目")
+	}
+
+	for _, info := range masterAudit {
+		if info.Status == StatusWaitToAudit {
+			return nil, fmt.Errorf("notReady")
+		}
+	}
+
+	return masterAudit, nil
 }
