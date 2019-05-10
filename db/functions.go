@@ -85,3 +85,19 @@ func GetProjectByID(id int) (*Project, error) {
 
 	return &project, nil
 }
+
+// GetProjectInviteByID ...
+func GetProjectInviteByID(id int) (*ProjectInvite, error) {
+	o := GetOrmer()
+	info := o.QueryTable("project_invite").Filter("id", id)
+	var project ProjectInvite
+	if err := info.One(&project); err != nil {
+		if err == orm.ErrNoRows {
+			return nil, fmt.Errorf("该项目不存在！")
+		}
+
+		return nil, err
+	}
+
+	return &project, nil
+}

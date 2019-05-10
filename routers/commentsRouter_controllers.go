@@ -342,6 +342,15 @@ func init() {
 
     beego.GlobalControllerRouter["ProjectManage/controllers:TeacherController"] = append(beego.GlobalControllerRouter["ProjectManage/controllers:TeacherController"],
         beego.ControllerComments{
+            Method: "GetInviteProject",
+            Router: `/project/invite`,
+            AllowHTTPMethods: []string{"get"},
+            MethodParams: param.Make(),
+            Filters: nil,
+            Params: nil})
+
+    beego.GlobalControllerRouter["ProjectManage/controllers:TeacherController"] = append(beego.GlobalControllerRouter["ProjectManage/controllers:TeacherController"],
+        beego.ControllerComments{
             Method: "GetTempProjects",
             Router: `/project/temp`,
             AllowHTTPMethods: []string{"get"},

@@ -114,6 +114,11 @@ $(document).ready(function(){
       }
     })
 
+    //招标信息模态框
+    $("#modal-invite-project").on('hide.bs.modal',function() {
+      $("#invite-project-file").empty();
+    })
+
     function Table_1_Init() {
       //得到查询的参数
       queryParams = function (params) {
@@ -168,7 +173,38 @@ $(document).ready(function(){
             alert("此阶段不可查看招投标信息！");
             return;
           }
-          $("#modal-invite-project").modal("show");
+          var flag;
+          $.ajax({
+            url: "http://localhost:8080/project/teacher/project/invite",
+            type: "GET",
+            async: false,
+            dataType : "JSON",
+            data: {"id": row.id},
+            success: function(data) {
+              flag = data;
+            },
+            error: function (jqXHR) { 
+              flag = jqXHR.responseJSON;
+            }
+          },);
+          if (flag.msg == "success"){
+            $("#invite-project-id").html(flag.data.id);
+            $("#invite-project-name").html(flag.data.name);
+            $("#invite-project-begintime").html(flag.data.begin_time);
+            $("#invite-project-budget").html(flag.data.funds);
+            $("#invite-project-inviteway").html(flag.data.invite_way);
+            $("#invite-project-instruction").val(flag.data.instruction);
+
+            var fileName = flag.data.invite_file_name;
+            var pre = fileName.split(".")[0];
+            var info = "<a href='../static/file/"+row.id+"/"+fileName+"' download='"+fileName+"'>"+pre+"</a>";
+            $("#invite-project-file").append(info);
+            $("#modal-invite-project").modal("show");
+          } else {
+            alert(flag.msg);
+            return;
+          }
+          
         }
       }
   
@@ -529,5 +565,7 @@ $(document).ready(function(){
       }
     });
 
-
+    $("#btn-apply-change-inviteproject").click(function(){
+      $("#apply-change-inviteproject").modal("show");
+    });
 });

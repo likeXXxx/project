@@ -220,6 +220,7 @@ func TeacherVerifyProject(id int, instruction string, fileName string) error {
 		InviteWay:      project.InviteWay,
 		Instruction:    instruction,
 		InviteFileName: fileName,
+		Name:           project.Name,
 	}
 
 	_, err := o.Insert(&inviteProject)
@@ -229,4 +230,15 @@ func TeacherVerifyProject(id int, instruction string, fileName string) error {
 	}
 
 	return nil
+}
+
+//GetInviteProject ...
+func GetInviteProject(id int) (*db.ProjectInvite, error) {
+	project, err := db.GetProjectInviteByID(id)
+	if err != nil {
+		logrus.Errorln(err)
+		return nil, err
+	}
+
+	return project, nil
 }

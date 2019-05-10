@@ -349,7 +349,7 @@
    
         <!-- 模态框主体 -->
         <div class="modal-body">
-        <form id="form-verify-project">
+        <form id="form-invite-project">
           <div class="form-group">
             <label for="invite-project-id">项目ID:</label>
             <label id="invite-project-id" name="project-id"></label>
@@ -360,6 +360,9 @@
           <div class="form-group">
             <label for="invite-project-budget">计划预算:</label>
             <label id="invite-project-budget" name="project-id"></label>
+            &nbsp; &nbsp; &nbsp; &nbsp;
+            <label for="invite-project-begintime">开始时间:</label>
+            <label id="invite-project-begintime"></label>
           </div>
           <div class="form-group">
             <label for="invite-project-inviteway">招标方式:</label>
@@ -367,22 +370,63 @@
           </div>
           <label for="invite-instruction">招标说明:</label>
           <div class="form-group">
-            <textarea class="form-control" rows="3" id="verify-inviteway-instruction" name="invite-instruction"></textarea>
+            <textarea class="form-control" rows="3" id="invite-project-instruction" name="invite-instruction"></textarea>
           </div>
-          <label for="invite-project-file">招标文件附件:</label>
+          <div class="form-group">
+            <label>招标文件附件:</label>
+            <div id="invite-project-file"></div>
+          </div>
         </form>
           
         </div>
    
         <!-- 模态框底部 -->
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" id="btn-modal-invite-project-ok">申请修改参数</button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal" id="btn-apply-change-inviteproject">申请修改参数</button>
           <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
         </div>
    
       </div>
     </div>
   </div>
+
+  <!-- 申请修改参数 -->
+  <div class="modal fade" id="apply-change-inviteproject">
+      <div class="modal-dialog">
+        <div class="modal-content">
+     
+          <!-- 模态框头部 -->
+          <div class="modal-header">
+            <h4 class="modal-title">申请修改参数</h4>
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+          </div>
+     
+          <!-- 模态框主体 -->
+          <div class="modal-body">
+              <form>
+                <div>
+                  <strong>说明:</strong>
+                  <p>
+                    申请后等待信息化推进办公室审核，审核通过后项目返回核定参数状态，否则不可修改。
+                  </p>
+                  <hr>
+                </div>
+                  <label for="apply-change-instruction">申请说明:</label>
+                  <div class="form-group">
+                    <textarea class="form-control" rows="3" id="apply-change-instruction"></textarea>
+                  </div>
+                </form>
+          </div>
+     
+          <!-- 模态框底部 -->
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" id="btn-apply-change-ok">确定</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+          </div>
+     
+        </div>
+      </div>
+    </div>
   
       <div class="tab-content">
         <div id="tab-1" class="container tab-pane active tabcontent"><br>

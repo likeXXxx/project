@@ -233,3 +233,25 @@ func (c *TeacherController) VerifyProject() {
 
 	c.ServeOK(SuccessVal, nil)
 }
+
+// GetInviteProject ...
+// @router /project/invite [get]
+func (c *TeacherController) GetInviteProject() {
+	logrus.Infof("teacher get invite project info url: [%s]", c.Ctx.Input.URI())
+
+	id, err := c.GetInt("id")
+	if err != nil {
+		logrus.Errorln(err)
+		c.ServeError(http.StatusBadRequest, err)
+		return
+	}
+
+	project, err := models.GetInviteProject(id)
+	if err != nil {
+		logrus.Errorln(err)
+		c.ServeError(http.StatusInternalServerError, err)
+		return
+	}
+
+	c.ServeOK(SuccessVal, project)
+}

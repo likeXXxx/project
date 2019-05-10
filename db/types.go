@@ -92,6 +92,7 @@ type AbolitionProject struct {
 //ProjectInvite ...
 type ProjectInvite struct {
 	ID             int       `orm:"column(id);pk" json:"id,omitempty"`
+	Name           string    `orm:"column(name)" json:"name,omitempty"`
 	BeginTime      time.Time `orm:"column(begin_time);auto_now_add;type(date)" json:"begin_time,omitempty"`
 	FinTime        time.Time `orm:"column(fin_time);type(date)" json:"fin_time,omitempty"`
 	Funds          int       `orm:"column(funds)" json:"funds,omitempty"`
