@@ -104,3 +104,13 @@ type ProjectInvite struct {
 	ChangeReason   string    `orm:"column(change_reason)" json:"change_reason"`
 	ChangeApply    string    `orm:"column(change_apply)" json:"change_apply"`
 }
+
+//ProjectEvent ...
+type ProjectEvent struct {
+	ID          int       `orm:"column(id);pk" json:"id,omitempty"`
+	ProjectID   int       `orm:"column(project_id)" json:"project_id,omitempty"`
+	Name        string    `orm:"column(name)" json:"name,omitempty"`
+	Time        time.Time `orm:"column(time);type(date)" json:"time,omitempty"`
+	UseFunds    int       `orm:"column(use_funds)" json:"use_funds"`
+	Instruction string    `orm:"column(instruction)" json:"instruction"`
+}

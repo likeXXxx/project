@@ -427,6 +427,107 @@
         </div>
       </div>
     </div>
+
+    <!-- 确认执行项目 -->
+  <div class="modal fade" id="modal-verify-project-run">
+      <div class="modal-dialog">
+        <div class="modal-content">
+     
+          <!-- 模态框头部 -->
+          <div class="modal-header">
+            <h4 class="modal-title">确认信息</h4>
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+          </div>
+     
+          <!-- 模态框主体 -->
+          <div class="modal-body">
+              <div class="input-group mb-3">
+                  <div class="input-group-prepend">
+                      <span class="input-group-text">中标公司</span>
+                  </div>
+                  <input type="text" class="form-control" placeholder="最终中标公司名称" id="project-invite-company">
+              </div>
+              <div class="input-group mb-3">
+                  <div class="input-group-prepend">
+                      <span class="input-group-text">中标金额</span>
+                  </div>
+                  <input type="text" class="form-control" placeholder="项目中标的实际金额" id="project-invite-funds">
+              </div>
+          </div>
+     
+          <!-- 模态框底部 -->
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" id="btn-project-run-ok">确认执行</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+          </div>
+     
+        </div>
+      </div>
+    </div>
+
+    <!-- running project添加事件 -->
+  <div class="modal fade" id="modal-running-project-addevent">
+      <div class="modal-dialog">
+        <div class="modal-content">
+     
+          <!-- 模态框头部 -->
+          <div class="modal-header">
+            <h4 class="modal-title">添加事件</h4>
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+          </div>
+     
+          <!-- 模态框主体 -->
+          <div class="modal-body">
+              <div class="input-group mb-3">
+                  <div class="input-group-prepend">
+                      <span class="input-group-text">使用金额</span>
+                  </div>
+                  <input type="text" class="form-control" placeholder="本次使用的预算金额" id="running-project-use-money">
+              </div>
+              <div class="input-group mb-3">
+                  <div class="input-group-prepend">
+                      <span class="input-group-text">使用说明</span>
+                  </div>
+                  <input type="text" class="form-control" placeholder="本次预算使用说明" id="running-project-use-instruction">
+              </div>
+          </div>
+     
+          <!-- 模态框底部 -->
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" id="running-project-addevent-ok">添加事件</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+          </div>
+     
+        </div>
+      </div>
+    </div>
+
+    <!-- running project查看事件 -->
+  <div class="modal fade" id="modal-running-project-addevent">
+      <div class="modal-dialog">
+        <div class="modal-content">
+     
+          <!-- 模态框头部 -->
+          <div class="modal-header">
+            <h4 class="modal-title">事件列表</h4>
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+          </div>
+     
+          <!-- 模态框主体 -->
+          <div class="modal-body">
+              <div id="running-project-event-list">
+
+              </div>
+          </div>
+     
+          <!-- 模态框底部 -->
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+          </div>
+     
+        </div>
+      </div>
+    </div>
   
       <div class="tab-content">
         <div id="tab-1" class="container tab-pane active tabcontent"><br>
@@ -446,14 +547,23 @@
           <h4>已废除项目:</h4>
           <table id="abolition-project-table"></table>
         </div>
-       <div id="tab-2" class="container tab-pane fade tabcontent"><br>
-         <h3>Menu 1</h3>
-         <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-       </div>
-       <div id="tab-3" class="container tab-pane fade tabcontent"><br>
+
+      <div id="tab-2" class="container tab-pane fade tabcontent"><br>
+        <div class="btn-group">
+          <button type="button" class="btn btn-primary" id="btn-refresh-RunningProjectTable">刷新</button>
+        </div>
+          
+        <div>
+          <table id="RunningProjectTable">
+          
+          </table>
+        </div>
+      </div>
+
+      <div id="tab-3" class="container tab-pane fade tabcontent"><br>
           <h3>Menu 2</h3>
          <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam.</p>
-       </div>
+      </div>
      </div>
 
       </div>

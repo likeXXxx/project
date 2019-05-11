@@ -3,6 +3,7 @@ package models
 import (
 	"ProjectManage/db"
 	"fmt"
+	"time"
 
 	"github.com/astaxie/beego/orm"
 
@@ -70,7 +71,7 @@ func GetTempProjects(teacherID int64) (*TmpProjectsResp, error) {
 	o := db.GetOrmer()
 
 	var projects []db.Project
-	_, err := o.QueryTable("project").Exclude("invite_way", StatusRunning).Exclude("invite_way", StatusFinish).Filter("teacher_id", teacherID).All(&projects)
+	_, err := o.QueryTable("project").Exclude("status", StatusRunning).Exclude("status", StatusFinish).Filter("teacher_id", teacherID).All(&projects)
 	if err != nil {
 		if err == orm.ErrNoRows {
 			return nil, nil
@@ -261,6 +262,138 @@ func ChangeInviteProject(id int, instruction string) error {
 	projectInvite.ChangeApply = "true"
 	projectInvite.ChangeReason = instruction
 	if _, err := o.Update(projectInvite, "change_reason", "change_apply"); err != nil {
+		logrus.Errorln(err)
+		return err
+	}
+
+	return nil
+}
+
+//ProjectRun ...
+func ProjectRun(company string, id, funds int) error {
+	o := db.GetOrmer()
+	projectInvite, err := db.GetProjectInviteByID(id)
+	if err != nil {
+		logrus.Errorln(err)
+		return err
+	}
+	projectInvite.CompanyName = company
+	projectInvite.FinFunds = funds
+	projectInvite.FinTime = time.Now()
+	if _, err := o.Update(projectInvite, "company_name", "fin_funds", "fin_time"); err != nil {
+		logrus.Errorln(err)
+		return err
+	}
+
+	project, err := db.GetProjectByID(id)
+	project.RunTime = time.Now()
+	project.Status = StatusRunning
+	if _, err := o.Update(project, "run_time", "status"); err != nil {
+		logrus.Errorln(err)
+		return err
+	}
+
+	return nil
+}
+
+//RunningProjectResp ..
+type RunningProjectResp struct {
+	ID            int    `json:"id,omitempty"`
+	Name          string `json:"name,omitempty"`
+	RunTime       string `json:"run_time,omitempty"`
+	CompanyName   string `json:"company_name,omitempty"`
+	FinFunds      int    `json:"fin_funds,omitempty"`
+	LeftoverFunds int    `json:"leftover_funds,omitempty"`
+}
+
+func getProjectLeftFunds(id int, totalFunds int) (int, error) {
+	o := db.GetOrmer()
+
+	var projects []db.ProjectEvent
+	_, err := o.QueryTable("project_event").Filter("project_id", id).All(&projects)
+	if err != nil {
+		if err == orm.ErrNoRows {
+			return totalFunds, nil
+		}
+
+		logrus.Errorln(err)
+		return totalFunds, err
+	}
+	if len(projects) == 0 {
+		return totalFunds, nil
+	}
+
+	result := totalFunds
+	for i := 0; i < len(projects); i++ {
+		result = result - projects[i].UseFunds
+	}
+	return result, nil
+}
+
+func convertProjectToRunningProjectResp(projects []db.Project) ([]RunningProjectResp, error) {
+	if len(projects) == 0 {
+		return make([]RunningProjectResp, 0, 0), nil
+	}
+
+	projectResp := make([]RunningProjectResp, 0, len(projects))
+	for i := 0; i < len(projects); i++ {
+		runningProject := RunningProjectResp{
+			ID:       projects[i].ID,
+			Name:     projects[i].Name,
+			RunTime:  projects[i].RunTime.Format("2006-01-02"),
+			FinFunds: projects[i].FinFunds,
+		}
+
+		projectInvite, err := db.GetProjectInviteByID(projects[i].ID)
+		if err != nil {
+			logrus.Errorln(err)
+			return nil, err
+		}
+		runningProject.CompanyName = projectInvite.CompanyName
+
+		runningProject.LeftoverFunds, err = getProjectLeftFunds(projects[i].ID, projects[i].FinFunds)
+		if err != nil {
+			logrus.Errorln(err)
+			return nil, err
+		}
+
+		projectResp = append(projectResp, runningProject)
+	}
+
+	return projectResp, nil
+}
+
+//GetRunningProjects ...
+func GetRunningProjects(teacherID int64) ([]RunningProjectResp, error) {
+	o := db.GetOrmer()
+
+	var projects []db.Project
+	_, err := o.QueryTable("project").Filter("teacher_id", teacherID).Filter("status", StatusRunning).All(&projects)
+	if err != nil {
+		logrus.Errorln(err)
+		return nil, err
+	}
+
+	return convertProjectToRunningProjectResp(projects)
+}
+
+//RunningProjectAddEvent ...
+func RunningProjectAddEvent(instruction string, funds, id int) error {
+	project, err := db.GetProjectByID(id)
+	if err != nil {
+		logrus.Errorln(err)
+		return err
+	}
+
+	projectEvent := db.ProjectEvent{
+		ProjectID:   id,
+		Name:        project.Name,
+		Time:        time.Now(),
+		UseFunds:    funds,
+		Instruction: instruction,
+	}
+	o := db.GetOrmer()
+	if _, err := o.Insert(&projectEvent); err != nil {
 		logrus.Errorln(err)
 		return err
 	}

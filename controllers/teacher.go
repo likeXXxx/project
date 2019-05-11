@@ -277,3 +277,78 @@ func (c *TeacherController) ApplyChangeInviteProject() {
 
 	c.ServeOK(SuccessVal, nil)
 }
+
+// ProjectRun ...
+// @router /project/run [post]
+func (c *TeacherController) ProjectRun() {
+	logrus.Infof("teacher run project info: [%s]", c.Ctx.Input.URI())
+
+	company := c.GetString("company")
+	funds, err := c.GetInt("funds")
+	if err != nil {
+		logrus.Errorln(err)
+		c.ServeError(http.StatusBadRequest, err)
+		return
+	}
+	id, err := c.GetInt("id")
+	if err != nil {
+		logrus.Errorln(err)
+		c.ServeError(http.StatusBadRequest, err)
+		return
+	}
+
+	if err := models.ProjectRun(company, id, funds); err != nil {
+		logrus.Errorln(err)
+		c.ServeError(http.StatusInternalServerError, err)
+		return
+	}
+
+	c.ServeOK(SuccessVal, nil)
+}
+
+// GetRunningProjects ...
+// @router /project/run [get]
+func (c *TeacherController) GetRunningProjects() {
+	logrus.Infof("teacher[%s] get running projects url: [%s]", c.uID, c.Ctx.Input.URI())
+
+	runningProjectsResp, err := models.GetRunningProjects(c.uID)
+	if err != nil {
+		logrus.Errorln(err)
+		c.ServeError(http.StatusInternalServerError, err)
+		return
+	}
+
+	resp := make(map[string]interface{})
+	resp["rows"] = runningProjectsResp
+	resp["total"] = len(runningProjectsResp)
+	c.Data["json"] = resp
+	c.ServeJSON()
+}
+
+// RunningProjectAddEvent ...
+// @router /project/run/addevent [post]
+func (c *TeacherController) RunningProjectAddEvent() {
+	logrus.Infof("teacher[%s] add running project event url: [%s]", c.uID, c.Ctx.Input.URI())
+
+	instruction := c.GetString("instruction")
+	funds, err := c.GetInt("funds")
+	if err != nil {
+		logrus.Errorln(err)
+		c.ServeError(http.StatusBadRequest, err)
+		return
+	}
+	id, err := c.GetInt("id")
+	if err != nil {
+		logrus.Errorln(err)
+		c.ServeError(http.StatusBadRequest, err)
+		return
+	}
+
+	if err := models.RunningProjectAddEvent(instruction, funds, id); err != nil {
+		logrus.Errorln(err)
+		c.ServeError(http.StatusInternalServerError, err)
+		return
+	}
+
+	c.ServeOK(SuccessVal, nil)
+}

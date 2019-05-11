@@ -2,12 +2,15 @@ $(document).ready(function(){
   $(".alert").hide();
   Table_1_Init();
   Table_Abolition_Project_Init();
+  RunningProjectTable_Init();
   $.ajaxSetup({
     contentType: "application/x-www-form-urlencoded; charset=utf-8"
   });
   var last_clicked_abolition_project_id;
   var last_clicked_apply_project_id;
   var information_modal_type;
+  var last_clicked_running_project_id;
+  var last_clicked_running_project_leftover_funds;
 
   var TeacherInfo = new Array(2);
   var hostip = "http://localhost:8080/";
@@ -34,7 +37,7 @@ $(document).ready(function(){
   });
   
   $("#li2").click(function(){
-    $("#u-name").html("申报中")
+    $("#u-name").html("执行中")
   });
   
   $("#li3").click(function(){
@@ -204,9 +207,18 @@ $(document).ready(function(){
           } else {
             alert(flag.msg);
             return;
+          } 
+        },
+
+        "click #tmpTableRun":function(e,value,row,index){
+          last_clicked_apply_project_id = row.id;
+          if (row.status != "招投标"){
+            alert("未招标项目不可执行！");
+            return;
           }
-          
-        }
+
+          $("#modal-verify-project-run").modal("show");
+        },
       }
   
       function AddTmpTableFuncAlty(value,row,index){
@@ -572,6 +584,7 @@ $(document).ready(function(){
       $("#apply-change-instruction").val("");
     })
 
+    //申请修改参数
     $("#btn-apply-change-ok").click(function(){
       var instruction = $("#apply-change-instruction").val();
       if (instruction == ""){
@@ -600,4 +613,197 @@ $(document).ready(function(){
       }
     });
 
+    //确认执行项目模态框关闭
+    $('#modal-verify-project-run').on('hide.bs.modal',function() {
+      $("#project-invite-company").val("");
+      $("#project-invite-funds").val("");
+    })
+
+    $("#btn-project-run-ok").click(function(){
+      var company = $("#project-invite-company").val();
+      var funds = $("#project-invite-funds").val();
+      if (company==""||funds==""){
+        alert("请将信息填写完整!");
+        return;
+      }
+      var r=/^[1-9][0-9]+$/gi;
+      if (!r.test(funds)){
+        alert("最终资金请输入纯数字！");
+        return;
+      }
+      
+      var flag; 
+      $.ajax({ 
+        url : hostip+"project/teacher/project/run", 
+        type: "POST",
+        async: false,
+        dataType : "JSON",
+        data: {"company":company,"funds":funds, "id":last_clicked_apply_project_id},
+        success: function(data) {
+          flag = data;
+        },
+        error: function (jqXHR) { 
+          flag = jqXHR.responseJSON;
+        }
+      },);
+      if (flag.msg == "success"){
+        $("#modal-verify-project-run").modal("hide");
+        $("#TmpProjectTable").bootstrapTable('refresh');
+        return;
+      } else {
+        alert(flag.msg);
+        return;
+      }
+    });
+
+
+    //正在执行的项目
+    function RunningProjectTable_Init(){
+      queryParams = function (params) {
+        var temp = {   
+        limit: params.limit,   //页面大小
+        offset:params.offset
+        };
+       return temp;
+      };
+
+      //Table中按钮绑定事件
+      window.abolitionOperateEvents = {
+        "click #running-project-addevent":function(e,value,row,index){
+          last_clicked_running_project_id = row.id;
+          last_clicked_running_project_leftover_funds = row.leftover_funds;
+          $("#modal-running-project-addevent").modal("show");
+        },
+        "click #running-project-listevent":function(e,value,row,index){
+          last_clicked_running_project_id = row.id;
+          $("#modal-running-project-listevent").modal("show");
+        },
+      }
+
+      function AddAbolitionTableFuncAlty(value,row,index){
+        return[
+          '<button id="running-project-addevent" type="button" class="btn btn-default">添加事件</button>',
+          '<button id="running-project-listevent" type="button" class="btn btn-default">查看事件</button>',
+          '<button id="running-project-finish" type="button" class="btn btn-default">完成项目</button>',
+        ].join("")
+      };
+
+      $('#RunningProjectTable').bootstrapTable({
+        url: 'http://localhost:8080/project/teacher/project/run',         //请求后台的URL（*）
+        method: 'get',                      //请求方式（*）
+        striped: true,                      //是否显示行间隔色
+        cache: false,                       //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
+        pagination: true,                   //是否显示分页（*）
+        sortable: true,                     //是否启用排序
+        sortOrder: "asc",                   //排序方式
+        sidePagination: 'client',           //分页方式：client客户端分页，server服务端分页（*）
+        pageNumber: 1,                       //初始化加载第一页，默认第一页
+        pageSize: 10,                       //每页的记录行数（*）
+        pageList: [10, 15, 20],        //可供选择的每页的行数（*）
+        queryParams: queryParams,           //传递参数（*）
+        search: true,                       //是否显示表格搜索，此搜索是客户端搜索，不会进服务端，所以，个人感觉意义不大
+        contentType: "application/x-www-form-urlencoded",
+        strictSearch: true,
+        showColumns: true,                  //是否显示所有的列
+        showRefresh: true,                  //是否显示刷新按钮
+        clickToSelect: true,                //是否启用点击选中行
+        uniqueId: "no",                     //每一行的唯一标识，一般为主键列
+        showToggle: true,                    //是否显示详细视图和列表视图的切换按钮
+        cardView: false,                    //是否显示详细视图
+        detailView: false,                   //是否显示父子表
+        columns: [
+        {
+          field: 'id',
+          title: 'ID'
+        }, {
+          field: 'name',
+          title: '名称'
+        }, {
+          field: 'run_time',
+          title: '开始时间',
+          sortable: true
+        },{
+          field: 'company_name',
+          title: '中标公司'
+        },{
+          field: 'fin_funds',
+          title: '计划预算'
+        },{
+          field: 'leftover_funds',
+          title: '剩余预算'
+        },{
+          field: 'useroperator',
+          title: '操作',
+          events: abolitionOperateEvents,
+          formatter: AddAbolitionTableFuncAlty
+        }
+        ],
+        rowStyle: function (row, index) {
+            var classesArr = ['success', 'info'];
+            var strclass = "";
+            if (index % 2 === 0) {//偶数行
+                strclass = classesArr[0];
+            } else {//奇数行
+                strclass = classesArr[1];
+            }
+            return { classes: strclass };
+        },//隔行变色
+
+        });
+    };
+
+    $("#btn-refresh-RunningProjectTable").click(function(){
+      $("#RunningProjectTable").bootstrapTable('refresh');
+    });
+
+    //添加事件模态框关闭
+    $('#modal-running-project-addevent').on('hide.bs.modal',function() {
+      $("#running-project-use-instruction").val("");
+      $("#running-project-use-money").val("");
+    })
+
+    $("#running-project-addevent-ok").click(function(){
+      instruction = $("#running-project-use-instruction").val();
+      useFunds = $("#running-project-use-money").val();
+      if (instruction==""||useFunds==""){
+        alert("请把信息填写完整！");
+        return;
+      }
+      var r=/^[1-9][0-9]+$/gi;
+      if (!r.test(useFunds)){
+        alert("最终资金请输入纯数字！");
+        return;
+      }
+      if(useFunds>last_clicked_running_project_leftover_funds){
+        alert("使用金额超过剩余预算！");
+        return;
+      }
+      var flag; 
+      $.ajax({ 
+        url : hostip+"project/teacher/project/run/addevent", 
+        type: "POST",
+        async: false,
+        dataType : "JSON",
+        data: {"id":last_clicked_running_project_id,"funds":useFunds, "instruction":instruction},
+        success: function(data) {
+          flag = data;
+        },
+        error: function (jqXHR) { 
+          flag = jqXHR.responseJSON;
+        }
+      },);
+      if (flag.msg == "success"){
+        $("#modal-running-project-addevent").modal("hide");
+        $("#RunningProjectTable").bootstrapTable('refresh');
+        return;
+      } else {
+        alert(flag.msg);
+        return;
+      }
+    });
+
+    //查看事件模态框关闭
+    $('#modal-running-project-listevent').on('hide.bs.modal',function() {
+      $("#running-project-event-list").empty();
+    })
 });

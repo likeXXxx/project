@@ -28,14 +28,6 @@ $(document).ready(function(){
     $("#li1").click(function(){
       $("#u-name").html("学院申报项目")
     });
-    
-    $("#li2").click(function(){
-      $("#u-name").html("学院执行项目")
-    });
-    
-    $("#li3").click(function(){
-      $("#u-name").html("学院完成项目")
-    });
   
     $("#item-logout").click(function(){
       $.ajax({
