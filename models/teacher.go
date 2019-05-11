@@ -2,6 +2,7 @@ package models
 
 import (
 	"ProjectManage/db"
+	"fmt"
 
 	"github.com/astaxie/beego/orm"
 
@@ -178,7 +179,7 @@ func CreateProject(projectReq *CreateProjectReq) error {
 func DeleteAbolitionProject(id int) error {
 	o := db.GetOrmer()
 
-	if _, err := o.Delete(&db.AbolitionProject{ID: id}); err == nil {
+	if _, err := o.Delete(&db.AbolitionProject{ID: id}); err != nil {
 		logrus.Errorln(err)
 		return err
 	}
@@ -221,6 +222,7 @@ func TeacherVerifyProject(id int, instruction string, fileName string) error {
 		Instruction:    instruction,
 		InviteFileName: fileName,
 		Name:           project.Name,
+		ChangeApply:    "false",
 	}
 
 	_, err := o.Insert(&inviteProject)
@@ -241,4 +243,27 @@ func GetInviteProject(id int) (*db.ProjectInvite, error) {
 	}
 
 	return project, nil
+}
+
+//ChangeInviteProject ...
+func ChangeInviteProject(id int, instruction string) error {
+	projectInvite, err := db.GetProjectInviteByID(id)
+	if err != nil {
+		logrus.Errorln(err)
+		return err
+	}
+
+	if projectInvite.ChangeApply == "true" {
+		return fmt.Errorf("该招标项目已申请过修改，请耐心等待审批，务重复申请")
+	}
+
+	o := db.GetOrmer()
+	projectInvite.ChangeApply = "true"
+	projectInvite.ChangeReason = instruction
+	if _, err := o.Update(projectInvite, "change_reason", "change_apply"); err != nil {
+		logrus.Errorln(err)
+		return err
+	}
+
+	return nil
 }

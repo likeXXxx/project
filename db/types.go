@@ -101,4 +101,6 @@ type ProjectInvite struct {
 	InviteWay      string    `orm:"column(invite_way)" json:"invite_way,omitempty"`
 	Instruction    string    `orm:"column(instruction)" json:"instruction,omitempty"`
 	InviteFileName string    `orm:"column(invite_file_name)" json:"invite_file_name,omitempty"`
+	ChangeReason   string    `orm:"column(change_reason)" json:"change_reason"`
+	ChangeApply    string    `orm:"column(change_apply)" json:"change_apply"`
 }

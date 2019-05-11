@@ -255,3 +255,25 @@ func (c *TeacherController) GetInviteProject() {
 
 	c.ServeOK(SuccessVal, project)
 }
+
+// ApplyChangeInviteProject ...
+// @router /project/invite/change [post]
+func (c *TeacherController) ApplyChangeInviteProject() {
+	logrus.Infof("teacher apply change invite project info url: [%s]", c.Ctx.Input.URI())
+
+	id, err := c.GetInt("id")
+	if err != nil {
+		logrus.Errorln(err)
+		c.ServeError(http.StatusBadRequest, err)
+		return
+	}
+	instruction := c.GetString("instruction")
+
+	if err := models.ChangeInviteProject(id, instruction); err != nil {
+		logrus.Errorln(err)
+		c.ServeError(http.StatusInternalServerError, err)
+		return
+	}
+
+	c.ServeOK(SuccessVal, nil)
+}

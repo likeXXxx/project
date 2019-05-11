@@ -228,3 +228,64 @@ func (c *IManagerController) FinAuditFail() {
 
 	c.ServeOK(SuccessVal, nil)
 }
+
+// ApplyChangeInviteProject ...
+// @router /project/invite/change [get]
+func (c *IManagerController) ApplyChangeInviteProject() {
+	logrus.Infof("imanager get apply change invite projects url: [%s]", c.Ctx.Input.URI())
+
+	applyProjectsResp, err := models.GetChangeInviteProjects()
+	if err != nil {
+		logrus.Errorln(err)
+		c.ServeError(http.StatusInternalServerError, err)
+		return
+	}
+
+	resp := make(map[string]interface{})
+	resp["rows"] = applyProjectsResp
+	resp["total"] = len(applyProjectsResp)
+	c.Data["json"] = resp
+	c.ServeJSON()
+}
+
+// PassChangeProjectApply ...
+// @router /project/invite/change/pass [post]
+func (c *IManagerController) PassChangeProjectApply() {
+	logrus.Infof("imanager pass change invite projects apply url: [%s]", c.Ctx.Input.URI())
+
+	id, err := c.GetInt("id")
+	if err != nil {
+		logrus.Errorln(err)
+		c.ServeError(http.StatusBadRequest, err)
+		return
+	}
+
+	if err := models.PassChangeProjectApply(id); err != nil {
+		logrus.Errorln(err)
+		c.ServeError(http.StatusInternalServerError, err)
+		return
+	}
+
+	c.ServeOK(SuccessVal, nil)
+}
+
+// FailChangeProjectApply ...
+// @router /project/invite/change/fail [post]
+func (c *IManagerController) FailChangeProjectApply() {
+	logrus.Infof("imanager fail change invite projects apply url: [%s]", c.Ctx.Input.URI())
+
+	id, err := c.GetInt("id")
+	if err != nil {
+		logrus.Errorln(err)
+		c.ServeError(http.StatusBadRequest, err)
+		return
+	}
+
+	if err := models.FailChangeProjectApply(id); err != nil {
+		logrus.Errorln(err)
+		c.ServeError(http.StatusInternalServerError, err)
+		return
+	}
+
+	c.ServeOK(SuccessVal, nil)
+}

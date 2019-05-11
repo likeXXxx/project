@@ -297,3 +297,104 @@ func FinAuditFail(instruction string, id int, iID int64) error {
 
 	return nil
 }
+
+//GetChangeInviteProjectResp ...
+type GetChangeInviteProjectResp struct {
+	ID           int    `json:"id,omitempty"`
+	Name         string `json:"name,omitempty"`
+	Funds        int    `json:"funds,omitempty"`
+	InviteWay    string `json:"invite_way,omitempty"`
+	ChangeReason string `json:"change_reason"`
+	TeacherName  string `json:"teacher_name,omitempty"`
+	TeacherTel   string `json:"teacher_tel,omitempty"`
+}
+
+func convertInviteProjectToGetChangeInviteProjectResp(inviteProjects []db.ProjectInvite) ([]*GetChangeInviteProjectResp, error) {
+	resp := make([]*GetChangeInviteProjectResp, 0, len(inviteProjects))
+	for i := 0; i < len(inviteProjects); i++ {
+		applyProjectResp := GetChangeInviteProjectResp{
+			ID:           inviteProjects[i].ID,
+			Name:         inviteProjects[i].Name,
+			Funds:        inviteProjects[i].Funds,
+			InviteWay:    inviteProjects[i].InviteWay,
+			ChangeReason: inviteProjects[i].ChangeReason,
+		}
+		project, err := db.GetProjectByID(inviteProjects[i].ID)
+		if err != nil {
+			return nil, err
+		}
+		teacher, err := db.GetTeacherByID(project.TeacherID)
+
+		applyProjectResp.TeacherName = teacher.Name
+		applyProjectResp.TeacherTel = teacher.Tel
+		resp = append(resp, &applyProjectResp)
+	}
+	return resp, nil
+}
+
+//GetChangeInviteProjects ...
+func GetChangeInviteProjects() ([]*GetChangeInviteProjectResp, error) {
+	o := db.GetOrmer()
+
+	var projects []db.ProjectInvite
+	_, err := o.QueryTable("project_invite").Filter("change_apply", "true").All(&projects)
+	if err != nil {
+		if err == orm.ErrNoRows {
+			return nil, nil
+		}
+
+		logrus.Errorln(err)
+		return nil, err
+	}
+
+	resp, err := convertInviteProjectToGetChangeInviteProjectResp(projects)
+	if err != nil {
+		logrus.Errorln(err)
+		return nil, err
+	}
+
+	return resp, nil
+}
+
+//PassChangeProjectApply ..
+func PassChangeProjectApply(id int) error {
+	o := db.GetOrmer()
+
+	if _, err := o.Delete(&db.ProjectInvite{ID: id}); err != nil {
+		logrus.Errorln(err)
+		return err
+	}
+
+	project, err := db.GetProjectByID(id)
+	if err != nil {
+		logrus.Errorln(err)
+		return err
+	}
+	project.Status = StatusVerifyProject
+
+	if _, err := o.Update(project, "status"); err != nil {
+		logrus.Errorln(err)
+		return err
+	}
+
+	return nil
+}
+
+//FailChangeProjectApply ...
+func FailChangeProjectApply(id int) error {
+	project, err := db.GetProjectInviteByID(id)
+	if err != nil {
+		logrus.Errorln(err)
+		return err
+	}
+	project.ChangeReason = ""
+	project.ChangeApply = "false"
+
+	o := db.GetOrmer()
+	if _, err := o.Update(project, "change_reason", "change_apply"); err != nil {
+		logrus.Errorln(err)
+		return err
+	}
+
+	return nil
+}

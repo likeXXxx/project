@@ -81,6 +81,33 @@ func init() {
 
     beego.GlobalControllerRouter["ProjectManage/controllers:IManagerController"] = append(beego.GlobalControllerRouter["ProjectManage/controllers:IManagerController"],
         beego.ControllerComments{
+            Method: "ApplyChangeInviteProject",
+            Router: `/project/invite/change`,
+            AllowHTTPMethods: []string{"get"},
+            MethodParams: param.Make(),
+            Filters: nil,
+            Params: nil})
+
+    beego.GlobalControllerRouter["ProjectManage/controllers:IManagerController"] = append(beego.GlobalControllerRouter["ProjectManage/controllers:IManagerController"],
+        beego.ControllerComments{
+            Method: "FailChangeProjectApply",
+            Router: `/project/invite/change/fail`,
+            AllowHTTPMethods: []string{"post"},
+            MethodParams: param.Make(),
+            Filters: nil,
+            Params: nil})
+
+    beego.GlobalControllerRouter["ProjectManage/controllers:IManagerController"] = append(beego.GlobalControllerRouter["ProjectManage/controllers:IManagerController"],
+        beego.ControllerComments{
+            Method: "PassChangeProjectApply",
+            Router: `/project/invite/change/pass`,
+            AllowHTTPMethods: []string{"post"},
+            MethodParams: param.Make(),
+            Filters: nil,
+            Params: nil})
+
+    beego.GlobalControllerRouter["ProjectManage/controllers:IManagerController"] = append(beego.GlobalControllerRouter["ProjectManage/controllers:IManagerController"],
+        beego.ControllerComments{
             Method: "IManagerProjectPass",
             Router: `/project/pass`,
             AllowHTTPMethods: []string{"post"},
@@ -345,6 +372,15 @@ func init() {
             Method: "GetInviteProject",
             Router: `/project/invite`,
             AllowHTTPMethods: []string{"get"},
+            MethodParams: param.Make(),
+            Filters: nil,
+            Params: nil})
+
+    beego.GlobalControllerRouter["ProjectManage/controllers:TeacherController"] = append(beego.GlobalControllerRouter["ProjectManage/controllers:TeacherController"],
+        beego.ControllerComments{
+            Method: "ApplyChangeInviteProject",
+            Router: `/project/invite/change`,
+            AllowHTTPMethods: []string{"post"},
             MethodParams: param.Make(),
             Filters: nil,
             Params: nil})

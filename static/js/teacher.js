@@ -169,6 +169,7 @@ $(document).ready(function(){
         },
 
         "click #tmpTableInvite":function(e,value,row,index){
+          last_clicked_apply_project_id = row.id;
           if (row.status != "招投标"){
             alert("此阶段不可查看招投标信息！");
             return;
@@ -237,9 +238,6 @@ $(document).ready(function(){
             showRefresh: true,                  //是否显示刷新按钮
             clickToSelect: true,                //是否启用点击选中行
             uniqueId: "no",                     //每一行的唯一标识，一般为主键列
-            // showToggle: true,                    //是否显示详细视图和列表视图的切换按钮
-            // cardView: false,                    //是否显示详细视图
-            // detailView: false,                   //是否显示父子表
             columns: [
             {
               field: 'id',
@@ -568,4 +566,38 @@ $(document).ready(function(){
     $("#btn-apply-change-inviteproject").click(function(){
       $("#apply-change-inviteproject").modal("show");
     });
+
+    //申请修改参数模态框关闭
+    $('#apply-change-inviteproject').on('hide.bs.modal',function() {
+      $("#apply-change-instruction").val("");
+    })
+
+    $("#btn-apply-change-ok").click(function(){
+      var instruction = $("#apply-change-instruction").val();
+      if (instruction == ""){
+        alert("请填写申请说明");
+        return;
+      }
+      var flag; 
+      $.ajax({ 
+        url : hostip+"project/teacher/project/invite/change", 
+        type: "POST",
+        async: false,
+        dataType : "JSON",
+        data: {"id":last_clicked_apply_project_id,"instruction":instruction},
+        success: function(data) {
+          flag = data;
+        },
+        error: function (jqXHR) { 
+          flag = jqXHR.responseJSON;
+        }
+      },);
+      if (flag.msg == "success"){
+        $("#apply-change-inviteproject").modal("hide");
+        return;
+      } else {
+        alert(flag.msg);
+      }
+    });
+
 });

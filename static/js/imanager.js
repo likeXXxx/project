@@ -1,10 +1,12 @@
 $(document).ready(function(){
     $(".alert").hide();
     Table_1_Init();
+    Table_ApplyChangeInviteProjectTable_Init();
     $.ajaxSetup({
       contentType: "application/x-www-form-urlencoded; charset=utf-8"
     });
   
+    var last_clicked_change_project_id;
     var flag;
     var hostip = "http://localhost:8080/" 
     $.ajax({
@@ -321,8 +323,8 @@ $(document).ready(function(){
               sortOrder: "asc",                   //排序方式
               sidePagination: "client",           //分页方式：client客户端分页，server服务端分页（*）
               pageNumber: 1,                       //初始化加载第一页，默认第一页
-              pageSize: 5,                       //每页的记录行数（*）
-              pageList: [5, 10, 25, 50, 100],        //可供选择的每页的行数（*）
+              pageSize: 10,                       //每页的记录行数（*）
+              pageList: [10, 15, 20,50],        //可供选择的每页的行数（*）
               queryParams: queryParams,           //传递参数（*）
               search: true,                       //是否显示表格搜索，此搜索是客户端搜索，不会进服务端，所以，个人感觉意义不大
               contentType: "application/x-www-form-urlencoded",
@@ -330,7 +332,6 @@ $(document).ready(function(){
               showColumns: true,                  //是否显示所有的列
               showRefresh: true,                  //是否显示刷新按钮
               clickToSelect: true,                //是否启用点击选中行
-              height: 700,                        //行高，如果没有设置height属性，表格自动根据记录条数觉得表格高度
               uniqueId: "no",                     //每一行的唯一标识，一般为主键列
               columns: [
               {
@@ -459,7 +460,7 @@ $(document).ready(function(){
         }
       });
 
-      //初审不过
+      //终审不过
       $('#fin-auditing-fail').click(function(){
         var verifyInstruction = $("#fin-verify-instruction").val();
         if (verifyInstruction == "") {
@@ -490,5 +491,148 @@ $(document).ready(function(){
           return;
         }
       });
+
+
+      //审核申请修改招标项目table
+      function Table_ApplyChangeInviteProjectTable_Init() {
+        //得到查询的参数
+        queryParams = function (params) {
+          var temp = {   //这里的键的名字和控制器的变量名必须一直，这边改动，控制器也需要改成一样的
+          limit: params.limit,   //页面大小
+          offset:params.offset
+          };
+         return temp;
+        }
+  
+        //Table中按钮绑定事件
+        window.applyOperateEvents = {
+          "click #applyChangeProjectAudit":function(e,value,row,index){
+            last_clicked_change_project_id = row.id;
+
+            $("#modal-change-project-auditing").modal('show');
+          },
+        }
+    
+        function AddApplyTableFuncAlty(value,row,index){
+          return[
+            '<button id="applyChangeProjectAudit" type="button" class="btn btn-default">审核</button> ',
+          ].join("")
+        }
+  
+          $('#ApplyChangeInviteProjectTable').bootstrapTable({
+              url: 'http://localhost:8080/project/imanager/project/invite/change',         //请求后台的URL（*）
+              method: 'get',                      //请求方式（*）
+              striped: true,                      //是否显示行间隔色
+              cache: false,                       //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
+              pagination: true,                   //是否显示分页（*）
+              sortable: true,                     //是否启用排序
+              sortOrder: "asc",                   //排序方式
+              sidePagination: "client",           //分页方式：client客户端分页，server服务端分页（*）
+              pageNumber: 1,                       //初始化加载第一页，默认第一页
+              pageSize: 10,                       //每页的记录行数（*）
+              pageList: [5, 10, 25, 50, 100],        //可供选择的每页的行数（*）
+              queryParams: queryParams,           //传递参数（*）
+              search: true,                       //是否显示表格搜索，此搜索是客户端搜索，不会进服务端，所以，个人感觉意义不大
+              contentType: "application/x-www-form-urlencoded",
+              strictSearch: true,
+              showColumns: true,                  //是否显示所有的列
+              showRefresh: true,                  //是否显示刷新按钮
+              clickToSelect: true,                //是否启用点击选中行
+              uniqueId: "no",                     //每一行的唯一标识，一般为主键列
+              columns: [
+              {
+                field: 'id',
+                title: 'ID'
+              },{
+                field: 'name',
+                title: '名称'
+              }, {
+                field: 'invite_way',
+                title: '招标方式',
+                sortable: true
+              },{
+                field: 'funds',
+                title: '计划预算'
+              },{
+                field: 'change_reason',
+                title: '申请修改说明'
+              },{
+                field: 'teacher_name',
+                title: '负责教师'
+              },{
+                  field: 'teacher_tel',
+                  title: '联系方式'
+              },{
+                field: 'operator',
+                title: '操作',
+                events: applyOperateEvents,
+                formatter: AddApplyTableFuncAlty,
+              }
+              ],
+              rowStyle: function (row, index) {
+                  var classesArr = ['success', 'info'];
+                  var strclass = "";
+                  if (index % 2 === 0) {//偶数行
+                      strclass = classesArr[0];
+                  } else {//奇数行
+                      strclass = classesArr[1];
+                  }
+                  return { classes: strclass };
+              },//隔行变色  
+          });
+      };
+
+      //修改申请项目通过
+      $('#change-project-pass').click(function(){
+        var flag;
+        $.ajax({
+            url: "http://localhost:8080/project/imanager/project/invite/change/pass",
+            type: "POST",
+            async: false,
+            dataType : "JSON",
+            data: {"id":last_clicked_change_project_id},
+            success: function(data) {
+                flag = data;
+            },
+            error: function (jqXHR) { 
+              flag = jqXHR.responseJSON;
+            }
+        },);
+        if (flag.msg != "success"){
+          alert(flag.msg);
+          return;
+        } else {
+          $("#ApplyChangeInviteProjectTable").bootstrapTable('refresh');
+          $("#modal-change-project-auditing").modal('hide');
+          return;
+        }
+      });
+
+      //修改申请项目不过
+      $('#change-project-fail').click(function(){
+        var flag;
+        $.ajax({
+            url: "http://localhost:8080/project/imanager/project/invite/change/fail",
+            type: "POST",
+            async: false,
+            dataType : "JSON",
+            data: {"id":last_clicked_change_project_id},
+            success: function(data) {
+                flag = data;
+            },
+            error: function (jqXHR) { 
+              flag = jqXHR.responseJSON;
+            }
+        },);
+        if (flag.msg != "success"){
+          alert(flag.msg);
+          return;
+        } else {
+          $("#ApplyChangeInviteProjectTable").bootstrapTable('refresh');
+          $("#modal-change-project-auditing").modal('hide');
+          return;
+        }
+      });
+
 
   });
