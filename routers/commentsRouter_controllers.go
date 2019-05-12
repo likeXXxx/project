@@ -7,6 +7,42 @@ import (
 
 func init() {
 
+    beego.GlobalControllerRouter["ProjectManage/controllers:GlobalController"] = append(beego.GlobalControllerRouter["ProjectManage/controllers:GlobalController"],
+        beego.ControllerComments{
+            Method: "Get",
+            Router: `/`,
+            AllowHTTPMethods: []string{"get"},
+            MethodParams: param.Make(),
+            Filters: nil,
+            Params: nil})
+
+    beego.GlobalControllerRouter["ProjectManage/controllers:GlobalController"] = append(beego.GlobalControllerRouter["ProjectManage/controllers:GlobalController"],
+        beego.ControllerComments{
+            Method: "GlobalGetFinishedProject",
+            Router: `/finishedproject`,
+            AllowHTTPMethods: []string{"get"},
+            MethodParams: param.Make(),
+            Filters: nil,
+            Params: nil})
+
+    beego.GlobalControllerRouter["ProjectManage/controllers:GlobalController"] = append(beego.GlobalControllerRouter["ProjectManage/controllers:GlobalController"],
+        beego.ControllerComments{
+            Method: "GlobalGetPassProject",
+            Router: `/passproject`,
+            AllowHTTPMethods: []string{"get"},
+            MethodParams: param.Make(),
+            Filters: nil,
+            Params: nil})
+
+    beego.GlobalControllerRouter["ProjectManage/controllers:GlobalController"] = append(beego.GlobalControllerRouter["ProjectManage/controllers:GlobalController"],
+        beego.ControllerComments{
+            Method: "GlobalGetRunningProject",
+            Router: `/runningproject`,
+            AllowHTTPMethods: []string{"get"},
+            MethodParams: param.Make(),
+            Filters: nil,
+            Params: nil})
+
     beego.GlobalControllerRouter["ProjectManage/controllers:IManagerController"] = append(beego.GlobalControllerRouter["ProjectManage/controllers:IManagerController"],
         beego.ControllerComments{
             Method: "Get",

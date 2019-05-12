@@ -3,6 +3,7 @@ package controllers
 import (
 	"fmt"
 	"net/http"
+	"regexp"
 
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/session"
@@ -42,7 +43,9 @@ type BaseController struct {
 
 // Prepare ...
 func (b *BaseController) Prepare() {
-	if b.Ctx.Input.URI() == "/project/login" || b.Ctx.Input.URI() == "/project/login/mapper" {
+	uri := b.Ctx.Input.URI()
+	r, _ := regexp.Compile("/project/global/*")
+	if uri == "/project/login" || uri == "/project/login/mapper" || r.MatchString(uri) {
 		return
 	}
 

@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>ProjectManager</title>
+    <script src="http://localhost:8080/jquery/dist/jquery.min.js"></script>
+    <meta http-equiv=”content-type” content=”text/html; charset=UTF-8″ />
+    <link rel="stylesheet" href="http://localhost:8080/bootstrap-4.3.1-dist/css/bootstrap.min.css"> 
+    <script src="http://localhost:8080/static/js/popper.min.js"></script>
+    <script src="http://localhost:8080/bootstrap-4.3.1-dist/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="../static/css/bootstrap-table.min.css"> 
+    <script src="../static/js/bootstrap-table.min.js"></script> 
+    <script src="http://localhost:8080/static/js/project.js"></script>
+</head>
+<style>
+    body {
+      margin: 0;
+    }
+    ul {
+      list-style-type: none;
+      margin: 0;
+      left: 0;
+      top: 10%;
+      width: 20%;
+      background-color: #f8f4f4;
+      position: fixed;
+      height: 90%;
+      overflow: auto;
+    }
+
+    .tab-content {
+      position:absolute;
+      margin: 0;
+      padding: 0;
+      left: 20%;
+      width: 80%;
+      top: 10%;
+      height: 90%;
+    }
+
+    #logo {
+      list-style-type: none;
+      margin: 0;
+      left: 0;
+      top: 0%;
+      width: 20%;
+      background-color: hsl(180, 2%, 59%);
+      position: fixed;
+      height: 10%;
+      overflow: auto;
+    }
+
+    #display {
+      position:absolute;
+      margin: 0;
+      padding: 0;
+      left: 20%;
+      width: 80%;
+      top: 0;
+      height: 10%;
+      background-color: hsl(190, 21%, 89%);
+      display: flex;
+      align-items: center;
+    }
+
+    #logoinfo {
+      top:0;
+      right:0;
+      bottom:0;
+      left:0;
+      margin:auto;
+
+    }
+
+    #lb-name {
+      position:absolute;
+      left: 2%;
+      width: 20%;
+    }
+
+    #loginbtn {
+      position:absolute;
+      right: 2%;
+      width: 20%;
+    }
+
+    #information {
+      position: fixed;
+      top: 5%;
+    }
+</style>
+
+<body>
+    <div class="container">
+
+      <div class="text-center " id="logo">
+        <p id="logoinfo" clase="text-info" style="color:white"><strong>信息化建设项目全生命周期管理信息系统</strong></p>
+      </div>
+
+      <ul class="nav nav-tabs flex-column">
+        <li class="nav-item" id="li1">
+          <a class="nav-link active text-center" data-toggle="tab" href="#tab-1">过审项目</a>
+        </li>
+        <li class="nav-item" id="li2">
+          <a class="nav-link text-center" data-toggle="tab" href="#tab-2">执行中项目</a>
+        </li>
+        <li class="nav-item" id="li3">
+          <a class="nav-link text-center" data-toggle="tab" href="#tab-3">已完成项目</a>
+        </li>
+      </ul>
+
+      <div id="display">
+        <div id="lb-name" style="height: auto;">
+          <label id="u-name" >过审项目</label>
+        </div>
+        
+        <div id="loginbtn">
+            <button type="button" class="btn btn-primary" id="btn-login">登录</button>
+        </div>
+      </div>
+      
+      <hr>     
+     
+  
+      <div class="tab-content">
+        <div id="tab-1" class="container tab-pane active tabcontent"><br>
+          
+
+          <div class="btn-group">
+            <button type="button" class="btn btn-primary" id="btn-refresh-PassProjectTable">刷新</button>
+          </div>
+          
+          <div>
+          <table id="PassProjectTable">
+          
+          </table>
+          </div>
+        </div>
+
+      <div id="tab-2" class="container tab-pane fade tabcontent"><br>
+        <div class="btn-group">
+          <button type="button" class="btn btn-primary" id="btn-refresh-RunningProjectTable">刷新</button>
+        </div>
+          
+        <div>
+          <table id="RunningProjectTable">
+          
+          </table>
+        </div>
+      </div>
+
+      <div id="tab-3" class="container tab-pane fade tabcontent"><br>
+        <div class="btn-group">
+            <button type="button" class="btn btn-primary" id="btn-refresh-FinishedProjectTable">刷新</button>
+        </div>
+            
+          <div>
+            <table id="FinishedProjectTable">
+            
+            </table>
+          </div> 
+      </div>
+    </div>
+  </div>
+  <script>
+
+  </script>
+  
+</body>
+</html>

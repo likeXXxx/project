@@ -33,6 +33,11 @@ func init() {
 				&controllers.MasterController{},
 			),
 		),
+		beego.NSNamespace("/global",
+			beego.NSInclude(
+				&controllers.GlobalController{},
+			),
+		),
 	)
 	beego.AddNamespace(ns)
 }

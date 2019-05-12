@@ -1,0 +1,125 @@
+ Jenkinsfile | 49 ++++++++++++++++++++++++++++++-------------------
+ 1 file changed, 30 insertions(+), 19 deletions(-)
+
+diff --git a/Jenkinsfile b/Jenkinsfile
+index c831750..fdbe678 100644
+--- a/Jenkinsfile
++++ b/Jenkinsfile
+@@ -13,6 +13,7 @@ pipeline {
+     IMAGE_NAME = "internal-registry.ghostcloud.cn/venus/venus-plugin-app"
+     GIT_COMMIT_SHORT = env.GIT_COMMIT.take(7)
+     VENUS_HOST = "venus.ghostcloud.cn"
++	DINGDING_ROBOT_URL = "https://oapi.dingtalk.com/robot/send?access_token=cf4741ce4c8a9b99e09eb48d684b3cb1930a59005c283df1ee3ff5498b79b702"
+   }
+   stages {
+     stage('version') {
+@@ -45,22 +46,18 @@ pipeline {
+         sh "cp version.json bin/"
+         script {
+           docker.withRegistry("http://${env.DOCKER_REGISTRY}",'') {
+-            sh 'ls'
+             docker.build("${PROJECT_GROUP}/${PROJECT_NAME}").push("${GIT_COMMIT_SHORT}")
+           }
+-          sh 'ls'
+-          sh 'docker save ${PROJECT_GROUP}/${PROJECT_NAME} -o ${PROJECT_NAME}-${GIT_COMMIT_SHORT}.tar'
+-          stash(name: 'image', includes: '*.tar')
+         }
+       }
+     }
+-    stage('deploy_dev') {
++    stage('deploy to dev') {
+       agent any
+       steps {
+       	sh "curl -d \'{\"name\":\"${PROJECT_NAME}\",\"namespace\":\"${NAMESPACE}\",\"image\":\"${IMAGE_NAME}\",\"tag\":\"${GIT_COMMIT_SHORT}\",\"port\":8080}\' http://${MASTER_IP}/app/api/v1/deployments/release/fast"
+       }
+     }
+-    stage('test') {
++    stage('test for dev') {
+       agent {
+         docker {
+           image 'internal-registry.ghostcloud.cn/library/sakura:mm'
+@@ -83,12 +80,14 @@ pipeline {
+         ])
+       }
+     }
+-    stage ('deploy_venus') {
++    stage ('deploy to production') {
+       options {
+-        timeout(time:1,unit:'HOURS')
++        timeout(activity: true, time: 1)
+       }
+       when {
+         branch 'master'
++		beforeAgent true
++		beforeInput true
+       }
+       agent any
+       input {
+@@ -103,9 +102,10 @@ pipeline {
+         sh "curl -d \'{\"name\":\"${PROJECT_NAME}\",\"namespace\":\"${VENUS_NSP}\",\"image\":\"${IMAGE_NAME}\",\"tag\":\"${GIT_COMMIT_SHORT}\",\"port\":8080}\' http://${MASTER_IP}/app/api/v1/deployments/release/fast"
+       }
+     }
+-    stage ('test second') {
++    stage ('test for production') {
+       when {
+         branch 'master'
++        beforeAgent true
+       }
+       agent {
+         docker {
+@@ -133,9 +133,11 @@ pipeline {
+       agent any
+       when {
+         branch 'master'
++		beforeAgent true
++		beforeInput true
+       }
+       options {
+-        timeout(time:1,unit:'HOURS')
++        timeout(activity: true, time: 1)
+       }
+       environment {
+         GIT_COMMIT_SHORT = env.GIT_COMMIT.take(7)
+@@ -157,24 +159,33 @@ pipeline {
+             }
+           """
+           println body
+-          httpRequest quiet: false, httpMode: 'POST', requestBody: body, url: "http://${VENUS_HOST}/repository/v1/package"
++          httpRequest contentType: 'APPLICATION_JSON_UTF8', quiet: false, httpMode: 'POST', requestBody: body, url: "http://${VENUS_HOST}/repository/v1/package"
+         }
+       }
+     }
+   }
+ 
+   post{
+-    always {
+-      echo 'One way or another, I have finished ヽ(ﾟ∀ﾟ)ﾉ'
+-    }
+     success {
+       echo 'I succeeeded! :))'
+     }
+-    unstable {
+-      echo 'I am unstable :/'
+-    }
+-    failure {
+-      echo 'I failed :('
++    unsuccessful {
++	  script {
++          def body = """
++            {
++              "msgtype": "markdown",
++			  "markdown": {
++                  "title":"Jenkins构建情况",
++                  "text": "## $PROJECT_NAME $env.BRANCH_NAME $env.BUILD_ID  [构建失败]($BUILD_URL)"
++              },
++			  "at": {
++			      "isAtAll": true
++			  }
++            }
++          """
++          println body
++          httpRequest contentType: 'APPLICATION_JSON_UTF8', quiet: false, httpMode: 'POST', requestBody: body, url: "${DINGDING_ROBOT_URL}"
++      }
+     }
+   }
+ }
