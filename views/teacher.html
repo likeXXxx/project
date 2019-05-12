@@ -503,7 +503,7 @@
     </div>
 
     <!-- running project查看事件 -->
-  <div class="modal fade" id="modal-running-project-addevent">
+  <div class="modal fade" id="modal-running-project-listevent">
       <div class="modal-dialog">
         <div class="modal-content">
      
@@ -528,6 +528,41 @@
         </div>
       </div>
     </div>
+
+     <!-- running project完成项目 -->
+  <div class="modal fade" id="modal-running-project-finish">
+    <div class="modal-dialog">
+      <div class="modal-content">
+   
+        <!-- 模态框头部 -->
+        <div class="modal-header">
+          <h4 class="modal-title">完成项目</h4>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+   
+        <!-- 模态框主体 -->
+        <div class="modal-body">
+          <form>
+          <label for="apply-change-instruction">计划资金:</label>
+          <div class="form-group">
+            <input type="text" class="form-control" readonly="readonly" placeholder="本项目的预算金额" id="running-project-total-money"></text>
+          </div>
+          <label for="apply-change-instruction">使用资金:</label>
+          <div class="form-group">
+            <input type="text" class="form-control" readonly="readonly" placeholder="本项目最终使用金额" id="running-project-final-used-money"></text>
+          </div>
+          </form>
+        </div>
+   
+        <!-- 模态框底部 -->
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" id="btn-running-project-finish">确认完成</button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+        </div>
+   
+      </div>
+    </div>
+  </div>
   
       <div class="tab-content">
         <div id="tab-1" class="container tab-pane active tabcontent"><br>
@@ -561,8 +596,15 @@
       </div>
 
       <div id="tab-3" class="container tab-pane fade tabcontent"><br>
-          <h3>Menu 2</h3>
-         <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam.</p>
+        <div class="btn-group">
+            <button type="button" class="btn btn-primary" id="btn-refresh-FinishedProjectTable">刷新</button>
+          </div>
+            
+          <div>
+            <table id="FinishedProjectTable">
+            
+            </table>
+          </div>
       </div>
      </div>
 

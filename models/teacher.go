@@ -370,6 +370,9 @@ func GetRunningProjects(teacherID int64) ([]RunningProjectResp, error) {
 	var projects []db.Project
 	_, err := o.QueryTable("project").Filter("teacher_id", teacherID).Filter("status", StatusRunning).All(&projects)
 	if err != nil {
+		if err == orm.ErrNoRows {
+			return nil, nil
+		}
 		logrus.Errorln(err)
 		return nil, err
 	}
@@ -394,6 +397,70 @@ func RunningProjectAddEvent(instruction string, funds, id int) error {
 	}
 	o := db.GetOrmer()
 	if _, err := o.Insert(&projectEvent); err != nil {
+		logrus.Errorln(err)
+		return err
+	}
+
+	return nil
+}
+
+//RunningProjectEvent ...
+type RunningProjectEvent struct {
+	ID          int    `json:"id,omitempty"`
+	Name        string `json:"name,omitempty"`
+	Time        string `json:"time"`
+	UseFunds    int    `json:"use_funds"`
+	Instruction string `json:"instruction"`
+}
+
+//ListRunningProjectEvent ...
+func ListRunningProjectEvent(id int) ([]RunningProjectEvent, error) {
+	o := db.GetOrmer()
+
+	var projectEvents []db.ProjectEvent
+	if _, err := o.QueryTable("project_event").Filter("project_id", id).All(&projectEvents); err != nil {
+		if err == orm.ErrNoRows {
+			return make([]RunningProjectEvent, 0, 0), nil
+		}
+
+		return nil, err
+	}
+
+	resp := make([]RunningProjectEvent, 0, len(projectEvents))
+	for i := 0; i < len(projectEvents); i++ {
+		runningProjectEvent := RunningProjectEvent{
+			ID:          projectEvents[i].ProjectID,
+			Name:        projectEvents[i].Name,
+			Time:        projectEvents[i].Time.Format("2006-01-02"),
+			UseFunds:    projectEvents[i].UseFunds,
+			Instruction: projectEvents[i].Instruction,
+		}
+		resp = append(resp, runningProjectEvent)
+	}
+
+	return resp, nil
+}
+
+//RunningProjectFinish ...
+func RunningProjectFinish(id int) error {
+	o := db.GetOrmer()
+
+	project, err := db.GetProjectByID(id)
+	if err != nil {
+		logrus.Errorln(err)
+		return err
+	}
+
+	leftFunds, err := getProjectLeftFunds(id, project.FinFunds)
+	if err != nil {
+		logrus.Errorln(err)
+		return err
+	}
+
+	project.Status = StatusFinish
+	project.UsedFunds = project.FinFunds - leftFunds
+	project.FinTime = time.Now()
+	if _, err := o.Update(project, "used_funds", "status", "fin_time"); err != nil {
 		logrus.Errorln(err)
 		return err
 	}

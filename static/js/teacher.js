@@ -3,6 +3,7 @@ $(document).ready(function(){
   Table_1_Init();
   Table_Abolition_Project_Init();
   RunningProjectTable_Init();
+  FinishedProjectTable_Init();
   $.ajaxSetup({
     contentType: "application/x-www-form-urlencoded; charset=utf-8"
   });
@@ -675,8 +676,43 @@ $(document).ready(function(){
           $("#modal-running-project-addevent").modal("show");
         },
         "click #running-project-listevent":function(e,value,row,index){
-          last_clicked_running_project_id = row.id;
+          var flag;
+          $.ajax({
+            url: "http://localhost:8080/project/teacher/run/eventlist",
+            type: "GET",
+            async: false,
+            dataType : "JSON",
+            data: {"id": row.id},
+            success: function(data) {
+              flag = data;
+            },
+            error: function (jqXHR) { 
+              flag = jqXHR.responseJSON;
+            }
+          },);
+          if (flag.msg != "success"){
+            alert(flag.msg);
+            return;
+          } 
+
+          for (var i=0;i<flag.data.length;i++){
+            var info = "<div class='form-group'>\
+            <label style='font-weight:bold;'>项目ID:</label> &nbsp;"+"<label>"+flag.data[i].id+"</label> &nbsp; &nbsp;&nbsp; &nbsp;<label style='font-weight:bold;'>项目名称:</label>  &nbsp;<label>"+flag.data[i].name+"</label>\
+            <br><label style='font-weight:bold;'>时间:</label> &nbsp;"+flag.data[i].time+"<br><label style='font-weight:bold;'>使用预算:</label> &nbsp;"+"\
+            <label>"+flag.data[i].use_funds+"</label><br>\
+            <label style='font-weight:bold;'>使用说明:</label> &nbsp; <label>"+flag.data[i].instruction+"</label>\
+            </div> <hr>";
+            $("#running-project-event-list").append(info);
+          }
+
           $("#modal-running-project-listevent").modal("show");
+        },
+
+        "click #running-project-finish":function(e,value,row,index){
+          last_clicked_running_project_id = row.id;
+          $("#running-project-total-money").val(row.fin_funds);
+          $("#running-project-final-used-money").val(row.fin_funds-row.leftover_funds);
+          $("#modal-running-project-finish").modal("show");
         },
       }
 
@@ -806,4 +842,123 @@ $(document).ready(function(){
     $('#modal-running-project-listevent').on('hide.bs.modal',function() {
       $("#running-project-event-list").empty();
     })
+
+    //完成项目
+    $("#btn-running-project-finish").click(function(){
+      var flag; 
+      $.ajax({ 
+        url : hostip+"project/teacher/project/run/finish", 
+        type: "POST",
+        async: false,
+        dataType : "JSON",
+        data: {"id":last_clicked_running_project_id},
+        success: function(data) {
+          flag = data;
+        },
+        error: function (jqXHR) { 
+          flag = jqXHR.responseJSON;
+        }
+      },);
+      if (flag.msg == "success"){
+        $("#modal-running-project-finish").modal("hide");
+        $("#RunningProjectTable").bootstrapTable('refresh');
+        return;
+      } else {
+        alert(flag.msg);
+        return;
+      }
+    });
+
+    //已完成项目
+    $("#btn-refresh-FinishedProjectTable").click(function(){
+      $("#FinishedProjectTable").bootstrapTable('refresh');
+    });
+
+    //正在执行的项目
+    function FinishedProjectTable_Init(){
+      queryParams = function (params) {
+        var temp = {   
+        limit: params.limit,   //页面大小
+        offset:params.offset
+        };
+       return temp;
+      };
+
+      //Table中按钮绑定事件
+      window.abolitionOperateEvents = {
+        "click #finished-project-detail":function(e,value,row,index){
+        },
+
+      }
+
+      function AddAbolitionTableFuncAlty(value,row,index){
+        return[
+          '<button id="finished-project-detail" type="button" class="btn btn-default">详情</button>',
+          '<button id="finished-project-inviteinfo" type="button" class="btn btn-default">招标信息</button>',
+        ].join("")
+      };
+
+      $('#FinishedProjectTable').bootstrapTable({
+        url: 'http://localhost:8080/project/teacher/project/finished',         //请求后台的URL（*）
+        method: 'get',                      //请求方式（*）
+        striped: true,                      //是否显示行间隔色
+        cache: false,                       //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
+        pagination: true,                   //是否显示分页（*）
+        sortable: true,                     //是否启用排序
+        sortOrder: "asc",                   //排序方式
+        sidePagination: 'client',           //分页方式：client客户端分页，server服务端分页（*）
+        pageNumber: 1,                       //初始化加载第一页，默认第一页
+        pageSize: 10,                       //每页的记录行数（*）
+        pageList: [10, 15, 20],        //可供选择的每页的行数（*）
+        queryParams: queryParams,           //传递参数（*）
+        search: true,                       //是否显示表格搜索，此搜索是客户端搜索，不会进服务端，所以，个人感觉意义不大
+        contentType: "application/x-www-form-urlencoded",
+        strictSearch: true,
+        showColumns: true,                  //是否显示所有的列
+        showRefresh: true,                  //是否显示刷新按钮
+        clickToSelect: true,                //是否启用点击选中行
+        uniqueId: "no",                     //每一行的唯一标识，一般为主键列
+        showToggle: true,                    //是否显示详细视图和列表视图的切换按钮
+        cardView: false,                    //是否显示详细视图
+        detailView: false,                   //是否显示父子表
+        columns: [
+        {
+          field: 'id',
+          title: 'ID'
+        }, {
+          field: 'name',
+          title: '名称'
+        }, {
+          field: 'run_time',
+          title: '开始时间',
+          sortable: true
+        },{
+          field: 'fin_time',
+          title: '结束时间'
+        },{
+          field: 'fin_funds',
+          title: '计划预算'
+        },{
+          field: 'used_funds',
+          title: '使用预算'
+        },{
+          field: 'useroperator',
+          title: '操作',
+          events: abolitionOperateEvents,
+          formatter: AddAbolitionTableFuncAlty
+        }
+        ],
+        rowStyle: function (row, index) {
+            var classesArr = ['success', 'info'];
+            var strclass = "";
+            if (index % 2 === 0) {//偶数行
+                strclass = classesArr[0];
+            } else {//奇数行
+                strclass = classesArr[1];
+            }
+            return { classes: strclass };
+        },//隔行变色
+
+        });
+    };
 });

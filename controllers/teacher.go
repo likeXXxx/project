@@ -352,3 +352,46 @@ func (c *TeacherController) RunningProjectAddEvent() {
 
 	c.ServeOK(SuccessVal, nil)
 }
+
+// ListRunningProjectEvent ...
+// @router /run/eventlist [get]
+func (c *TeacherController) ListRunningProjectEvent() {
+	logrus.Infof("teacher[%s] get running project events url: [%s]", c.uID, c.Ctx.Input.URI())
+
+	id, err := c.GetInt("id")
+	if err != nil {
+		logrus.Errorln(err)
+		c.ServeError(http.StatusBadRequest, err)
+		return
+	}
+
+	eventList, err := models.ListRunningProjectEvent(id)
+	if err != nil {
+		logrus.Errorln(err)
+		c.ServeError(http.StatusInternalServerError, err)
+		return
+	}
+
+	c.ServeOK(SuccessVal, eventList)
+}
+
+// RunningProjectFinish ..
+// @router /project/run/finish [post]
+func (c *TeacherController) RunningProjectFinish() {
+	logrus.Infof("teacher[%s] finish running project url: [%s]", c.uID, c.Ctx.Input.URI())
+
+	id, err := c.GetInt("id")
+	if err != nil {
+		logrus.Errorln(err)
+		c.ServeError(http.StatusBadRequest, err)
+		return
+	}
+
+	if err := models.RunningProjectFinish(id); err != nil {
+		logrus.Errorln(err)
+		c.ServeError(http.StatusInternalServerError, err)
+		return
+	}
+
+	c.ServeOK(SuccessVal, nil)
+}
