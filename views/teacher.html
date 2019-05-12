@@ -543,13 +543,21 @@
         <!-- 模态框主体 -->
         <div class="modal-body">
           <form>
-          <label for="apply-change-instruction">计划资金:</label>
+          <label for="running-project-total-money">计划资金:</label>
           <div class="form-group">
             <input type="text" class="form-control" readonly="readonly" placeholder="本项目的预算金额" id="running-project-total-money"></text>
           </div>
-          <label for="apply-change-instruction">使用资金:</label>
+          <label for="running-project-final-used-money">使用资金:</label>
           <div class="form-group">
             <input type="text" class="form-control" readonly="readonly" placeholder="本项目最终使用金额" id="running-project-final-used-money"></text>
+          </div>
+          <label for="running-project-final-completion_status">完成情况说明:</label>
+          <div class="form-group">
+            <input type="text" class="form-control" placeholder="本项目完成情况说明" id="running-project-final-completion_status"></text>
+          </div>
+          <label for="running-project-self_evaluation">项目自评:</label>
+          <div class="form-group">
+            <textarea rows="3" class="form-control" placeholder="本项目完成自我评价" id="running-project-self_evaluation"></textarea>
           </div>
           </form>
         </div>
@@ -563,6 +571,147 @@
       </div>
     </div>
   </div>
+
+  <!-- 已完成项目详情 -->
+  <div class="modal fade" id="modal-finished-project-detail">
+      <div class="modal-dialog">
+        <div class="modal-content">
+     
+          <!-- 模态框头部 -->
+          <div class="modal-header">
+            <h4 class="modal-title">项目详情</h4>
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+          </div>
+     
+          <!-- 模态框主体 -->
+          <div class="modal-body">
+            <form>
+              <div class="form-group">
+                <label for="project-detail-id" style="font-weight:bold;">项目ID:</label>
+                <label id="project-detail-id"></label>
+                &nbsp; &nbsp; &nbsp; &nbsp;
+                <label for="project-detail-name" style="font-weight:bold;">项目名:</label>
+                <label id="project-detail-name"></label>
+              </div>
+              <div class="form-group">
+                <label for="project-detail-organization" style="font-weight:bold;">所属学院:</label>
+                <label id="project-detail-organization"></label>
+                &nbsp; &nbsp; &nbsp; &nbsp;
+                <label for="project-detail-createtime" style="font-weight:bold;">创建时间:</label>
+                <label id="project-detail-createtime"></label>
+              </div>
+              <div class="form-group">
+                <label for="project-detail-finfunds" style="font-weight:bold;">计划预算:</label>
+                <label id="project-detail-finfunds"></label>
+                &nbsp; &nbsp; &nbsp; &nbsp;
+                <label for="project-detail-usedfunds" style="font-weight:bold;">使用预算:</label>
+                <label id="project-detail-usedfunds"></label>
+              </div>
+              <div class="form-group">
+                <label for="project-detail-purpose" style="font-weight:bold;">项目用途:</label>
+                <label id="project-detail-purpose"></label>
+              </div>
+              <div class="form-group">
+                <label for="project-detail-function" style="font-weight:bold;">主要功能:</label>
+                <label id="project-detail-function"></label>
+              </div>
+              <div class="form-group">
+                <label for="project-detail-result" style="font-weight:bold;">预期结果:</label>
+                <label id="project-detail-result"></label>
+              </div>
+              <div class="form-group">
+                <label for="project-detail-instruction" style="font-weight:bold;">补充说明:</label>
+                <label id="project-detail-instruction"></label>
+              </div>
+              <div class="form-group">
+                <label for="project-detail-runtime" style="font-weight:bold;">开始时间:</label>
+                <label id="project-detail-runtime"></label>
+                  &nbsp; &nbsp; &nbsp; &nbsp;
+                <label for="project-detail-fintime" style="font-weight:bold;">结束时间:</label>
+                <label id="project-detail-fintime"></label>
+              </div>
+              <div class="form-group">
+                <label for="project-detail-completionstatus" style="font-weight:bold;">完成情况说明:</label>
+                  <label id="project-detail-completionstatus"></label>
+              </div>
+              <div class="form-group">
+                <label for="project-detail-selfevaluation" style="font-weight:bold;">项目自评:</label>
+                <label id="project-detail-selfevaluation"></label>
+              </div>
+            </form>
+          </div>
+     
+          <!-- 模态框底部 -->
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+          </div>
+     
+        </div>
+      </div>
+    </div>
+
+    <!-- 已结束项目招标信息 -->
+    <div class="modal fade" id="modal-finished-project-inviteinfo">
+        <div class="modal-dialog">
+          <div class="modal-content">
+       
+            <!-- 模态框头部 -->
+            <div class="modal-header">
+              <h4 class="modal-title">招标信息</h4>
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+       
+            <!-- 模态框主体 -->
+            <div class="modal-body">
+            <form >
+              <div class="form-group">
+                <label for="finished-invite-project-id" style="font-weight:bold;">项目ID:</label>
+                <label id="finished-invite-project-id"></label>
+                &nbsp; &nbsp; &nbsp; &nbsp;
+                <label for="finished-invite-project-name" style="font-weight:bold;">项目名:</label>
+                <label id="finished-invite-project-name"></label>
+              </div>
+              <div class="form-group">
+                <label for="finished-invite-project-budget" style="font-weight:bold;">计划预算:</label>
+                <label id="finished-invite-project-budget"></label>
+                &nbsp; &nbsp; &nbsp; &nbsp;
+                <label for="finished-invite-project-finfunds" style="font-weight:bold;">中标金额:</label>
+                <label id="finished-invite-project-finfunds"></label>
+              </div>
+              <div class="form-group">
+                  <label for="finished-invite-project-begintime" style="font-weight:bold;">开始时间:</label>
+                  <label id="finished-invite-project-begintime"></label>
+                  <br>
+                  <label for="finished-invite-project-fintime" style="font-weight:bold;">结束时间:</label>
+                  <label id="finished-invite-project-fintime"></label>
+                </div>
+              <div class="form-group">
+                <label for="finished-invite-project-inviteway" style="font-weight:bold;">招标方式:</label>
+                <label id="finished-invite-project-inviteway"></label>
+                &nbsp; &nbsp; &nbsp; &nbsp;
+                <label for="finished-invite-project-company" style="font-weight:bold;">中标公司:</label>
+                <label id="finished-invite-project-company"></label>
+              </div>
+              <label for="finished-invite-instruction" style="font-weight:bold;">招标说明:</label>
+              <div class="form-group">
+                <textarea class="form-control" rows="3" id="finished-invite-project-instruction" readonly="readonly" name="finished-invite-instruction"></textarea>
+              </div>
+              <div class="form-group">
+                <label style="font-weight:bold;">招标文件附件:</label>
+                <div id="finished-invite-project-file"></div>
+              </div>
+            </form>
+              
+            </div>
+       
+            <!-- 模态框底部 -->
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+            </div>
+       
+          </div>
+        </div>
+      </div>
   
       <div class="tab-content">
         <div id="tab-1" class="container tab-pane active tabcontent"><br>
@@ -598,20 +747,19 @@
       <div id="tab-3" class="container tab-pane fade tabcontent"><br>
         <div class="btn-group">
             <button type="button" class="btn btn-primary" id="btn-refresh-FinishedProjectTable">刷新</button>
-          </div>
+        </div>
             
           <div>
             <table id="FinishedProjectTable">
             
             </table>
-          </div>
+          </div> 
       </div>
-     </div>
-
-      </div>
-
+    </div>
+  </div>
   <script>
 
   </script>
+  
 </body>
 </html>

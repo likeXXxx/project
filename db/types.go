@@ -65,6 +65,8 @@ type Project struct {
 	ExpectResult      string    `orm:"column(expect_result)" json:"expect_result,omitempty"`
 	IFinInstruction   string    `orm:"column(i_fin_instruction)" json:"i_fin_instruction,omitempty"`
 	UsedFunds         int       `orm:"column(used_funds)" json:"used_funds"`
+	CompletionStatus  string    `orm:"column(completion_status)" json:"completion_status"`
+	SelfEvaluation    string    `orm:"column(self_evaluation)" json:"self_evaluation"`
 }
 
 //MasterAudit ...

@@ -442,7 +442,7 @@ func ListRunningProjectEvent(id int) ([]RunningProjectEvent, error) {
 }
 
 //RunningProjectFinish ...
-func RunningProjectFinish(id int) error {
+func RunningProjectFinish(id int, selfEvaluation, completionStatus string) error {
 	o := db.GetOrmer()
 
 	project, err := db.GetProjectByID(id)
@@ -460,10 +460,54 @@ func RunningProjectFinish(id int) error {
 	project.Status = StatusFinish
 	project.UsedFunds = project.FinFunds - leftFunds
 	project.FinTime = time.Now()
-	if _, err := o.Update(project, "used_funds", "status", "fin_time"); err != nil {
+	project.SelfEvaluation = selfEvaluation
+	project.CompletionStatus = completionStatus
+	if _, err := o.Update(project, "used_funds", "status", "fin_time", "completion_status", "self_evaluation"); err != nil {
 		logrus.Errorln(err)
 		return err
 	}
 
 	return nil
+}
+
+//FinishedProjectResp ..
+type FinishedProjectResp struct {
+	ID         int    `json:"id,omitempty"`
+	Name       string `json:"name,omitempty"`
+	CreateTime string `json:"create_time"`
+	RunTime    string `json:"run_time,omitempty"`
+	FinishTime string `json:"fin_time,omitempty"`
+	FinFunds   int    `json:"fin_funds,omitempty"`
+	UsedFunds  int    `json:"used_funds,omitempty"`
+}
+
+//GetFinishedProjects ...
+func GetFinishedProjects(id int64) ([]FinishedProjectResp, error) {
+	o := db.GetOrmer()
+
+	var projects []db.Project
+	_, err := o.QueryTable("project").Filter("teacher_id", id).Filter("status", StatusFinish).All(&projects)
+	if err != nil {
+		if err == orm.ErrNoRows {
+			return make([]FinishedProjectResp, 0, 0), nil
+		}
+		logrus.Errorln(err)
+		return nil, err
+	}
+
+	resp := make([]FinishedProjectResp, 0, len(projects))
+	for i := 0; i < len(projects); i++ {
+		finProject := FinishedProjectResp{
+			ID:         projects[i].ID,
+			Name:       projects[i].Name,
+			RunTime:    projects[i].RunTime.Format("2006-01-02"),
+			CreateTime: projects[i].CreateTime.Format("2006-01-02"),
+			FinishTime: projects[i].FinTime.Format("2006-01-02"),
+			FinFunds:   projects[i].FinFunds,
+			UsedFunds:  projects[i].UsedFunds,
+		}
+		resp = append(resp, finProject)
+	}
+
+	return resp, nil
 }

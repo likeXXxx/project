@@ -380,6 +380,8 @@ func (c *TeacherController) ListRunningProjectEvent() {
 func (c *TeacherController) RunningProjectFinish() {
 	logrus.Infof("teacher[%s] finish running project url: [%s]", c.uID, c.Ctx.Input.URI())
 
+	selfEvaluation := c.GetString("selfevaluation")
+	completionStatus := c.GetString("completionstatus")
 	id, err := c.GetInt("id")
 	if err != nil {
 		logrus.Errorln(err)
@@ -387,11 +389,30 @@ func (c *TeacherController) RunningProjectFinish() {
 		return
 	}
 
-	if err := models.RunningProjectFinish(id); err != nil {
+	if err := models.RunningProjectFinish(id, selfEvaluation, completionStatus); err != nil {
 		logrus.Errorln(err)
 		c.ServeError(http.StatusInternalServerError, err)
 		return
 	}
 
 	c.ServeOK(SuccessVal, nil)
+}
+
+// GetFinishedProjects ...
+// @router /project/finished [get]
+func (c *TeacherController) GetFinishedProjects() {
+	logrus.Infof("teacher[%s] get finished projects url: [%s]", c.uID, c.Ctx.Input.URI())
+
+	finishedProjectsResp, err := models.GetFinishedProjects(c.uID)
+	if err != nil {
+		logrus.Errorln(err)
+		c.ServeError(http.StatusInternalServerError, err)
+		return
+	}
+
+	resp := make(map[string]interface{})
+	resp["rows"] = finishedProjectsResp
+	resp["total"] = len(finishedProjectsResp)
+	c.Data["json"] = resp
+	c.ServeJSON()
 }

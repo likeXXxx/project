@@ -342,15 +342,6 @@ func init() {
 
     beego.GlobalControllerRouter["ProjectManage/controllers:TeacherController"] = append(beego.GlobalControllerRouter["ProjectManage/controllers:TeacherController"],
         beego.ControllerComments{
-            Method: "DeleteAbolitionProject",
-            Router: `/project/abolition`,
-            AllowHTTPMethods: []string{"delete"},
-            MethodParams: param.Make(),
-            Filters: nil,
-            Params: nil})
-
-    beego.GlobalControllerRouter["ProjectManage/controllers:TeacherController"] = append(beego.GlobalControllerRouter["ProjectManage/controllers:TeacherController"],
-        beego.ControllerComments{
             Method: "GetAbolitionProjects",
             Router: `/project/abolition`,
             AllowHTTPMethods: []string{"get"},
@@ -360,8 +351,26 @@ func init() {
 
     beego.GlobalControllerRouter["ProjectManage/controllers:TeacherController"] = append(beego.GlobalControllerRouter["ProjectManage/controllers:TeacherController"],
         beego.ControllerComments{
+            Method: "DeleteAbolitionProject",
+            Router: `/project/abolition`,
+            AllowHTTPMethods: []string{"delete"},
+            MethodParams: param.Make(),
+            Filters: nil,
+            Params: nil})
+
+    beego.GlobalControllerRouter["ProjectManage/controllers:TeacherController"] = append(beego.GlobalControllerRouter["ProjectManage/controllers:TeacherController"],
+        beego.ControllerComments{
             Method: "GetProjectDetail",
             Router: `/project/detail`,
+            AllowHTTPMethods: []string{"get"},
+            MethodParams: param.Make(),
+            Filters: nil,
+            Params: nil})
+
+    beego.GlobalControllerRouter["ProjectManage/controllers:TeacherController"] = append(beego.GlobalControllerRouter["ProjectManage/controllers:TeacherController"],
+        beego.ControllerComments{
+            Method: "GetFinishedProjects",
+            Router: `/project/finished`,
             AllowHTTPMethods: []string{"get"},
             MethodParams: param.Make(),
             Filters: nil,
@@ -387,18 +396,18 @@ func init() {
 
     beego.GlobalControllerRouter["ProjectManage/controllers:TeacherController"] = append(beego.GlobalControllerRouter["ProjectManage/controllers:TeacherController"],
         beego.ControllerComments{
-            Method: "GetRunningProjects",
+            Method: "ProjectRun",
             Router: `/project/run`,
-            AllowHTTPMethods: []string{"get"},
+            AllowHTTPMethods: []string{"post"},
             MethodParams: param.Make(),
             Filters: nil,
             Params: nil})
 
     beego.GlobalControllerRouter["ProjectManage/controllers:TeacherController"] = append(beego.GlobalControllerRouter["ProjectManage/controllers:TeacherController"],
         beego.ControllerComments{
-            Method: "ProjectRun",
+            Method: "GetRunningProjects",
             Router: `/project/run`,
-            AllowHTTPMethods: []string{"post"},
+            AllowHTTPMethods: []string{"get"},
             MethodParams: param.Make(),
             Filters: nil,
             Params: nil})

@@ -26,6 +26,9 @@ type ProjectDetail struct {
 	Purpose           string `json:"purpose,omitempty"`
 	PFunction         string `json:"p_function,omitempty"`
 	ExpectResult      string `json:"expect_result,omitempty"`
+	UsedFunds         int    `json:"used_funds"`
+	CompletionStatus  string `json:"completion_status"`
+	SelfEvaluation    string `json:"self_evaluation"`
 }
 
 // ProjectDetailResp ...
@@ -53,6 +56,9 @@ func convertProjectToProjectDetail(project *db.Project) *ProjectDetail {
 		Purpose:           project.Purpose,
 		PFunction:         project.PFunction,
 		ExpectResult:      project.ExpectResult,
+		UsedFunds:         project.UsedFunds,
+		CompletionStatus:  project.CompletionStatus,
+		SelfEvaluation:    project.SelfEvaluation,
 	}
 	return projectDetail
 }

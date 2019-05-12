@@ -843,15 +843,26 @@ $(document).ready(function(){
       $("#running-project-event-list").empty();
     })
 
+    $('#modal-running-project-finish').on('hide.bs.modal',function() {
+      $("#running-project-final-completion_status").val("");
+      $("#running-project-self_evaluation").val("");
+    })
+
     //完成项目
     $("#btn-running-project-finish").click(function(){
+      var completionStatus = $("#running-project-final-completion_status").val();
+      var selfEvaluation = $("#running-project-self_evaluation").val();
+      if (completionStatus==""||selfEvaluation==""){
+        alert("请将信息填写完整!");
+        return;
+      }
       var flag; 
       $.ajax({ 
         url : hostip+"project/teacher/project/run/finish", 
         type: "POST",
         async: false,
         dataType : "JSON",
-        data: {"id":last_clicked_running_project_id},
+        data: {"id":last_clicked_running_project_id,"completionstatus":completionStatus,"selfevaluation":selfEvaluation},
         success: function(data) {
           flag = data;
         },
@@ -887,8 +898,79 @@ $(document).ready(function(){
       //Table中按钮绑定事件
       window.abolitionOperateEvents = {
         "click #finished-project-detail":function(e,value,row,index){
+          var flag; 
+          $.ajax({ 
+            url : hostip+"project/teacher/project/detail", 
+            type: "get",
+            async: false,
+            dataType : "JSON",
+            data: {"id":row.id},
+            success: function(data) {
+              flag = data;
+            },
+            error: function (jqXHR) { 
+              flag = jqXHR.responseJSON;
+            }
+          },);
+          if (flag.msg == "success"){
+            $("#project-detail-id").html(flag.data.project.id);
+            $("#project-detail-name").html(flag.data.project.name);
+            $("#project-detail-organization").html(flag.data.project.organization);
+            $("#project-detail-finfunds").html(flag.data.project.fin_funds);
+            $("#project-detail-usedfunds").html(flag.data.project.used_funds);
+            $("#project-detail-createtime").html(flag.data.project.create_time);
+            $("#project-detail-runtime").html(flag.data.project.run_time);
+            $("#project-detail-fintime").html(flag.data.project.fin_time);
+            $("#project-detail-instruction").html(flag.data.project.instruction)
+            $("#project-detail-purpose").html(flag.data.project.purpose);
+            $("#project-detail-function").html(flag.data.project.p_function);
+            $("#project-detail-result").html(flag.data.project.expect_result);
+            $("#project-detail-completionstatus").html(flag.data.project.completion_status);
+            $("#project-detail-selfevaluation").html(flag.data.project.self_evaluation);
+            $("#modal-finished-project-detail").modal("show");
+            return;
+          } else {
+            alert(flag.msg);
+            return;
+          }
         },
 
+        "click #finished-project-inviteinfo":function(e,value,row,index){
+          var flag;
+          $.ajax({
+            url: "http://localhost:8080/project/teacher/project/invite",
+            type: "GET",
+            async: false,
+            dataType : "JSON",
+            data: {"id": row.id},
+            success: function(data) {
+              flag = data;
+            },
+            error: function (jqXHR) { 
+              flag = jqXHR.responseJSON;
+            }
+          },);
+          if (flag.msg == "success"){
+            $("#finished-invite-project-id").html(flag.data.id);
+            $("#finished-invite-project-name").html(flag.data.name);
+            $("#finished-invite-project-begintime").html(flag.data.begin_time);
+            $("#finished-invite-project-fintime").html(flag.data.fin_time);
+            $("#finished-invite-project-budget").html(flag.data.funds);
+            $("#finished-invite-project-finfunds").html(flag.data.fin_funds);
+            $("#finished-invite-project-inviteway").html(flag.data.invite_way);
+            $("#finished-invite-project-instruction").val(flag.data.instruction);
+            $("#finished-invite-project-company").html(flag.data.company_name);
+
+            var fileName = flag.data.invite_file_name;
+            var pre = fileName.split(".")[0];
+            var info = "<a href='../static/file/"+row.id+"/"+fileName+"' download='"+fileName+"'>"+pre+"</a>";
+            $("#finished-invite-project-file").append(info);
+            $("#modal-finished-project-inviteinfo").modal("show");
+          } else {
+            alert(flag.msg);
+            return;
+          } 
+        }
       }
 
       function AddAbolitionTableFuncAlty(value,row,index){
@@ -929,6 +1011,10 @@ $(document).ready(function(){
           field: 'name',
           title: '名称'
         }, {
+          field: 'create_time',
+          title: '创建时间',
+          sortable: true
+        },{
           field: 'run_time',
           title: '开始时间',
           sortable: true
@@ -961,4 +1047,25 @@ $(document).ready(function(){
 
         });
     };
+
+    $('#modal-finished-project-detail').on('hide.bs.modal',function() {
+      $("#project-detail-id").html("");
+      $("#project-detail-name").html("");
+      $("#project-detail-organization").html("");
+      $("#project-detail-finfunds").html("");
+      $("#project-detail-usedfunds").html("");
+      $("#project-detail-createtime").html("");
+      $("#project-detail-runtime").html("");
+      $("#project-detail-fintime").html("");
+      $("#project-detail-instruction").html("")
+      $("#project-detail-purpose").html("");
+      $("#project-detail-function").html("");
+      $("#project-detail-result").html("");
+      $("#project-detail-completionstatus").html("");
+      $("#project-detail-selfevaluation").html("");
+    })
+
+    $('#modal-finished-project-inviteinfo').on('hide.bs.modal',function() {
+      $("#finished-invite-project-file").empty();
+    })
 });
