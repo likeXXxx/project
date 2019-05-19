@@ -121,6 +121,136 @@
       
       <hr>     
      
+
+      <!-- 已完成项目详情 -->
+  <div class="modal fade" id="modal-finished-project-detail">
+    <div class="modal-dialog">
+      <div class="modal-content">
+   
+        <!-- 模态框头部 -->
+        <div class="modal-header">
+          <h4 class="modal-title">项目详情</h4>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+   
+        <!-- 模态框主体 -->
+        <div class="modal-body">
+          <form>
+            <div class="form-group">
+              <label for="finished-project-detail-id" style="font-weight:bold;">项目ID:</label>
+              <label id="finished-project-detail-id"></label>
+              &nbsp; &nbsp; &nbsp; &nbsp;
+              <label for="finished-project-detail-name" style="font-weight:bold;">项目名:</label>
+              <label id="finished-project-detail-name"></label>
+            </div>
+            <div class="form-group">
+              <label for="finished-project-detail-organization" style="font-weight:bold;">所属学院:</label>
+              <label id="finished-project-detail-organization"></label>
+            </div>
+            <div class="form-group">
+              <label for="finished-project-detail-finfunds" style="font-weight:bold;">计划预算:</label>
+              <label id="finished-project-detail-finfunds"></label>
+              &nbsp; &nbsp; &nbsp; &nbsp;
+              <label for="finished-project-detail-usedfunds" style="font-weight:bold;">使用预算:</label>
+              <label id="finished-project-detail-usedfunds"></label>
+            </div>
+            <div class="form-group">
+              <label for="finished-project-detail-purpose" style="font-weight:bold;">项目用途:</label>
+              <label id="finished-project-detail-purpose"></label>
+            </div>
+            <div class="form-group">
+              <label for="finished-project-detail-function" style="font-weight:bold;">主要功能:</label>
+              <label id="finished-project-detail-function"></label>
+            </div>
+            <div class="form-group">
+              <label for="finished-project-detail-result" style="font-weight:bold;">预期结果:</label>
+              <label id="finished-project-detail-result"></label>
+            </div>
+            <div class="form-group">
+              <label for="finished-project-detail-instruction" style="font-weight:bold;">补充说明:</label>
+              <label id="finished-project-detail-instruction"></label>
+            </div>
+            <div class="form-group">
+              <label for="finished-project-detail-createtime" style="font-weight:bold;">创建时间:</label>
+              <label id="finished-project-detail-createtime"></label>
+              <br>
+              <label for="finished-project-detail-runtime" style="font-weight:bold;">开始时间:</label>
+              <label id="finished-project-detail-runtime"></label>
+              <br>
+              <label for="finished-project-detail-fintime" style="font-weight:bold;">结束时间:</label>
+              <label id="finished-project-detail-fintime"></label>
+            </div>
+            <div class="form-group">
+              <label for="finished-project-detail-completionstatus" style="font-weight:bold;">完成情况说明:</label>
+                <label id="finished-project-detail-completionstatus"></label>
+            </div>
+            <div class="form-group">
+              <label for="finished-project-detail-selfevaluation" style="font-weight:bold;">项目自评:</label>
+              <label id="finished-project-detail-selfevaluation"></label>
+            </div>
+          </form>
+          <hr>
+          <div>
+              <h4>教师信息:</h4>
+              <form>
+                <div class="form-group">
+                  <label for="finished-teacher-detail-name">教师姓名:</label>
+                  <label id="finished-teacher-detail-name"></label>
+                  &nbsp; &nbsp; &nbsp; &nbsp;
+                  <label for="finished-teacher-detail-id">教师ID:</label>
+                  <label id="finished-teacher-detail-id"></label>
+                </div>
+                <div class="form-group">
+                  <label for="finished-teacher-detail-organization">所属学院:</label>
+                  <label id="finished-teacher-detail-organization"></label>
+                </div>
+                <div class="form-group">
+                    <label for="finished-teacher-detail-pt">职称:</label>
+                    <label id="finished-teacher-detail-pt"></label>
+                </div>
+                <div class="form-group">
+                    <label for="finished-teacher-detail-tel">联系方式:</label>
+                    <label id="finished-teacher-detail-tel"></label>
+                </div>
+              </form>
+            </div>
+        </div>
+   
+        <!-- 模态框底部 -->
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+        </div>
+   
+      </div>
+    </div>
+  </div>
+
+  <!-- 已完成项目查看事件 -->
+  <div class="modal fade" id="modal-finished-project-listevent">
+      <div class="modal-dialog">
+        <div class="modal-content">
+     
+          <!-- 模态框头部 -->
+          <div class="modal-header">
+            <h4 class="modal-title">事件列表</h4>
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+          </div>
+     
+          <!-- 模态框主体 -->
+          <div class="modal-body">
+              <div id="finished-project-event-list">
+
+              </div>
+          </div>
+     
+          <!-- 模态框底部 -->
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+          </div>
+     
+        </div>
+      </div>
+    </div>
   
       <div class="tab-content">
         <div id="tab-1" class="container tab-pane active tabcontent"><br>

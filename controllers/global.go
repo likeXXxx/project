@@ -74,3 +74,47 @@ func (c *GlobalController) GlobalGetFinishedProject() {
 	c.Data["json"] = resp
 	c.ServeJSON()
 }
+
+// GetFinishedProjectDetail ...
+// @router /finished/detail [get]
+func (c *GlobalController) GetFinishedProjectDetail() {
+	logrus.Infof("global get finished project detail url: [%s]", c.Ctx.Input.URI())
+
+	id, err := c.GetInt("id")
+	if err != nil {
+		logrus.Errorln(err)
+		c.ServeError(http.StatusBadRequest, err)
+		return
+	}
+
+	projectDetail, err := models.GetProjectDetail(id)
+	if err != nil {
+		logrus.Errorln(err)
+		c.ServeError(http.StatusInternalServerError, err)
+		return
+	}
+
+	c.ServeOK(SuccessVal, projectDetail)
+}
+
+// GetProjectEventList ...
+// @router /project/eventlist [get]
+func (c *GlobalController) GetProjectEventList() {
+	logrus.Infof("global get project events url: [%s]", c.Ctx.Input.URI())
+
+	id, err := c.GetInt("id")
+	if err != nil {
+		logrus.Errorln(err)
+		c.ServeError(http.StatusBadRequest, err)
+		return
+	}
+
+	eventList, err := models.ListRunningProjectEvent(id)
+	if err != nil {
+		logrus.Errorln(err)
+		c.ServeError(http.StatusInternalServerError, err)
+		return
+	}
+
+	c.ServeOK(SuccessVal, eventList)
+}

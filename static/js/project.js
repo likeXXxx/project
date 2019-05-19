@@ -217,13 +217,86 @@ $(document).ready(function(){
         //Table中按钮绑定事件
         window.abolitionOperateEvents = {
             "click #finished-project-detail":function(e,value,row,index){
+                var flag; 
+                $.ajax({ 
+                    url : hostip+"project/global/finished/detail", 
+                    type: "get",
+                    async: false,
+                    dataType : "JSON",
+                    data: {"id":row.id},
+                    success: function(data) {
+                        flag = data;
+                    },
+                    error: function (jqXHR) { 
+                        flag = jqXHR.responseJSON;
+                    }
+                },);
+                if (flag.msg == "success"){
+                    $("#finished-project-detail-id").html(flag.data.project.id);
+                    $("#finished-project-detail-name").html(flag.data.project.name);
+                    $("#finished-project-detail-organization").html(flag.data.project.organization);
+                    $("#finished-project-detail-finfunds").html(flag.data.project.fin_funds);
+                    $("#finished-project-detail-usedfunds").html(flag.data.project.used_funds);
+                    $("#finished-project-detail-createtime").html(flag.data.project.create_time);
+                    $("#finished-project-detail-runtime").html(flag.data.project.run_time);
+                    $("#finished-project-detail-fintime").html(flag.data.project.fin_time);
+                    $("#finished-project-detail-instruction").html(flag.data.project.instruction)
+                    $("#finished-project-detail-purpose").html(flag.data.project.purpose);
+                    $("#finished-project-detail-function").html(flag.data.project.p_function);
+                    $("#finished-project-detail-result").html(flag.data.project.expect_result);
+                    $("#finished-project-detail-completionstatus").html(flag.data.project.completion_status);
+                    $("#finished-project-detail-selfevaluation").html(flag.data.project.self_evaluation);
+                    $("#finished-teacher-detail-name").html(flag.data.teacher.name);
+                    $("#finished-teacher-detail-id").html(flag.data.teacher.id);
+                    $("#finished-teacher-detail-organization").html(flag.data.teacher.organization);
+                    $("#finished-teacher-detail-pt").html(flag.data.teacher.professional_title);
+                    $("#finished-teacher-detail-tel").html(flag.data.teacher.tel);
+                    $("#modal-finished-project-detail").modal("show");
+                    return;
+                } else {
+                    alert(flag.msg);
+                    return;
+                }
+            },
+
+            "click #finished-project-event":function(e,value,row,index){
+                var flag;
+                $.ajax({
+                    url: "http://localhost:8080/project/global/project/eventlist",
+                    type: "GET",
+                    async: false,
+                    dataType : "JSON",
+                    data: {"id": row.id},
+                    success: function(data) {
+                        flag = data;
+                    },
+                    error: function (jqXHR) { 
+                        flag = jqXHR.responseJSON;
+                    }
+                },);
+                if (flag.msg != "success"){
+                    alert(flag.msg);
+                    return;
+                } 
+
+                for (var i=0;i<flag.data.length;i++){
+                    var info = "<div class='form-group'>\
+                    <label style='font-weight:bold;'>项目ID:</label> &nbsp;"+"<label>"+flag.data[i].id+"</label> &nbsp; &nbsp;&nbsp; &nbsp;<label style='font-weight:bold;'>项目名称:</label>  &nbsp;<label>"+flag.data[i].name+"</label>\
+                    <br><label style='font-weight:bold;'>时间:</label> &nbsp;"+flag.data[i].time+"<br><label style='font-weight:bold;'>使用预算:</label> &nbsp;"+"\
+                    <label>"+flag.data[i].use_funds+"</label><br>\
+                    <label style='font-weight:bold;'>使用说明:</label> &nbsp; <label>"+flag.data[i].instruction+"</label>\
+                    </div> <hr>";
+                    $("#finished-project-event-list").append(info);
+                }
+
+                $("#modal-finished-project-listevent").modal("show");
             },
         }
 
         function AddAbolitionTableFuncAlty(value,row,index){
             return[
               '<button id="finished-project-detail" type="button" class="btn btn-default">项目详情</button>',
-              '<button id="finished-project-invite" type="button" class="btn btn-default">招标信息</button>',
+              '<button id="finished-project-event" type="button" class="btn btn-default">项目事件</button>',
             ].join("")
         };
 
@@ -289,4 +362,31 @@ $(document).ready(function(){
             },//隔行变色
         });
     }
+
+    $('#modal-finished-project-detail').on('hide.bs.modal',function() {
+        $("#finished-project-detail-id").html("");
+        $("#finished-project-detail-name").html("");
+        $("#finished-project-detail-organization").html("");
+        $("#finished-project-detail-finfunds").html("");
+        $("#finished-project-detail-usedfunds").html("");
+        $("#finished-project-detail-createtime").html("");
+        $("#finished-project-detail-runtime").html("");
+        $("#finished-project-detail-fintime").html("");
+        $("#finished-project-detail-instruction").html("")
+        $("#finished-project-detail-purpose").html("");
+        $("#finished-project-detail-function").html("");
+        $("#finished-project-detail-result").html("");
+        $("#finished-project-detail-completionstatus").html("");
+        $("#finished-project-detail-selfevaluation").html("");
+        $("#finished-teacher-detail-name").html("");
+        $("#finished-teacher-detail-id").html("");
+        $("#finished-teacher-detail-organization").html("");
+        $("#finished-teacher-detail-pt").html("");
+        $("#finished-teacher-detail-tel").html("");
+    })
+
+      //查看事件模态框关闭
+    $('#modal-finished-project-listevent').on('hide.bs.modal',function() {
+        $("#finished-project-event-list").empty();
+    })
 });
