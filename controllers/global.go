@@ -118,3 +118,47 @@ func (c *GlobalController) GetProjectEventList() {
 
 	c.ServeOK(SuccessVal, eventList)
 }
+
+// GetProjectDetail ...
+// @router /project/detail [get]
+func (c *GlobalController) GetProjectDetail() {
+	logrus.Infof("global get project detail, url: [%s]", c.Ctx.Input.URI())
+
+	id, err := c.GetInt("id")
+	if err != nil {
+		logrus.Errorln(err)
+		c.ServeError(http.StatusBadRequest, err)
+		return
+	}
+
+	projectDetail, err := models.GetProjectDetail(id)
+	if err != nil {
+		logrus.Errorln(err)
+		c.ServeError(http.StatusInternalServerError, err)
+		return
+	}
+
+	c.ServeOK(SuccessVal, projectDetail)
+}
+
+// GetProjectInviteInfo ...
+// @router /project/invite [get]
+func (c *GlobalController) GetProjectInviteInfo() {
+	logrus.Infof("global get invite project info url: [%s]", c.Ctx.Input.URI())
+
+	id, err := c.GetInt("id")
+	if err != nil {
+		logrus.Errorln(err)
+		c.ServeError(http.StatusBadRequest, err)
+		return
+	}
+
+	project, err := models.GetInviteProject(id)
+	if err != nil {
+		logrus.Errorln(err)
+		c.ServeError(http.StatusInternalServerError, err)
+		return
+	}
+
+	c.ServeOK(SuccessVal, project)
+}

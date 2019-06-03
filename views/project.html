@@ -121,6 +121,164 @@
       
       <hr>     
      
+  <!-- 项目详情 -->
+  <div class="modal fade" id="modal-apply-project-detail">
+    <div class="modal-dialog">
+      <div class="modal-content">
+   
+        <!-- 模态框头部 -->
+        <div class="modal-header">
+          <h4 class="modal-title">项目详情</h4>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+   
+        <!-- 模态框主体 -->
+        <div class="modal-body">
+            <div>
+              <h4>项目信息:</h4>
+              <form>
+                  <div class="form-group">
+                    <label for="project-detail-id" style="font-weight:bold;">项目ID:</label>
+                    <label id="project-detail-id"></label>
+                    &nbsp; &nbsp; &nbsp; &nbsp;
+                    <label for="project-detail-name" style="font-weight:bold;">项目名:</label>
+                    <label id="project-detail-name"></label>
+                  </div>
+                  <div class="form-group">
+                    <label for="project-detail-organization" style="font-weight:bold;">所属学院:</label>
+                    <label id="project-detail-organization"></label>
+                  </div>
+                  <div class="form-group">
+                    <label for="project-detail-budget" style="font-weight:bold;">最终预算:</label>
+                    <label id="project-detail-budget"></label>
+                    &nbsp; &nbsp; &nbsp; &nbsp;
+                    <label for="project-detail-createtime" style="font-weight:bold;">创建时间:</label>
+                    <label id="project-detail-createtime"></label>
+                  </div>
+                  <div class="form-group">
+                      <label for="project-detail-inviteway" style="font-weight:bold;">招标方式:</label>
+                      <label id="project-detail-inviteway"></label>
+                      &nbsp; &nbsp; &nbsp; &nbsp;
+                    <label for="project-detail-purpose" style="font-weight:bold;">项目用途:</label>
+                    <label id="project-detail-purpose"></label>
+                  </div>
+                  <div class="form-group">
+                      <label for="project-detail-function" style="font-weight:bold;">主要功能:</label>
+                      <label id="project-detail-function"></label>
+                  </div>
+                  <div class="form-group">
+                      <label for="project-detail-result" style="font-weight:bold;">预期结果:</label>
+                      <label id="project-detail-result"></label>
+                  </div>
+                  <div class="form-group">
+                    <label for="project-detail-instruction" style="font-weight:bold;">补充说明:</label>
+                    <label id="project-detail-instruction"></label>
+                  </div>
+              </form>
+            </div>
+            <hr>
+            <div>
+              <h4>教师信息:</h4>
+              <form>
+                <div class="form-group">
+                  <label for="teacher-detail-name" style="font-weight:bold;">教师姓名:</label>
+                  <label id="teacher-detail-name"></label>
+                  &nbsp; &nbsp; &nbsp; &nbsp;
+                  <label for="teacher-detail-id" style="font-weight:bold;">教师ID:</label>
+                  <label id="teacher-detail-id"></label>
+                </div>
+                <div class="form-group">
+                  <label for="teacher-detail-sex" style="font-weight:bold;">性别:</label>
+                  <label id="teacher-detail-sex"></label>
+                </div>
+                <div class="form-group">
+                  <label for="teacher-detail-organization" style="font-weight:bold;">所属学院:</label>
+                  <label id="teacher-detail-organization"></label>
+                </div>
+                <div class="form-group">
+                    <label for="teacher-detail-pt" style="font-weight:bold;">职称:</label>
+                    <label id="teacher-detail-pt"></label>
+                </div>
+                <div class="form-group">
+                    <label for="teacher-detail-tel" style="font-weight:bold;">联系方式:</label>
+                    <label id="teacher-detail-tel"></label>
+                </div>
+              </form>
+            </div>    
+        </div>
+   
+        <!-- 模态框底部 -->
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal" id="btn-skip-audit">审核</button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+        </div>
+   
+      </div>
+    </div>
+  </div>
+
+  <!-- 项目招标信息 -->
+  <div class="modal fade" id="modal-finished-project-inviteinfo">
+    <div class="modal-dialog">
+      <div class="modal-content">
+   
+        <!-- 模态框头部 -->
+        <div class="modal-header">
+          <h4 class="modal-title">招标信息</h4>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+   
+        <!-- 模态框主体 -->
+        <div class="modal-body">
+        <form >
+          <div class="form-group">
+            <label for="finished-invite-project-id" style="font-weight:bold;">项目ID:</label>
+            <label id="finished-invite-project-id"></label>
+            &nbsp; &nbsp; &nbsp; &nbsp;
+            <label for="finished-invite-project-name" style="font-weight:bold;">项目名:</label>
+            <label id="finished-invite-project-name"></label>
+          </div>
+          <div class="form-group">
+            <label for="finished-invite-project-budget" style="font-weight:bold;">计划预算:</label>
+            <label id="finished-invite-project-budget"></label>
+            &nbsp; &nbsp; &nbsp; &nbsp;
+            <label for="finished-invite-project-finfunds" style="font-weight:bold;">中标金额:</label>
+            <label id="finished-invite-project-finfunds"></label>
+          </div>
+          <div class="form-group">
+              <label for="finished-invite-project-begintime" style="font-weight:bold;">开始时间:</label>
+              <label id="finished-invite-project-begintime"></label>
+              <br>
+              <label for="finished-invite-project-fintime" style="font-weight:bold;">结束时间:</label>
+              <label id="finished-invite-project-fintime"></label>
+            </div>
+          <div class="form-group">
+            <label for="finished-invite-project-inviteway" style="font-weight:bold;">招标方式:</label>
+            <label id="finished-invite-project-inviteway"></label>
+            &nbsp; &nbsp; &nbsp; &nbsp;
+            <label for="finished-invite-project-company" style="font-weight:bold;">中标公司:</label>
+            <label id="finished-invite-project-company"></label>
+          </div>
+          <label for="finished-invite-instruction" style="font-weight:bold;">招标说明:</label>
+          <div class="form-group">
+            <textarea class="form-control" rows="3" id="finished-invite-project-instruction" readonly="readonly" name="finished-invite-instruction"></textarea>
+          </div>
+          <div class="form-group">
+            <label style="font-weight:bold;">招标文件附件:</label>
+            <div id="finished-invite-project-file"></div>
+          </div>
+        </form>
+          
+        </div>
+   
+        <!-- 模态框底部 -->
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+        </div>
+   
+      </div>
+    </div>
+  </div>
 
       <!-- 已完成项目详情 -->
   <div class="modal fade" id="modal-finished-project-detail">
@@ -194,22 +352,22 @@
               <h4>教师信息:</h4>
               <form>
                 <div class="form-group">
-                  <label for="finished-teacher-detail-name">教师姓名:</label>
+                  <label for="finished-teacher-detail-name" style="font-weight:bold;">教师姓名:</label>
                   <label id="finished-teacher-detail-name"></label>
                   &nbsp; &nbsp; &nbsp; &nbsp;
-                  <label for="finished-teacher-detail-id">教师ID:</label>
+                  <label for="finished-teacher-detail-id" style="font-weight:bold;">教师ID:</label>
                   <label id="finished-teacher-detail-id"></label>
                 </div>
                 <div class="form-group">
-                  <label for="finished-teacher-detail-organization">所属学院:</label>
+                  <label for="finished-teacher-detail-organization" style="font-weight:bold;">所属学院:</label>
                   <label id="finished-teacher-detail-organization"></label>
                 </div>
                 <div class="form-group">
-                    <label for="finished-teacher-detail-pt">职称:</label>
+                    <label for="finished-teacher-detail-pt" style="font-weight:bold;">职称:</label>
                     <label id="finished-teacher-detail-pt"></label>
                 </div>
                 <div class="form-group">
-                    <label for="finished-teacher-detail-tel">联系方式:</label>
+                    <label for="finished-teacher-detail-tel" style="font-weight:bold;">联系方式:</label>
                     <label id="finished-teacher-detail-tel"></label>
                 </div>
               </form>

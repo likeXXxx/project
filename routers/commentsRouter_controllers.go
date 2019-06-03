@@ -45,8 +45,26 @@ func init() {
 
 	beego.GlobalControllerRouter["ProjectManage/controllers:GlobalController"] = append(beego.GlobalControllerRouter["ProjectManage/controllers:GlobalController"],
 		beego.ControllerComments{
+			Method:           "GetProjectDetail",
+			Router:           `/project/detail`,
+			AllowHTTPMethods: []string{"get"},
+			MethodParams:     param.Make(),
+			Filters:          nil,
+			Params:           nil})
+
+	beego.GlobalControllerRouter["ProjectManage/controllers:GlobalController"] = append(beego.GlobalControllerRouter["ProjectManage/controllers:GlobalController"],
+		beego.ControllerComments{
 			Method:           "GetProjectEventList",
 			Router:           `/project/eventlist`,
+			AllowHTTPMethods: []string{"get"},
+			MethodParams:     param.Make(),
+			Filters:          nil,
+			Params:           nil})
+
+	beego.GlobalControllerRouter["ProjectManage/controllers:GlobalController"] = append(beego.GlobalControllerRouter["ProjectManage/controllers:GlobalController"],
+		beego.ControllerComments{
+			Method:           "GetProjectInviteInfo",
+			Router:           `/project/invite`,
 			AllowHTTPMethods: []string{"get"},
 			MethodParams:     param.Make(),
 			Filters:          nil,
