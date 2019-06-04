@@ -19,8 +19,8 @@ type MySQL struct {
 }
 
 var mysql = MySQL{
-	Host:     "localhost",
-	Port:     3306,
+	Host:     "172.17.0.1",
+	Port:     33306,
 	Username: "root",
 	Password: "password",
 	Database: "project",

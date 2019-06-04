@@ -15,12 +15,12 @@
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
-create database project;
-use project;
-
 --
 -- Table structure for table `abolition_project`
 --
+
+create database project;
+use project;
 
 DROP TABLE IF EXISTS `abolition_project`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -127,7 +127,7 @@ CREATE TABLE `master_audit` (
 
 LOCK TABLES `master_audit` WRITE;
 /*!40000 ALTER TABLE `master_audit` DISABLE KEYS */;
-INSERT INTO `master_audit` VALUES (20000001,'已完成','pass','tg',1000,1),(20110011,'已完成','fail','instruction',0,1),(20000001,'已完成','pass','tg',1234,2),(20110011,'已完成','pass','tg',100,2),(20110012,'已完成','pass','btg',1000,2),(20000001,'已完成','pass','tg',1000,3),(20110011,'已完成','fail','btg',0,3),(20110012,'已完成','pass','tg',1000,3),(20000001,'已完成','pass','通过',1000,4),(20110011,'已完成','pass','tg',1000,4),(20110012,'已完成','pass','tg',1000,4),(20000001,'已完成','pass','tg',1000,5),(20110011,'已完成','pass','tg',1000,5),(20110012,'已完成','pass','tg',1000,5);
+INSERT INTO `master_audit` VALUES (20000001,'已完成','pass','tg',1000,1),(20110011,'已完成','fail','instruction',0,1),(20000001,'已完成','pass','tg',1234,2),(20110011,'已完成','pass','tg',100,2),(20110012,'已完成','pass','btg',1000,2),(20000001,'已完成','pass','tg',1000,3),(20110011,'已完成','fail','btg',0,3),(20110012,'已完成','pass','tg',1000,3),(20000001,'已完成','pass','通过',1000,4),(20110011,'已完成','pass','tg',1000,4),(20110012,'已完成','pass','tg',1000,4),(20000001,'已完成','pass','tg',1000,5),(20110011,'已完成','pass','tg',1000,5),(20110012,'已完成','pass','tg',1000,5),(20000001,'已完成','pass','演示系统功能',10000,6),(20110011,'已完成','pass','演示',10000,6),(20110012,'已完成','pass','演示',9000,6),(20000001,'已完成','pass','tongguo',1000,8),(20110011,'已完成','pass','tg',1000,8),(20110012,'已完成','pass','tg',1000,8),(20000001,'已完成','pass','通过',10000,9),(20110011,'已完成','pass','通过',10000,9),(20110012,'已完成','pass','通过',10000,9);
 /*!40000 ALTER TABLE `master_audit` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -216,7 +216,7 @@ CREATE TABLE `project` (
   PRIMARY KEY (`id`),
   KEY `fk_teacher_id_teaid` (`teacher_id`),
   CONSTRAINT `fk_teacher_id_teaid` FOREIGN KEY (`teacher_id`) REFERENCES `teacher` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -225,7 +225,7 @@ CREATE TABLE `project` (
 
 LOCK TABLES `project` WRITE;
 /*!40000 ALTER TABLE `project` DISABLE KEYS */;
-INSERT INTO `project` VALUES (2,'tse','计算机科学学院',20110001,'2019-05-09',1000,'已完成','2019-05-12','邀请招标','ee','2019-05-11','xx','tg',1000,'教学','ee','ee','tg',900,'cc','cc'),(3,'xx','计算机科学学院',20110001,'2019-05-11',1000,'已完成','2019-05-12','公开招标','xx','2019-05-11','tg','tg',1000,'教学','xx','xx','tg',0,'完成','完美完成'),(4,'测试项目','计算机科学学院',20110001,'2019-05-12',1000,'招投标',NULL,'公开招标','测试',NULL,'通过','通过',1000,'教学','测试','测试','tg',0,'',''),(5,'测试','计算机科学学院',20110001,'2019-05-12',10000,'核定参数',NULL,'公开招标','测试',NULL,'通过','通过',10000,'办公','测试','测试','tg',0,'','');
+INSERT INTO `project` VALUES (2,'tse','计算机科学学院',20110001,'2019-05-09',1000,'已完成','2019-05-12','邀请招标','ee','2019-05-11','xx','tg',1000,'教学','ee','ee','tg',900,'cc','cc'),(3,'xx','计算机科学学院',20110001,'2019-05-11',1000,'已完成','2019-05-12','公开招标','xx','2019-05-11','tg','tg',1000,'教学','xx','xx','tg',0,'完成','完美完成'),(4,'测试项目','计算机科学学院',20110001,'2019-05-12',1000,'执行中',NULL,'公开招标','测试','2019-06-03','通过','通过',1000,'教学','测试','测试','tg',0,'',''),(5,'测试','计算机科学学院',20110001,'2019-05-12',10000,'核定参数',NULL,'公开招标','测试',NULL,'通过','通过',10000,'办公','测试','测试','tg',0,'',''),(6,'演示项目','计算机科学学院',20110001,'2019-05-19',10000,'已完成','2019-05-19','公开招标','演示系统功能','2019-05-19','演示系统功能','演示项目功能',10000,'教学','演示系统功能','演示系统功能','演示系统功能',9950,'演示系统功能','演示系统功能'),(7,'演示','计算机科学学院',20110001,'2019-06-02',1000,'网信中心审核',NULL,'公开招标','演示',NULL,'tg','',0,'教学','演示','演示','',0,'',''),(8,'演示','计算机科学学院',20110001,'2019-06-03',1000,'执行中',NULL,'公开招标','演示','2019-06-03','通过','通过',1000,'教学','演示','演示','通过',0,'',''),(9,'视频演示','计算机科学学院',20110001,'2019-06-03',10000,'已完成','2019-06-03','公开招标','视频演示','2019-06-03','通过','通过',10000,'教学','视频演示','视频演示','通过',900,'演示','视频演示');
 /*!40000 ALTER TABLE `project` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -244,7 +244,7 @@ CREATE TABLE `project_event` (
   `instruction` varchar(255) NOT NULL,
   `project_id` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -253,7 +253,7 @@ CREATE TABLE `project_event` (
 
 LOCK TABLES `project_event` WRITE;
 /*!40000 ALTER TABLE `project_event` DISABLE KEYS */;
-INSERT INTO `project_event` VALUES (1,'tse','2019-05-11',100,'测试',2),(2,'tse','2019-05-12',200,'测试',2),(3,'tse','2019-05-12',600,'测试',2);
+INSERT INTO `project_event` VALUES (1,'tse','2019-05-11',100,'测试',2),(2,'tse','2019-05-12',200,'测试',2),(3,'tse','2019-05-12',600,'测试',2),(4,'演示项目','2019-05-19',1000,'演示系统功能',6),(5,'演示项目','2019-05-19',8950,'演示',6),(6,'测试项目','2019-06-03',900,'演示',4),(7,'视频演示','2019-06-03',900,'视频演示',9);
 /*!40000 ALTER TABLE `project_event` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -288,7 +288,7 @@ CREATE TABLE `project_invite` (
 
 LOCK TABLES `project_invite` WRITE;
 /*!40000 ALTER TABLE `project_invite` DISABLE KEYS */;
-INSERT INTO `project_invite` VALUES (2,'2019-05-11','2019-05-11',1000,1000,'测试公司','test','diff (1).txt','邀请招标','tse','','false'),(3,'2019-05-11','2019-05-11',1000,1000,'海尔','ces','研发计划表.xlsx','公开招标','xx','','false'),(4,'2019-05-12',NULL,1000,0,'','测试','diff.txt','公开招标','测试项目','','false');
+INSERT INTO `project_invite` VALUES (2,'2019-05-11','2019-05-11',1000,1000,'测试公司','test','diff (1).txt','邀请招标','tse','','false'),(3,'2019-05-11','2019-05-11',1000,1000,'海尔','ces','研发计划表.xlsx','公开招标','xx','','false'),(4,'2019-05-12','2019-06-03',1000,1000,'微软','测试','diff.txt','公开招标','测试项目','','false'),(6,'2019-05-19','2019-05-19',10000,10000,'演示公司','演示系统功能','招标文件.doc','公开招标','演示项目','演示修改招标参数','true'),(8,'2019-06-03','2019-06-03',1000,1000,'微软','演示','招标文件.doc','公开招标','演示','','false'),(9,'2019-06-03','2019-06-03',10000,10000,'微软','测试','招标文件.doc','公开招标','视频演示','','false');
 /*!40000 ALTER TABLE `project_invite` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -333,4 +333,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-05-16  9:41:46
+-- Dump completed on 2019-06-04 18:53:46
